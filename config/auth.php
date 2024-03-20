@@ -46,6 +46,21 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'pelapor' => [
+            'driver' => 'session',
+            'provider' => 'pelapors'
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins'
+        ],
+
+        'pengawas' => [
+            'driver' => 'session',
+            'provider' => 'pengawass'
+        ],
     ],
 
     /*
@@ -69,6 +84,21 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'pelapors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Pelapor::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+
+        'pengawass' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Pengawas::class,
         ],
 
         // 'users' => [

@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PelaporController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,26 +17,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::post('/regist-pelapor', [PelaporController::class, 'store'])->name('regist-pelapor');
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/postlogin', [LoginController::class, 'postlogin'])->name('postlogin');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/comp', function () {
-    return view('user.complaint');
-});
-Route::get('/dash', function () {
-    return view('user.dashboard');
+Route::get('/home', function () {
+    return view('pelapor.dashboard');
 });
 Route::get('/form-comp', function () {
-    return view('user.form-comp');
+    return view('pelapor.comp-create');
 });
-Route::get('/test', function () {
-    return view('test');
-});
+Route::get('/comp', [LaporanController::class, 'index']);
+Route::post('/save-laporan', [LaporanController::class, 'store'])->name('save-laporan');
+
 Route::get('/it-comp', function () {
     return view('it.it-complaint');
 });
 Route::get('/detail-comp', function () {
     return view('it.detail-complaint');
 });
+// Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
+// });
 

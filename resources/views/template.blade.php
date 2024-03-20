@@ -33,7 +33,7 @@
     <link href="{{asset('gentelella-master/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css')}}" rel="stylesheet">
     <link href="{{asset('gentelella-master/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
     <link href="{{asset('gentelella-master/vendors/cropper/dist/cropper.min.css')}}" rel="stylesheet">
-    
+
     @yield('head')
     <link href="{{asset('gentelella-master/build/css/custom.min.css')}}" rel="stylesheet">
     <meta name="robots" content="index, nofollow">
@@ -123,7 +123,13 @@
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
-                            <h2>John Doe</h2>
+                            <h2>
+                                @if (Str::length(Auth::guard('pelapor')->user()) > 0)
+                                {{ Auth::guard('pelapor')->user()->nama }}
+                                @elseif (Str::length(Auth::guard('admin')->user()) > 0)
+                                {{ Auth::guard('admin')->user()->name }}
+                                @endif
+                            </h2>
                         </div>
                     </div>
 
@@ -133,10 +139,16 @@
                         <div class="menu_section">
                             <!-- <h3>General</h3> -->
                             <ul class="nav side-menu">
-                                <li><a href="/dash"><i class="fa fa-home"></i> Home</a></li>
-                                <li><a href="/comp"><i class="fa fa-edit"></i> Complaint</a></li>
-                                <li><a href="/it-comp"><i class="fa fa-edit"></i> Process Complaint</a></li>
-                                <li><a><i class="fa fa-power-off"></i> Logout</a></li>
+                                @if (Str::length(Auth::guard('pelapor')->user()) > 0)
+                                <li><a href="/home"><i class="fa fa-home"></i>Home</a></li>
+                                <li><a href="/comp"><i class="fa fa-edit"></i>Permintaan Layanan</a></li>
+                                @elif (Str::length(Auth::guard('admin')->user()) > 0)
+                                <li><a href="/it-comp"><i class="fa fa-edit"></i>Permintaan Layanan</a></li>
+                                @elif (Str::length(Auth::guard('pengawas')->user()) > 0)
+                                <li><a href="/it-comp"><i class="fa fa-edit"></i>Acc Pelayanan</a></li>
+                                @endif
+
+                                <li><a href="/logout"><i class="fa fa-power-off"></i> Logout</a></li>
                             </ul>
                         </div>
                     </div>
