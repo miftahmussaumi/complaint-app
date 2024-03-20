@@ -15,11 +15,11 @@ class CreateAdminTable extends Migration
     {
         Schema::create('admin', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 50)->nullable();
-            $table->string('nipp', 15)->nullable();
-            $table->string('jabatan', 15)->nullable();
-            $table->string('email', 30)->nullable();  
-            $table->string('password', 30)->nullable();
+            $table->string('nama', 50);
+            $table->string('nipp', 15);
+            $table->string('jabatan', 15);
+            $table->string('email', 30);  
+            $table->string('password', 30);
             $table->timestamps();
         });
     } 

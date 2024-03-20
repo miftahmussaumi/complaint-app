@@ -49,17 +49,22 @@ return [
 
         'pelapor' => [
             'driver' => 'session',
-            'provider' => 'pelapors'
+            'provider' => 'pelapor'
         ],
 
         'admin' => [
             'driver' => 'session',
-            'provider' => 'admins'
+            'provider' => 'admin'
         ],
 
         'pengawas' => [
             'driver' => 'session',
-            'provider' => 'pengawass'
+            'provider' => 'pengawas'
+        ],
+
+        'user' => [
+            'driver' => 'session',
+            'provider' => 'users'
         ],
     ],
 
@@ -86,17 +91,17 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'pelapors' => [
+        'pelapor' => [
             'driver' => 'eloquent',
             'model' => App\Models\Pelapor::class,
         ],
 
-        'admins' => [
+        'admin' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
 
-        'pengawass' => [
+        'pengawas' => [
             'driver' => 'eloquent',
             'model' => App\Models\Pengawas::class,
         ],

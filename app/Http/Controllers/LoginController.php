@@ -18,7 +18,7 @@ class LoginController extends Controller
         if (Auth::guard('pelapor')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect('/home');
         } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('/it-comp');
+            return redirect('/it');
         }
         return redirect('/login');
     }

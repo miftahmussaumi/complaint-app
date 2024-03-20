@@ -36,14 +36,14 @@ class PelaporController extends Controller
      */
     public function store(Request $request)
     {
-        $pass1 = $request->password;
+        // $pass1 = $request->password;
         $pass = bcrypt($request->password);
 
         Pelapor::create([
             'nama'      => $request->nama,
             'nipp'      => $request->nipp,
             'email'     => $request->email,
-            'password'  => bcrypt($pass),
+            'password'  => $pass,
             'jabatan'   => $request->jabatan,
             'divisi'    => $request->divisi,
             'telepon'   => $request->telepon,

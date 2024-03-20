@@ -15,10 +15,10 @@ class CreatePengawasTable extends Migration
     {
         Schema::create('pengawas', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 50)->nullable();
-            $table->string('nipp', 15)->nullable();
-            $table->string('email', 30)->nullable();
-            $table->string('password')->nullable();
+            $table->string('nama', 50);
+            $table->string('nipp', 15);
+            $table->string('email', 30);
+            $table->string('password');
             $table->timestamps();
         });
     }

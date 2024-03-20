@@ -15,13 +15,13 @@ class CreatePelaporTable extends Migration
     {
         Schema::create('pelapor', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 50)->nullable();
-            $table->string('nipp', 15)->nullable();
-            $table->string('email', 30)->nullable();
-            $table->string('password')->nullable();
-            $table->string('jabatan', 15)->nullable();
-            $table->string('divisi',15)->nullable();
-            $table->string('telepon', 15)->nullable();
+            $table->string('nama', 50);
+            $table->string('nipp', 15);
+            $table->string('email', 30);
+            $table->string('password');
+            $table->string('jabatan', 15);
+            $table->string('divisi',15);
+            $table->string('telepon', 15);
             $table->timestamps();
         });
     }

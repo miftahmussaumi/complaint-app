@@ -34,6 +34,9 @@
     <link href="{{asset('gentelella-master/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
     <link href="{{asset('gentelella-master/vendors/cropper/dist/cropper.min.css')}}" rel="stylesheet">
 
+    <link href="{{asset('gentelella-master/vendors/switchery/dist/switchery.min.css')}}" rel="stylesheet">
+    <link href="{{asset('gentelella-master/vendors/starrr/dist/starrr.css')}}" rel="stylesheet">
+
     @yield('head')
     <link href="{{asset('gentelella-master/build/css/custom.min.css')}}" rel="stylesheet">
     <meta name="robots" content="index, nofollow">
@@ -142,9 +145,10 @@
                                 @if (Str::length(Auth::guard('pelapor')->user()) > 0)
                                 <li><a href="/home"><i class="fa fa-home"></i>Home</a></li>
                                 <li><a href="/comp"><i class="fa fa-edit"></i>Permintaan Layanan</a></li>
-                                @elif (Str::length(Auth::guard('admin')->user()) > 0)
-                                <li><a href="/it-comp"><i class="fa fa-edit"></i>Permintaan Layanan</a></li>
-                                @elif (Str::length(Auth::guard('pengawas')->user()) > 0)
+                                <li><a href="/"><i class="fa fa-history"></i>History</a></li>
+                                @elseif (Str::length(Auth::guard('admin')->user()) > 0)
+                                <li><a href="/it"><i class="fa fa-edit"></i>Permintaan Layanan</a></li>
+                                @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
                                 <li><a href="/it-comp"><i class="fa fa-edit"></i>Acc Pelayanan</a></li>
                                 @endif
 
@@ -256,7 +260,21 @@
             </div>
             <div class="clearfix"></div>
         </footer>
-
+        <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="getCroppedCanvasTitle">Cropped</h4>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.png">Download</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     </div>
 
@@ -345,8 +363,21 @@
             $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
         });
     </script>
+
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"863d19bce8aa3e41","version":"2024.2.4","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
 
+    <script src="{{asset('gentelella-master/vendors/switchery//switchedistry.min.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/jquery.hotkeys/jquery.hotkeys.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/google-code-prettify/src/prettify.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/jquery.tagsinput/src/jquery.tagsinput.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/switchery/dist/switchery.min.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/select2/dist/js/select2.full.min.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/parsleyjs/dist/parsley.min.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/autosize/dist/autosize.min.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js')}}"></script>
+    <script src="{{asset('gentelella-master/vendors/starrr/dist/starrr.js')}}"></script>
+    <script src="{{asset('gentelella-master/build/js/custom.min.js')}}"></script>
     @yield('script')
 </body>
 

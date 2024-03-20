@@ -13,7 +13,7 @@ class Admin extends Authenticatable
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id','nama','jabatan','nipp','email'
+        'id','nama','jabatan','nipp','email','password'
     ];
 
     protected $hidden = [
