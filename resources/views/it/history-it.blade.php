@@ -74,6 +74,8 @@
                                             <span class="badge badge-success">Selesai</span>
                                             @elseif($dthist->status_laporan == 'Dibatalkan')
                                             <span class="badge badge-danger">Dibatalkan</span>
+                                            @elseif($dthist->status_laporan == 'ReqHapus')
+                                            <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
                                             @elseif($dthist->status_laporan == 'CheckedU')
                                             <span class="badge badge-warning">User Check</span>
                                             @elseif($dthist->status_laporan == 'reqAddTime')

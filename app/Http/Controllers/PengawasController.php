@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Pengawas;
 
 class PengawasController extends Controller
 {
@@ -11,9 +15,32 @@ class PengawasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function akun()
     {
-        //
+        $pelapor = DB::table('pelapor as p')
+        ->select(
+            'p.id','p.nama','p.nipp','p.email','p.password',
+            'p.jabatan','p.divisi','p.telepon',
+            DB::raw('COUNT(l.id) AS jumlah_laporan')
+        )
+        ->leftJoin('laporan as l', 'p.id', '=', 'l.id_pelapor')
+        ->groupBy('p.id', 'p.nama', 'p.nipp', 'p.email', 'p.password', 'p.jabatan', 'p.divisi', 'p.telepon')
+        ->get();
+
+        $it = DB::table('admin as t')
+        ->select(
+            't.id',
+            't.nama',
+            't.nipp',
+            't.email',
+            't.jabatan',
+            DB::raw('COUNT(l.id) AS jumlah_laporan')
+        )
+        ->leftJoin('laporan as l', 't.id', '=', 'l.id_admin')
+        ->groupBy('t.id','t.nama','t.nipp','t.email','t.jabatan',
+        )->get();
+
+        return view('pengawas.akun-user', compact('pelapor','it'));
     }
 
     /**
@@ -21,9 +48,29 @@ class PengawasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function laporan()
     {
-        //
+        $lap = DB::table('laporanakhir')
+        ->join('laporan','laporan.id','=','laporanakhir.id_laporan')
+        ->join('pelapor','laporan.id_pelapor','=','pelapor.id')
+        ->join('admin','admin.id','=','laporan.id_admin')
+        ->select(
+            'pelapor.nama AS nama', 'admin.nama AS nama_admin',
+            'laporan.id AS idlap',
+            'laporan.id AS idlap',
+            'laporan.jenis_layanan',
+            'laporan.waktu_tambahan',
+            'laporan.kat_layanan',
+            'laporan.det_layanan',
+            'laporan.no_inv_aset', 'laporan.det_pekerjaan','laporan.ket_pekerjaan',
+            DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%d-%m-%Y') AS tgl_masuk"),
+            DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d-%m-%Y (%H:%i WIB)') AS tgl_awal_pengerjaan"),
+            DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d-%m-%Y  (%H:%i WIB)') AS tgl_akhir_pengerjaan"),
+        )
+        ->get();
+        
+        // dd($lap);
+        return view('pengawas.laporan', compact('lap'));
     }
 
     /**

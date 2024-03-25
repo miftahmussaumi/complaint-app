@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Laporan;
+use App\Models\Laporanakhir;
 use App\Models\Laporanhist;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -206,6 +207,7 @@ class LaporanController extends Controller
         ->where('id', $idlap)
         ->update([
             'waktu_tambahan'  => $waktu_tambahan,
+            'id_admin'        => Auth::guard('admin')->user()->id
         ]);
 
         return redirect('it');
@@ -232,7 +234,6 @@ class LaporanController extends Controller
                 'tanggal'           => $tgl_masuk,
                 'keterangan'        => 'Permintaan penambahan waktu tidak diterima'
             ]);
-
             DB::table('laporan')
             ->where('id', $idlap)
             ->update([
@@ -250,6 +251,12 @@ class LaporanController extends Controller
                 ->update([
                     'tgl_selesai'  => $tgl_masuk,
                 ]);
+
+            Laporanakhir::create([
+                'id_laporan'        => $idlap,
+                'tgl_akhir'         => $tgl_masuk,
+            ]);
+            
         }
 
 
@@ -267,12 +274,22 @@ class LaporanController extends Controller
     {
         // $dateRange = $request->tgl_pengerjaan;
         $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');
-
-        Laporanhist::create([
-            'id_laporan'        => $idlap,
-            'status_laporan'    => 'Diproses',
-            'tanggal'           => $tgl_masuk,
-        ]);
+        $action     = $request->input('action');
+        
+        if ($action === 'process'){
+            Laporanhist::create([
+                'id_laporan'        => $idlap,
+                'status_laporan'    => 'Diproses',
+                'tanggal'           => $tgl_masuk,
+            ]);
+        } else if ($action === 'delete'){
+            Laporanhist::create([
+                'id_laporan'        => $idlap,
+                'status_laporan'    => 'Dibatalkan',
+                'tanggal'           => $tgl_masuk,
+                'keterangan'        => 'Pengajuan penghapusan permintaan disetujui oleh Admin IT, laporan dibatalkan.'
+            ]);
+        }
 
         return redirect('it');
         // dd($tgl_masuk, $tgl_awal_pengerjaan, $tgl_akhir_pengerjaan, $id_laporan);
@@ -446,8 +463,17 @@ class LaporanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($idlap)
     {
-        //
+        $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');
+
+        Laporanhist::create([
+            'id_laporan'        => $idlap,
+            'status_laporan'    => 'ReqHapus',
+            'tanggal'           => $tgl_masuk,
+            'keterangan'        => 'User mengajukan permintaan untuk menghapus laporan'
+        ]);
+
+        return redirect('comp');
     }
 }

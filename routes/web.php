@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelaporController;
+use App\Http\Controllers\PengawasController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
     Route::post('/save-laporan', [LaporanController::class, 'store'])->name('save-laporan');
     Route::post('/laporan-update/{idlap}', [LaporanController::class, 'update'])->name('laporan-update');
     Route::get('/history-user/{id}', [LaporanController::class, 'historyU']);
+    Route::get('/delete-laporan/{idlap}', [LaporanController::class, 'delete'])->name('delete-laporan');
 
     // ==============ROUTE UNTUK BAGIAN USER IT============== //
     Route::get('/it', [LaporanController::class, 'indexit']);
@@ -42,8 +44,12 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
     Route::post('/pelayanan-selesai/{idlap}', [LaporanController::class, 'pelayananS'])->name('pelayanan-selesai');
     Route::get('/history-admin/{id}', [LaporanController::class, 'historyA']);
 
+    // ==============ROUTE UNTUK BAGIAN USER PENGAWAS============== //
     Route::get('/dashboard-pengawas', function () {
         return view('pengawas.dashboard');
     });
+    Route::get('/list-akun', [PengawasController::class, 'akun']);
+    Route::get('/list-laporan', [PengawasController::class, 'laporan']);
+
 });
 

@@ -297,17 +297,16 @@
                     </li>
                     @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
                     <li>
-                        <a href="/">
+                        <a href="/list-akun">
                             <i class="fa fa-users"></i><span class="nav-text">Pengguna</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/history">
-                            <i class="fa fa-history"></i><span class="nav-text">History</span>
+                        <a href="/list-laporan">
+                            <i class="fa fa-folder-o"></i><span class="nav-text">Laporan</span>
                         </a>
                     </li>
                     @endif
-
                     <li>
                         <a href="/logout">
                             <i class="fa fa-sign-out"></i><span class="nav-text">Logout</span>

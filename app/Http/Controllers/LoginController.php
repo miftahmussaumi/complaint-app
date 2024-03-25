@@ -16,11 +16,11 @@ class LoginController extends Controller
     {
         // dd($request->all());
         if (Auth::guard('pelapor')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('/home');
+            return redirect('/dashboard-user');
         } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect('/it');
         } else if (Auth::guard('pengawas')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('/dashboard-pengawas');
+            return redirect('/list-akun');
         }
         return redirect('/login');
     }

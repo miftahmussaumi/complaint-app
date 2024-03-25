@@ -54,13 +54,15 @@
                                         <span class="badge badge-info">Diproses</span>
                                         @elseif($data->status_terbaru == 'CheckedU')
                                         <span class="badge badge-warning">User Check</span>
+                                        @elseif($data->status_terbaru == 'ReqHapus')
+                                        <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
                                         @elseif($data->status_terbaru == 'reqAddTime')
                                         <span class="badge badge-warning">Request <i class="fa fa-clock-o" aria-hidden="true"></i></span>
                                         @endif
                                     </td>
                                     <td>
                                         <a data-toggle="modal" data-target="#exampleModal{{$data->idlap}}" data-whatever="@getbootstrap"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        <a style="color: #C63F56;"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a>
+                                        <a href="{{url('delete-laporan',$data->idlap)}}" onclick="return confirm('Apakah Yakin Hapus Data Ini?')" style="color: #C63F56;"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a>
                                     </td>
                                 </tr>
                                 @endforeach

@@ -89,12 +89,14 @@
                                         <span class="badge badge-info">Diproses</span>
                                         @elseif($data->status_terbaru == 'CheckedU')
                                         <span class="badge badge-warning">User Check</span>
+                                        @elseif($data->status_terbaru == 'ReqHapus')
+                                        <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
                                         @elseif($data->status_terbaru == 'reqAddTime')
                                         <span class="badge badge-warning">Request <i class="fa fa-clock-o" aria-hidden="true"></i></span>
                                         @endif
                                     </td>
                                     <td>
-                                        @if($data->status_terbaru == 'Pengajuan')
+                                        @if($data->status_terbaru == 'Pengajuan' or $data->status_terbaru == 'ReqHapus')
                                         <a data-toggle="modal" data-target="#exampleModalDetail{{$data->idlap}}" data-whatever="@getbootstrap"><button class="btn btn-dark btn-sm"><i class="fa fa-bars"></i></button></a>
                                         @elseif($data->status_terbaru == 'Diproses')
                                         <a href="{{url('comp-detail',$data->idlap)}}"><button class="btn btn-info btn-sm"><i class="fa fa-check "></i></button></a>
@@ -168,7 +170,11 @@
                                     {{csrf_field()}}
                                     <div class="modal-content">
                                         <div class="modal-header">
+                                            @if($datau->status_terbaru == 'ReqHapus')
+                                            <h5 class="modal-title" id="exampleModalLabel">Pengajuan Hapus Permintaan Layanan</h5>
+                                            @else
                                             <h5 class="modal-title" id="exampleModalLabel">Detail Permintaan Layanan</h5>
+                                            @endif
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
@@ -222,7 +228,11 @@
                                             </table>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-info">Proses Layanan</button>
+                                            @if($datau->status_terbaru == 'Pengajuan')
+                                            <button type="submit" name="action" value="process" class="btn btn-info">Proses Layanan</button>
+                                            @elseif($datau->status_terbaru == 'ReqHapus')
+                                            <button type="submit" name="action" value="delete" class="btn btn-danger">Hapus Permintaan</button>
+                                            @endif
                                         </div>
                                     </div>
                                 </form>
