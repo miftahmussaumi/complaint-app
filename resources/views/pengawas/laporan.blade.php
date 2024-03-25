@@ -75,32 +75,7 @@
                                                             <td style="width: 15px;">:</td>
                                                             <td>{{ $dtp->tgl_awal_pengerjaan }} <i><b>sampai</b></i></td>
                                                         </tr>
-                                                        @if($dtp->waktu_tambahan != null)
-                                                        <?php
-                                                        $tanggalDeadline = $dtp->deadline;
-                                                        $waktu_tambahan = $dtp->waktu_tambahan;
-                                                        // Mengubah format tanggal ke format Y-m-d strtotime()
-                                                        $tanggalBaruTimestamp = strtotime(date('Y-m-d H:i', strtotime(str_replace('-', '/', $tanggalDeadline))) . " +$waktu_tambahan days");
-                                                        // Menguubah tanggal baru kembali ke format d-m-Y
-                                                        $tanggalBaru = date('d-m-Y', $tanggalBaruTimestamp) . ' (' . date('H:i', $tanggalBaruTimestamp) . ' WIB)';
-                                                        ?>
-                                                        <tr>
-                                                            <td style="width: 150px; height: 25px;"></td>
-                                                            <td style="width: 15px;"></td>
-                                                            <td style="color: #235EC4;">{{ $tanggalBaru }} </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="width: 150px; height: 25px;">Waktu Tambahan</td>
-                                                            <td style="width: 15px;">:</td>
-                                                            <td>{{ $dtp->waktu_tambahan }} </td>
-                                                        </tr>
-                                                        @else
-                                                        <tr>
-                                                            <td style="width: 150px; height: 25px;"></td>
-                                                            <td style="width: 15px;"></td>
-                                                            <td>{{ $dtp->tgl_akhir_pengerjaan }} </td>
-                                                        </tr>
-                                                        @endif
+                                                        
                                                         <tr>
                                                             <td><b>Keterangan Teknisi IT</b></td>
                                                         </tr>
