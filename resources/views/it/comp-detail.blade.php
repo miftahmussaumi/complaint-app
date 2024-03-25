@@ -1,99 +1,85 @@
 @extends('template')
 @section('content')
-<div class>
-    <div class="page-title">
-        <div class="title_left">
-            <h3>Welcome <small>in Detail Complaints</small></h3>
-        </div>
+<div class="row page-titles mx-0">
+    <div class="col p-md-0">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/it">List Permintaan Layanan</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)"><i>Proses Layanan</i></a></li>
+        </ol>
     </div>
 </div>
-<div class="clearfix"></div>
-<div class="row">
-    <div class="col-md-12 col-sm-12 ">
-        <div class="x_panel">
-            <div class="x_content">
-                <br />
-                <form class="form-horizontal form-label-left">
-                    <div class="form-group row ">
-                        <label class="control-label col-md-3 col-sm-3 ">No Referensi</label>
-                        <div class="col-md-9 col-sm-9 ">
-                            <input type="text" class="form-control" disabled value="IT/COMP/0012">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-3 col-sm-3 ">Tanggal </label>
-                        <div class="col-md-9 col-sm-9 ">
-                            <input type="text" class="form-control" disabled value="02/11/2024">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-3 col-sm-3 ">Permintaan Layanan dari</label>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-3 col-sm-3 ">Nama <span class="required">*</span>
-                        </label>
-                        <div class="col-md-9 col-sm-9 ">
-                            <input type="text" class="form-control" disabled value="Andreas Kamila">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-3 col-sm-3 ">Unit <span class="required">*</span>
-                        </label>
-                        <div class="col-md-9 col-sm-9 ">
-                            <input type="text" class="form-control" disabled value="Manufaktur">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-3 col-sm-3 ">Telepon <span class="required">*</span>
-                        </label>
-                        <div class="col-md-9 col-sm-9 ">
-                            <input type="text" class="form-control" disabled value="08xxxxxxxx">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-3 col-sm-3 ">Email <span class="required">*</span>
-                        </label>
-                        <div class="col-md-9 col-sm-9 ">
-                            <input type="text" class="form-control" disabled value="xxxx@gmail.com">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-3 col-sm-3 ">Permasalahan <span class="required">*</span>
-                        </label>
-                    </div>
-                    <div class="form-group row">
-                        <table class="table">
-                            <thead>
+<!-- row -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    @foreach($dtLap as $data)
+                    <div class="row justify-content-between">
+                        <div class="col-lg-5">
+                            <table style="color: #2D3134;">
                                 <tr>
-                                    <th>#</th>
-                                    <th>Tipe Permasalahan</th>
-                                    <th>Keterangan</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
+                                    <td style="width: 150px; height: 25px;">No Inventaris Aset</td>
+                                    <td style="width: 15px;">:</td>
+                                    <td>{{$data->no_inv_aset}}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
+                                    <td style="width: 150px; height: 25px;">Kategori Layanan</td>
+                                    <td style="width: 15px;">:</td>
+                                    <td>{{$data->kat_layanan}}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
+                                    <td style="width: 150px; height: 25px;">Jenis Layanan</td>
+                                    <td style="width: 15px;">:</td>
+                                    <td>{{$data->jenis_layanan}}</td>
                                 </tr>
-                            </tbody>
-                        </table>
+                                <tr>
+                                    <td style="width: 150px; height: 25px;">Detail</td>
+                                    <td style="width: 15px;">:</td>
+                                    <td>{{$data->det_layanan}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 150px; height: 25px;"> Waktu Pengerjaan</td>
+                                    <td style="width: 15px;">:</td>
+                                    <td>{{ $data->tgl_awal_pengerjaan }} <i><b>sampai</b></i></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 150px; height: 25px;"></td>
+                                    <td style="width: 15px;"></td>
+                                    @if($data->waktu_tambahan != null)
+                                    <?php
+                                    $tanggalDeadline = $data->deadline;
+                                    $waktu_tambahan = $data->waktu_tambahan;
+                                    // Mengubah format tanggal ke format Y-m-d strtotime()
+                                    $tanggalBaruTimestamp = strtotime(date('Y-m-d H:i', strtotime(str_replace('-', '/', $tanggalDeadline))) . " +$waktu_tambahan days");
+                                    // Menguubah tanggal baru kembali ke format d-m-Y
+                                    $tanggalBaru = date('d-m-Y', $tanggalBaruTimestamp) . ' (' . date('H:i', $tanggalBaruTimestamp) . ' WIB)';
+                                    ?>
+                                    <td style="color: #235EC4;">{{ $tanggalBaru }} </td>
+                                    @else
+                                    <td>{{ $data->tgl_akhir_pengerjaan }}</td>
+                                    @endif
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-lg-7">
+                            <form action="{{route('pelayanan-selesai',$data->idlap)}}" method="post">
+                                {{csrf_field()}}
+                                <div class="form-group">
+                                    <label>Detail Kegiatan <span style="color: red;">*</span></label>
+                                    <textarea name="det_pekerjaan" style="height: 100px;" type="text" class="form-control" placeholder="Isikan detail kegiatan"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Keterangan</label>
+                                    <textarea name="ket_pekerjaan" style="height: 100px;" type="text" class="form-control" placeholder="Isikan keterangan (opsional)"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Pelayanan Selesai</button>
+                            </form>
+                        </div>
                     </div>
-                </form>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>

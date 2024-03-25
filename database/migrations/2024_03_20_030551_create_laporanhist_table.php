@@ -17,7 +17,7 @@ class CreateLaporanhistTable extends Migration
             $table->id();
             $table->bigInteger('id_laporan')->nullable();    
             $table->string('status_laporan', 15)->nullable();
-            $table->dateTime('tangal')->nullable();  
+            $table->dateTime('tanggal')->nullable();  
             $table->text('keterang')->nullable();
             $table->string('foto')->nullable();
             $table->timestamps();

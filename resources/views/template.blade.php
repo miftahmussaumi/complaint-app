@@ -2,382 +2,392 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{asset('gentelella-master/production/images/favicon.ico')}}" type="image/ico" />
-    <title>Gentelella Alela! | </title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Quixlab - Bootstrap Admin Dashboard </title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('quixlab/images/favicon.png')}}">
+    <!-- Pignose Calender -->
+    <link href="{{asset('quixlab/plugins/pg-calendar/css/pignose.calendar.min.css')}}" rel="stylesheet">
+    <!-- Chartist -->
+    <link rel="stylesheet" href="{{asset('quixlab/plugins/chartist/css/chartist.min.css')}}">
+    <link rel="stylesheet" href="{{asset('quixlab/plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css')}}">
 
-    <link href="{{asset('gentelella-master/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/nprogress/nprogress.css')}}" rel="stylesheet">
+    <link href="{{asset('quixlab/plugins/tables/css/datatable/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
 
-    <link href="{{asset('gentelella-master/vendors/iCheck/skins/flat/green.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/jqvmap/dist/jqvmap.min.css')}}" rel="stylesheet" />
-    <link href="{{asset('gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link href="{{asset('quixlab/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}" rel="stylesheet">
+    <!-- Page plugins css -->
+    <link href="{{asset('quixlab/plugins/clockpicker/dist/jquery-clockpicker.min.css')}}" rel="stylesheet">
+    <!-- Color picker plugins css -->
+    <link href="{{asset('quixlab/plugins/jquery-asColorPicker-master/css/asColorPicker.css')}}" rel="stylesheet">
+    <!-- Date picker plugins css -->
+    <link href="{{asset('quixlab/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+    <!-- Daterange picker plugins css -->
+    <link href="{{asset('quixlab/plugins/timepicker/bootstrap-timepicker.min.css')}}" rel="stylesheet">
+    <link href="{{asset('quixlab/plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
 
-    <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-    <link href="{{asset('gentelella-master/vendors/iCheck/skins/flat/green.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
-
-    <link href="{{asset('gentelella-master/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/normalize-css/normalize.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/ion.rangeSlider/css/ion.rangeSlider.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/cropper/dist/cropper.min.css')}}" rel="stylesheet">
-
-    <link href="{{asset('gentelella-master/vendors/switchery/dist/switchery.min.css')}}" rel="stylesheet">
-    <link href="{{asset('gentelella-master/vendors/starrr/dist/starrr.css')}}" rel="stylesheet">
-
-    @yield('head')
-    <link href="{{asset('gentelella-master/build/css/custom.min.css')}}" rel="stylesheet">
-    <meta name="robots" content="index, nofollow">
-    <script nonce="0d4a5be9-c783-461e-838d-f2d6a9a667c1">
-        try {
-            (function(w, d) {
-                ! function(du, dv, dw, dx) {
-                    du[dw] = du[dw] || {};
-                    du[dw].executed = [];
-                    du.zaraz = {
-                        deferred: [],
-                        listeners: []
-                    };
-                    du.zaraz.q = [];
-                    du.zaraz._f = function(dy) {
-                        return async function() {
-                            var dz = Array.prototype.slice.call(arguments);
-                            du.zaraz.q.push({
-                                m: dy,
-                                a: dz
-                            })
-                        }
-                    };
-                    for (const dA of ["track", "set", "debug"]) du.zaraz[dA] = du.zaraz._f(dA);
-                    du.zaraz.init = () => {
-                        var dB = dv.getElementsByTagName(dx)[0],
-                            dC = dv.createElement(dx),
-                            dD = dv.getElementsByTagName("title")[0];
-                        dD && (du[dw].t = dv.getElementsByTagName("title")[0].text);
-                        du[dw].x = Math.random();
-                        du[dw].w = du.screen.width;
-                        du[dw].h = du.screen.height;
-                        du[dw].j = du.innerHeight;
-                        du[dw].e = du.innerWidth;
-                        du[dw].l = du.location.href;
-                        du[dw].r = dv.referrer;
-                        du[dw].k = du.screen.colorDepth;
-                        du[dw].n = dv.characterSet;
-                        du[dw].o = (new Date).getTimezoneOffset();
-                        if (du.dataLayer)
-                            for (const dH of Object.entries(Object.entries(dataLayer).reduce(((dI, dJ) => ({
-                                    ...dI[1],
-                                    ...dJ[1]
-                                })), {}))) zaraz.set(dH[0], dH[1], {
-                                scope: "page"
-                            });
-                        du[dw].q = [];
-                        for (; du.zaraz.q.length;) {
-                            const dK = du.zaraz.q.shift();
-                            du[dw].q.push(dK)
-                        }
-                        dC.defer = !0;
-                        for (const dL of [localStorage, sessionStorage]) Object.keys(dL || {}).filter((dN => dN.startsWith("_zaraz_"))).forEach((dM => {
-                            try {
-                                du[dw]["z_" + dM.slice(7)] = JSON.parse(dL.getItem(dM))
-                            } catch {
-                                du[dw]["z_" + dM.slice(7)] = dL.getItem(dM)
-                            }
-                        }));
-                        dC.referrerPolicy = "origin";
-                        dC.src = "/cdn-cgi/zaraz/s.js?z=" + btoa(encodeURIComponent(JSON.stringify(du[dw])));
-                        dB.parentNode.insertBefore(dC, dB)
-                    };
-                    ["complete", "interactive"].includes(dv.readyState) ? zaraz.init() : du.addEventListener("DOMContentLoaded", zaraz.init)
-                }(w, d, "zarazData", "script");
-            })(window, document)
-        } catch (e) {
-            throw fetch("/cdn-cgi/zaraz/t"), e;
-        };
-    </script>
+    <link href="{{asset('quixlab/plugins/sweetalert/css/sweetalert.css')}}" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link href="{{asset('quixlab/css/style.css')}}" rel="stylesheet">
+    @yield('style')
 </head>
 
-<body class="nav-md">
-    <div class="container body">
-        <div class="main_container">
-            <div class="col-md-3 left_col">
-                <!-- ============SIDEBAR MENU============ -->
-                <div class="left_col scroll-view">
-                    <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
-                    </div>
-                    <div class="clearfix"></div>
+<body>
 
-                    <div class="profile clearfix">
-                        <div class="profile_pic">
-                            <img src="{{asset('gentelella-master/production/images/img.jpg')}}" alt="..." class="img-circle profile_img">
-                        </div>
-                        <div class="profile_info">
-                            <span>Welcome,</span>
-                            <h2>
-                                @if (Str::length(Auth::guard('pelapor')->user()) > 0)
-                                {{ Auth::guard('pelapor')->user()->nama }}
-                                @elseif (Str::length(Auth::guard('admin')->user()) > 0)
-                                {{ Auth::guard('admin')->user()->name }}
-                                @endif
-                            </h2>
-                        </div>
-                    </div>
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
 
-                    <br />
 
-                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                        <div class="menu_section">
-                            <!-- <h3>General</h3> -->
-                            <ul class="nav side-menu">
-                                @if (Str::length(Auth::guard('pelapor')->user()) > 0)
-                                <li><a href="/home"><i class="fa fa-home"></i>Home</a></li>
-                                <li><a href="/comp"><i class="fa fa-edit"></i>Permintaan Layanan</a></li>
-                                <li><a href="/"><i class="fa fa-history"></i>History</a></li>
-                                @elseif (Str::length(Auth::guard('admin')->user()) > 0)
-                                <li><a href="/it"><i class="fa fa-edit"></i>Permintaan Layanan</a></li>
-                                @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
-                                <li><a href="/it-comp"><i class="fa fa-edit"></i>Acc Pelayanan</a></li>
-                                @endif
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
 
-                                <li><a href="/logout"><i class="fa fa-power-off"></i> Logout</a></li>
-                            </ul>
-                        </div>
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <div class="brand-logo">
+                <a href="index.html">
+                    <!-- <b class="logo-abbr"><img src="{{asset('quixlab/images/logo.png')}}" alt=""> </b> -->
+                    <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
+                    <!-- <span class="brand-title">
+                        <img src="{{asset('quixlab/images/logo-text.png')}}" alt="">
+                    </span> -->
+                    <h4 style="color: white;">Gambar Logo</h4>
+                </a>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            <div class="header-content clearfix">
+
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
                     </div>
                 </div>
-            </div>
-
-            <div class="top_nav">
-                <div class="nav_menu">
-                    <div class="nav toggle">
-                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                <!-- <div class="header-left">
+                    <div class="input-group icons">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                        </div>
+                        <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
+                        <div class="drop-down animated flipInX d-md-none">
+                            <form action="#">
+                                <input type="text" class="form-control" placeholder="Search">
+                            </form>
+                        </div>
                     </div>
-                    <nav class="nav navbar-nav">
-                        <ul class=" navbar-right">
-                            <li class="nav-item dropdown open" style="padding-left: 15px;">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{asset('gentelella-master/production/images/img.jpg')}}" alt>John Doe
-                                </a>
-                                <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="javascript:;"> Profile</a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <span class="badge bg-red pull-right">50%</span>
-                                        <span>Settings</span>
+                </div> -->
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <!-- <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+                                <i class="mdi mdi-email-outline"></i>
+                                <span class="badge badge-pill gradient-1">3</span>
+                            </a>
+                            <div class="drop-down animated fadeIn dropdown-menu">
+                                <div class="dropdown-content-heading d-flex justify-content-between">
+                                    <span class="">3 New Messages</span>
+                                    <a href="javascript:void()" class="d-inline-block">
+                                        <span class="badge badge-pill gradient-1">3</span>
                                     </a>
-                                    <a class="dropdown-item" href="javascript:;">Help</a>
-                                    <a class="dropdown-item" href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                 </div>
-                            </li>
-                            <li role="presentation" class="nav-item dropdown open">
-                                <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <span class="badge bg-green">6</span>
-                                </a>
-                                <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="{{asset('gentelella-master/production/images/img.jpg')}}" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="{{asset('gentelella-master/production/images/img.jpg')}}" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="{{asset('gentelella-master/production/images/img.jpg')}}" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="{{asset('gentelella-master/production/images/img.jpg')}}" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <div class="text-center">
-                                            <a class="dropdown-item">
-                                                <strong>See All Alerts</strong>
-                                                <i class="fa fa-angle-right"></i>
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li class="notification-unread">
+                                            <a href="javascript:void()">
+                                                <img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg" alt="">
+                                                <div class="notification-content">
+                                                    <div class="notification-heading">Saiful Islam</div>
+                                                    <div class="notification-timestamp">08 Hours ago</div>
+                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
+                                                </div>
                                             </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
+                                        </li>
+                                        <li class="notification-unread">
+                                            <a href="javascript:void()">
+                                                <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt="">
+                                                <div class="notification-content">
+                                                    <div class="notification-heading">Adam Smith</div>
+                                                    <div class="notification-timestamp">08 Hours ago</div>
+                                                    <div class="notification-text">Can you do me a favour?</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void()">
+                                                <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg" alt="">
+                                                <div class="notification-content">
+                                                    <div class="notification-heading">Barak Obama</div>
+                                                    <div class="notification-timestamp">08 Hours ago</div>
+                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void()">
+                                                <img class="float-left mr-3 avatar-img" src="images/avatar/4.jpg" alt="">
+                                                <div class="notification-content">
+                                                    <div class="notification-heading">Hilari Clinton</div>
+                                                    <div class="notification-timestamp">08 Hours ago</div>
+                                                    <div class="notification-text">Hello</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+                                <i class="mdi mdi-bell-outline"></i>
+                                <span class="badge badge-pill gradient-2">3</span>
+                            </a>
+                            <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
+                                <div class="dropdown-content-heading d-flex justify-content-between">
+                                    <span class="">2 New Notifications</span>
+                                    <a href="javascript:void()" class="d-inline-block">
+                                        <span class="badge badge-pill gradient-2">5</span>
+                                    </a>
+                                </div>
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="javascript:void()">
+                                                <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                                                <div class="notification-content">
+                                                    <h6 class="notification-heading">Events near you</h6>
+                                                    <span class="notification-text">Within next 5 days</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void()">
+                                                <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                                                <div class="notification-content">
+                                                    <h6 class="notification-heading">Event Started</h6>
+                                                    <span class="notification-text">One hour ago</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void()">
+                                                <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                                                <div class="notification-content">
+                                                    <h6 class="notification-heading">Event Ended Successfully</h6>
+                                                    <span class="notification-text">One hour ago</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void()">
+                                                <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                                                <div class="notification-content">
+                                                    <h6 class="notification-heading">Events to Join</h6>
+                                                    <span class="notification-text">After two days</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="icons dropdown d-none d-md-flex">
+                            <a href="javascript:void(0)" class="log-user" data-toggle="dropdown">
+                                <span>English</span> <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i>
+                            </a>
+                            <div class="drop-down dropdown-language animated fadeIn  dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li><a href="javascript:void()">English</a></li>
+                                        <li><a href="javascript:void()">Dutch</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li> -->
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative" data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img src="{{asset('quixlab/images/user/1.png')}}" height="40" width="40" alt="">
+                            </div>
+                            <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="app-profile.html"><i class="icon-user"></i> <span>Profile</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void()">
+                                                <i class="icon-envelope-open"></i> <span>Inbox</span>
+                                                <div class="badge gradient-3 badge-pill gradient-1">3</div>
+                                            </a>
+                                        </li>
+
+                                        <hr class="my-2">
+                                        <li>
+                                            <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock Screen</span></a>
+                                        </li>
+                                        <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="right_col" role="main">
-                @yield('content')
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="nk-sidebar">
+            <div class="nk-nav-scroll">
+                <ul class="metismenu" id="menu">
+                    <!-- <li class="nav-label">Dashboard</li> -->
+                    @if (Str::length(Auth::guard('pelapor')->user()) > 0)
+                    <li>
+                        <a href="/dashboard-user">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/comp">
+                            <i class="fa fa-desktop"></i><span class="nav-text">Layanan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{url('history-user',Auth::guard('pelapor')->user()->id)}}">
+                            <i class="fa fa-history"></i><span class="nav-text">History</span>
+                        </a>
+                    </li>
+                    @elseif (Str::length(Auth::guard('admin')->user()) > 0)
+                    <li>
+                        <a href="/it">
+                            <i class="fa fa-download"></i><span class="nav-text">Pengajuan Layanan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{url('history-admin',Auth::guard('admin')->user()->id)}}">
+                            <i class="fa fa-history"></i><span class="nav-text">History</span>
+                        </a>
+                    </li>
+                    @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
+                    <li>
+                        <a href="/">
+                            <i class="fa fa-users"></i><span class="nav-text">Pengguna</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/history">
+                            <i class="fa fa-history"></i><span class="nav-text">History</span>
+                        </a>
+                    </li>
+                    @endif
+
+                    <li>
+                        <a href="/logout">
+                            <i class="fa fa-sign-out"></i><span class="nav-text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
 
-
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
-        <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="getCroppedCanvasTitle">Cropped</h4>
-                    </div>
-                    <div class="modal-body"></div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.png">Download</a>
-                    </div>
-                </div>
-            </div>
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            @yield('content')
         </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
     </div>
-    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
 
-    <script src="{{asset('gentelella-master/vendors/jquery/dist/jquery.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/fastclick/lib/fastclick.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/nprogress/nprogress.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/Chart.js/dist/Chart.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/gauge.js/dist/gauge.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/iCheck/icheck.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/skycons/skycons.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/Flot/jquery.flot.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/Flot/jquery.flot.pie.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/Flot/jquery.flot.time.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/Flot/jquery.flot.stack.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/Flot/jquery.flot.resize.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/flot.orderbars/js/jquery.flot.orderBars.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/flot-spline/js/jquery.flot.spline.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/flot.curvedlines/curvedLines.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/DateJS/build/date.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/jqvmap/dist/jquery.vmap.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/jqvmap/dist/maps/jquery.vmap.world.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/moment/min/moment.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
-    <script src="{{asset('gentelella-master/build/js/custom.min.js')}}"></script>
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"863a38e0a80b401e","version":"2024.2.4","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <script src="{{asset('quixlab/plugins/common/common.min.js')}}"></script>
+    <script src="{{asset('quixlab/js/custom.min.js')}}"></script>
+    <script src="{{asset('quixlab/js/settings.js')}}"></script>
+    <script src="{{asset('quixlab/js/gleek.js')}}"></script>
+    <script src="{{asset('quixlab/js/styleSwitcher.js')}}"></script>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/datatables.net-scroller/js/dataTables.scroller.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/jszip/dist/jszip.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/pdfmake/build/pdfmake.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"863a39028b3a401e","version":"2024.2.4","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
+    <!-- Chartjs -->
+    <script src="{{asset('quixlab/plugins/chart.js/Chart.bundle.min.js')}}"></script>
+    <!-- Circle progress -->
+    <script src="{{asset('quixlab/plugins/circle-progress/circle-progress.min.js')}}"></script>
+    <!-- Datamap -->
+    <script src="{{asset('quixlab/plugins/d3v3/index.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/topojson/topojson.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/datamaps/datamaps.world.min.js')}}"></script>
+    <!-- Morrisjs -->
+    <script src="{{asset('quixlab/plugins/raphael/raphael.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/morris/morris.min.js')}}"></script>
+    <!-- Pignose Calender -->
+    <script src="{{asset('quixlab/plugins/moment/moment.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/pg-calendar/js/pignose.calendar.min.js')}}"></script>
+    <!-- ChartistJS -->
+    <script src="{{asset('quixlab/plugins/chartist/js/chartist.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js')}}"></script>
 
-    <script src="{{asset('gentelella-master/vendors/moment/min/moment.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/jquery-knob/dist/jquery.knob.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/cropper/dist/cropper.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/build/js/custom.min.js')}}"></script>
-    <script type="text/javascript">
-        $(function() {
-            $('#myDatepicker').datetimepicker();
-        });
+    <script src="{{asset('quixlab/plugins/tables/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/tables/js/datatable/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/tables/js/datatable-init/datatable-basic.min.js')}}"></script>
 
-        $('#myDatepicker2').datetimepicker({
-            format: 'DD.MM.YYYY'
-        });
+    <script src="{{asset('quixlab/js/dashboard/dashboard-1.js')}}"></script>
 
-        $('#myDatepicker3').datetimepicker({
-            format: 'hh:mm A'
-        });
+    <script src="{{asset('quixlab/plugins/moment/moment.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
+    <!-- Clock Plugin JavaScript -->
+    <script src="{{asset('quixlab/plugins/clockpicker/dist/jquery-clockpicker.min.js')}}"></script>
+    <!-- Color Picker Plugin JavaScript -->
+    <script src="{{asset('quixlab/plugins/jquery-asColorPicker-master/libs/jquery-asColor.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/jquery-asColorPicker-master/libs/jquery-asGradient.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js')}}"></script>
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{{asset('quixlab/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{{asset('quixlab/plugins/timepicker/bootstrap-timepicker.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
 
-        $('#myDatepicker4').datetimepicker({
-            ignoreReadonly: true,
-            allowInputToggle: true
-        });
+    <script src="{{asset('quixlab/js/plugins-init/form-pickers-init.js')}}"></script>
 
-        $('#datetimepicker6').datetimepicker();
+    <script src="{{asset('quixlab/plugins/sweetalert/js/sweetalert.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/sweetalert/js/sweetalert.init.js')}}"></script>
 
-        $('#datetimepicker7').datetimepicker({
-            useCurrent: false
-        });
 
-        $("#datetimepicker6").on("dp.change", function(e) {
-            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-        });
-
-        $("#datetimepicker7").on("dp.change", function(e) {
-            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-        });
-    </script>
-
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"863d19bce8aa3e41","version":"2024.2.4","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
-
-    <script src="{{asset('gentelella-master/vendors/switchery//switchedistry.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/jquery.hotkeys/jquery.hotkeys.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/google-code-prettify/src/prettify.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/jquery.tagsinput/src/jquery.tagsinput.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/switchery/dist/switchery.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/select2/dist/js/select2.full.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/parsleyjs/dist/parsley.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/autosize/dist/autosize.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js')}}"></script>
-    <script src="{{asset('gentelella-master/vendors/starrr/dist/starrr.js')}}"></script>
-    <script src="{{asset('gentelella-master/build/js/custom.min.js')}}"></script>
     @yield('script')
 </body>
 

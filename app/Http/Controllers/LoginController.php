@@ -19,6 +19,8 @@ class LoginController extends Controller
             return redirect('/home');
         } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect('/it');
+        } else if (Auth::guard('pengawas')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            return redirect('/dashboard-pengawas');
         }
         return redirect('/login');
     }

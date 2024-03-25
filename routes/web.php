@@ -21,25 +21,29 @@ Route::post('/regist-pelapor', [PelaporController::class, 'store'])->name('regis
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/postlogin', [LoginController::class, 'postlogin'])->name('postlogin');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/test', function () {
+    return view('test');
+});
 
 Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
-    Route::get('/home', function () {
-        return view('pelapor.dashboard');
-    });
-    Route::get('/form-comp', function () {
-        return view('pelapor.comp-create');
-    });
+    // ==============ROUTE UNTUK BAGIAN USER PELAPOR============== //
+    Route::get('/dashboard-user', [LaporanController::class, 'dashU']);
+    Route::get('/form-comp', function () { return view('pelapor.comp-create');});
     Route::get('/comp', [LaporanController::class, 'index']);
     Route::post('/save-laporan', [LaporanController::class, 'store'])->name('save-laporan');
-    Route::post('/update-laporan-u/{idlap}', [LaporanController::class, 'edit'])->name('update-laporan-u');
+    Route::post('/laporan-update/{idlap}', [LaporanController::class, 'update'])->name('laporan-update');
+    Route::get('/history-user/{id}', [LaporanController::class, 'historyU']);
 
     // ==============ROUTE UNTUK BAGIAN USER IT============== //
     Route::get('/it', [LaporanController::class, 'indexit']);
-    Route::post('/update-laporan/{idhist}',[LaporanController::class, 'editit'])->name('update-laporan');
+    Route::post('/proses-laporan/{idlap}',[LaporanController::class, 'editit'])->name('proses-laporan');
+    Route::post('/tambah-waktu/{idlap}', [LaporanController::class, 'tambahwaktu'])->name('tambah-waktu');
+    Route::get('/comp-detail/{idlap}', [LaporanController::class, 'detail'])->name('comp-detail');
+    Route::post('/pelayanan-selesai/{idlap}', [LaporanController::class, 'pelayananS'])->name('pelayanan-selesai');
+    Route::get('/history-admin/{id}', [LaporanController::class, 'historyA']);
 
-    // Route::get('/detail-comp', function () {
-    //     return view('it.detail-complaint');
-    // });
-
+    Route::get('/dashboard-pengawas', function () {
+        return view('pengawas.dashboard');
+    });
 });
 
