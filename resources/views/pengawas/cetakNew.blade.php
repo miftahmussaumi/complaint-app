@@ -35,7 +35,7 @@
         <table style="width: 100%;" class="table1">
             <tr valign="center">
                 <td rowspan="4" style="width: 25%;">
-                    <img src="{{asset('img/logo.png')}}" width="100" />
+                    <img width="100" />
                 </td>
                 <td rowspan="2">
                     PT. Saku Sekolah Indonesia <br> Sistem Informasi
