@@ -47,6 +47,7 @@ class PelaporController extends Controller
             'jabatan'   => $request->jabatan,
             'divisi'    => $request->divisi,
             'telepon'   => $request->telepon,
+            'status'    => 0
         ]);
 
         // dd($pass1, $pass);

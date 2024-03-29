@@ -15,6 +15,7 @@
         <div class="col-12">
             <!-- <h4 class="d-inline">Cards Types</h4>
             <p>The building block of a card is the <code class="highlighter-rouge">.card-body</code>. Use it whenever you need a padded section within a card.</p> -->
+            @if($datas != 1)
             @foreach($data as $dt)
             <div class="card text-left" style="color: #4F4B4B;">
                 <div class="card-body">
@@ -103,6 +104,9 @@
                 </div>
             </div>
             @endforeach
+            @else
+            <h5>Data history belum ada</h5>
+            @endif
         </div>
     </div>
 </div>

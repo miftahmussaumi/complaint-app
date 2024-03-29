@@ -280,7 +280,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{url('history-user',Auth::guard('pelapor')->user()->id)}}">
+                        <a href="{{url('history-user')}}">
                             <i class="fa fa-history"></i><span class="nav-text">History</span>
                         </a>
                     </li>

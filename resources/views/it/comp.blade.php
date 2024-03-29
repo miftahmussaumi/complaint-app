@@ -15,6 +15,7 @@
                             <thead>
                                 <tr>
                                     <th>Tanggal Permintaan</th>
+                                    <th>Pelapor</th>
                                     <th>No Inventaris</th>
                                     <th>Kategori Layanan</th>
                                     <th>Jenis Layanan</th>
@@ -27,6 +28,7 @@
                                 @foreach ($dtLap as $data)
                                 <tr>
                                     <td>{{ $data->tgl_masuk }}</td>
+                                    <td>{{ $data->nama }}</td>
                                     <td>{{ $data->no_inv_aset }}</td>
                                     <td>{{ $data->kat_layanan }}</td>
                                     <td>{{ $data->jenis_layanan }}</td>
@@ -180,6 +182,36 @@
                                         </div>
                                         <div class="modal-body">
                                             <table style="color: #2D3134;">
+                                                <tr>
+                                                    <td><b>Data Pelapor</b></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nama</td>
+                                                    <td>:</td>
+                                                    <td>{{$datau->nama}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Jabatan</td>
+                                                    <td>:</td>
+                                                    <td>{{$datau->jabatan}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Divisi</td>
+                                                    <td>:</td>
+                                                    <td>{{$datau->divisi}}</td>
+                                                </tr>
+                                                <tr style="height: 40px;" valign="top">
+                                                    <td>Kontak</td>
+                                                    <td>:</td>
+                                                    <td>{{$datau->telepon}} / {{$datau->email}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Isi Laporan</b></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
                                                 <tr>
                                                     <td style="width: 150px; height: 25px;">No Inventaris Aset</td>
                                                     <td style="width: 15px;">:</td>

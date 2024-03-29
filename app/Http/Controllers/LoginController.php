@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pelapor;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -15,11 +16,26 @@ class LoginController extends Controller
     public function postlogin(Request $request)
     {
         // dd($request->all());
-        if (Auth::guard('pelapor')->attempt(['email' => $request->email, 'password' => $request->password])) {
+        // if (Auth::guard('pelapor')->attempt(['email' => $request->email, 'password' => $request->password])) {
+        //     return redirect('/dashboard-user');
+        // } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
+        //     return redirect('/it');
+        // } else if (Auth::guard('pengawas')->attempt(['email' => $request->email, 'password' => $request->password])) {
+        //     return redirect('/list-akun');
+        // }
+        $credentials = $request->only('email', 'password');
+
+        $pelapor = Pelapor::where('email', $request->email)->first();
+
+        if ($pelapor && $pelapor->status == 0) {
+            return redirect()->back()->with('error', 'Akun Anda belum disetujui.');
+        }
+
+        if (Auth::guard('pelapor')->attempt($credentials)) {
             return redirect('/dashboard-user');
-        } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
+        } elseif (Auth::guard('admin')->attempt($credentials)) {
             return redirect('/it');
-        } else if (Auth::guard('pengawas')->attempt(['email' => $request->email, 'password' => $request->password])) {
+        } elseif (Auth::guard('pengawas')->attempt($credentials)) {
             return redirect('/list-akun');
         }
         return redirect('/login');

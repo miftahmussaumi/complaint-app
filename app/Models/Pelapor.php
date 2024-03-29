@@ -14,7 +14,8 @@ class Pelapor extends Authenticatable
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id', 'nama', 'jabatan', 'nipp', 'email','telepon','divisi','password',
+        'id', 'nama', 'jabatan', 'nipp', 'email','telepon','divisi',
+        'status','password', 'id_admin_tj'
     ];
 
     protected $hidden = [
