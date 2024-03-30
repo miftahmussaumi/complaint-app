@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2024 at 03:42 PM
+-- Generation Time: Mar 30, 2024 at 01:46 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -35,6 +35,7 @@ CREATE TABLE `admin` (
   `jabatan` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ttd` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -43,8 +44,8 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `nama`, `nipp`, `jabatan`, `email`, `password`, `created_at`, `updated_at`) VALUES
-(2, 'Admin Aplikasi 1', '20013001', 'Teknisi IT', 'admin1@gmail.com', '$2y$10$3ZkUBRR8mw/6hx/NfKhC5uyZ7QdZUEG7ULNzvUWpVwR6fimRbGlvO', '2024-03-19 21:45:37', '2024-03-19 21:45:37');
+INSERT INTO `admin` (`id`, `nama`, `nipp`, `jabatan`, `email`, `password`, `ttd`, `created_at`, `updated_at`) VALUES
+(2, 'Admin Aplikasi 1', '20013001', 'Teknisi IT', 'admin1@gmail.com', '$2y$10$3ZkUBRR8mw/6hx/NfKhC5uyZ7QdZUEG7ULNzvUWpVwR6fimRbGlvO', '2_1711758444_sign-admin.png', '2024-03-19 21:45:37', '2024-03-19 21:45:37');
 
 -- --------------------------------------------------------
 
@@ -67,6 +68,8 @@ CREATE TABLE `laporan` (
   `tgl_akhir_pengerjaan` datetime DEFAULT NULL,
   `waktu_tambahan` int(11) DEFAULT NULL,
   `foto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `det_pekerjaan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ket_pekerjaan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -75,13 +78,19 @@ CREATE TABLE `laporan` (
 -- Dumping data for table `laporan`
 --
 
-INSERT INTO `laporan` (`id`, `id_pelapor`, `id_pengawas`, `id_admin`, `tgl_masuk`, `no_inv_aset`, `tgl_selesai`, `kat_layanan`, `jenis_layanan`, `det_layanan`, `tgl_awal_pengerjaan`, `tgl_akhir_pengerjaan`, `waktu_tambahan`, `foto`, `created_at`, `updated_at`) VALUES
-(2, 4, NULL, NULL, '2024-03-20 04:06:25', '01/INV/003', '2024-03-20 20:14:35', 'Throubleshooting', 'PC/Laptop', 'PC tidak mau menyala', '2024-03-01 17:17:23', '2024-03-08 17:17:23', NULL, NULL, '2024-03-19 21:06:25', '2024-03-19 21:06:25'),
-(3, 4, NULL, NULL, '2024-03-20 04:07:04', '02/INV/001', NULL, 'Throubleshooting', 'Software', 'Aplikasi tidak bisa dijalankan', '2024-03-04 18:23:00', '2024-03-02 06:22:00', NULL, NULL, '2024-03-19 21:07:04', '2024-03-19 21:07:04'),
-(4, 4, NULL, NULL, '2024-03-20 04:19:31', '03/INV/001', NULL, 'Throubleshooting', 'Jaringan', 'jaringan terkendala', '2024-01-04 17:17:52', '2024-03-01 17:17:52', NULL, NULL, '2024-03-19 21:19:31', '2024-03-19 21:19:31'),
-(5, 4, NULL, NULL, '2024-03-20 04:37:14', '01/INV/004', NULL, 'Throubleshooting', 'Printer', 'Printer tidak bisa dijalankan', NULL, NULL, NULL, NULL, '2024-03-19 21:37:14', '2024-03-19 21:37:14'),
-(6, 4, NULL, NULL, '2024-03-20 07:39:01', '01/INV/005', NULL, 'Instalasi', 'Sistem Operasi', 'Sistem tidak berjalan dengan baik', NULL, NULL, NULL, NULL, '2024-03-20 00:39:01', '2024-03-20 00:39:01'),
-(7, 4, NULL, NULL, '2024-03-20 00:00:00', '01/INV/100', NULL, 'Throubleshooting', 'PC/Laptop', 'gdfhfgfhfgjhfjghgh fgfgh', '2024-03-12 09:25:00', '2024-03-30 21:26:00', NULL, NULL, '2024-03-20 14:23:27', '2024-03-20 14:23:27');
+INSERT INTO `laporan` (`id`, `id_pelapor`, `id_pengawas`, `id_admin`, `tgl_masuk`, `no_inv_aset`, `tgl_selesai`, `kat_layanan`, `jenis_layanan`, `det_layanan`, `tgl_awal_pengerjaan`, `tgl_akhir_pengerjaan`, `waktu_tambahan`, `foto`, `det_pekerjaan`, `ket_pekerjaan`, `created_at`, `updated_at`) VALUES
+(2, 4, NULL, 2, '2024-03-10 04:06:25', '01/INV/001', '2024-03-20 20:14:35', 'Throubleshooting', 'PC/Laptop', 'PC tidak mau menyala', '2024-03-11 17:17:23', '2024-03-25 17:17:23', 0, NULL, '', '', '2024-03-19 21:06:25', '2024-03-19 21:06:25'),
+(3, 4, NULL, 2, '2024-03-20 04:07:04', '01/INV/002', '2024-03-24 16:27:23', 'Throubleshooting', 'Software', 'Aplikasi tidak bisa dijalankan', '2024-03-04 18:23:00', '2024-03-02 06:22:00', 0, NULL, 'Malakukan kegiatan perbaikan website', '', '2024-03-19 21:07:04', '2024-03-19 21:07:04'),
+(4, 4, NULL, 2, '2024-03-20 04:19:31', '01/INV/003', '2024-03-20 21:54:45', 'Throubleshooting', 'Jaringan', 'jaringan terkendala', '2024-01-04 17:17:52', '2024-03-01 17:17:52', NULL, NULL, '', '', '2024-03-19 21:19:31', '2024-03-19 21:19:31'),
+(7, 4, NULL, 2, '2024-03-20 00:00:00', '01/INV/004', NULL, 'Throubleshooting', 'PC/Laptop', 'gdfhfgfhfgjhfjghgh fgfgh', '2024-03-12 09:25:00', '2024-03-30 21:26:00', 0, NULL, '', '', '2024-03-20 14:23:27', '2024-03-20 14:23:27'),
+(16, 4, 1, 2, '2024-03-24 15:47:47', '01/INV/005', '2024-03-25 18:09:52', 'Throubleshooting', 'Aplikasi', NULL, '2024-03-25 13:14:00', '2024-03-27 15:10:00', NULL, NULL, 'Mengerjakan perbaikan troubleshooting', ' perbaikan troubleshootin berhasil', '2024-03-22 08:47:47', '2024-03-22 08:47:47'),
+(17, 4, NULL, 2, '2024-03-24 10:08:50', '01/INV/006', NULL, 'Throubleshooting', 'PC/Laptop', NULL, '2024-03-24 12:00:00', '2024-03-31 06:00:00', 2, NULL, NULL, NULL, '2024-03-24 03:08:50', '2024-03-24 03:08:50'),
+(18, 4, NULL, 2, '2024-03-24 10:13:58', '01/INV/007', '2024-03-25 15:59:14', 'Instalasi', 'PC/Laptop', 'PC atau Laptop tidak bisa digunakan dengan baik', '2024-03-25 12:15:00', '2024-03-25 15:00:00', 3, NULL, 'ini detail kegiatan', NULL, '2024-03-24 03:13:58', '2024-03-24 03:13:58'),
+(20, 4, NULL, NULL, '2024-03-25 15:16:23', '01/INV/009', '2024-03-25 18:01:24', 'Throubleshooting', 'PC/Laptop', 'Permasalahan troubleshoot', '2024-03-26 13:14:00', '2024-03-30 13:14:00', NULL, NULL, NULL, NULL, '2024-03-25 08:16:23', '2024-03-25 08:16:23'),
+(21, 4, NULL, 2, '2024-03-25 20:41:59', '01/INV/010', NULL, 'Throubleshooting', 'PC/Laptop', 'Permasalahan trouble', '2024-03-25 13:14:00', '2024-04-06 13:14:00', NULL, NULL, NULL, NULL, '2024-03-25 13:41:59', '2024-03-25 13:41:59'),
+(22, 4, NULL, 2, '2024-03-25 21:08:00', '01/INV/011', '2024-03-29 17:12:01', 'Throubleshooting', 'PC/Laptop', 'masalah PC/Laptop', '2024-03-25 13:14:00', '2024-03-27 13:14:00', 3, NULL, 'Pengerjaan dalam perbaikan laptop', 'Sudah berhasil', '2024-03-25 14:08:00', '2024-03-25 14:08:00'),
+(23, 4, 2, NULL, '2024-03-29 15:54:49', '01/INV/012', NULL, 'Throubleshooting', 'PC/Laptop', 'Terdapat error dalam menghidupkan PC/Laptop', '2024-03-29 13:14:00', '2024-04-05 13:14:00', NULL, NULL, NULL, NULL, '2024-03-29 08:54:49', '2024-03-29 08:54:49'),
+(25, 4, NULL, 2, '2024-03-29 15:59:34', '01/INV/013', NULL, 'Throubleshooting', 'Jaringan', 'Permasalahan jaringan', '2024-03-29 13:14:00', '2024-04-05 13:14:00', NULL, NULL, NULL, NULL, '2024-03-29 08:59:34', '2024-03-29 08:59:34');
 
 -- --------------------------------------------------------
 
@@ -91,13 +100,25 @@ INSERT INTO `laporan` (`id`, `id_pelapor`, `id_pengawas`, `id_admin`, `tgl_masuk
 
 CREATE TABLE `laporanakhir` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `id_laoran` bigint(20) DEFAULT NULL,
+  `id_laporan` bigint(20) DEFAULT NULL,
   `no_ref` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggal_akhir` datetime DEFAULT NULL,
+  `tanggal` date DEFAULT NULL,
   `bisnis_area` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `versi` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `halaman` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nomor` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `laporanakhir`
+--
+
+INSERT INTO `laporanakhir` (`id`, `id_laporan`, `no_ref`, `tanggal`, `bisnis_area`, `versi`, `halaman`, `nomor`, `created_at`, `updated_at`) VALUES
+(1, 16, '01/SRT/01', '2024-03-29', 'Teknologi', 'terbaru', '1', '001', '2024-03-25 11:09:52', '2024-03-25 11:09:52'),
+(2, 22, NULL, NULL, NULL, NULL, NULL, NULL, '2024-03-25 14:10:22', '2024-03-25 14:10:22'),
+(3, 22, NULL, NULL, NULL, NULL, NULL, NULL, '2024-03-29 10:12:01', '2024-03-29 10:12:01');
 
 -- --------------------------------------------------------
 
@@ -108,7 +129,7 @@ CREATE TABLE `laporanakhir` (
 CREATE TABLE `laporanhist` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_laporan` bigint(20) DEFAULT NULL,
-  `status_laporan` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_laporan` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tanggal` datetime DEFAULT NULL,
   `keterangan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `foto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -126,15 +147,37 @@ INSERT INTO `laporanhist` (`id`, `id_laporan`, `status_laporan`, `tanggal`, `ket
 (3, 2, 'Diproses', '2024-03-20 11:10:51', NULL, NULL, '2024-03-20 04:10:51', '2024-03-20 04:10:51'),
 (4, 4, 'Pengajuan', '2024-03-20 04:19:31', NULL, NULL, '2024-03-19 21:19:31', '2024-03-19 21:19:31'),
 (5, 4, 'Diproses', '2024-03-20 11:20:01', NULL, NULL, '2024-03-20 04:20:01', '2024-03-20 04:20:01'),
-(6, 5, 'Pengajuan', '2024-03-20 04:37:14', NULL, NULL, '2024-03-19 21:37:14', '2024-03-19 21:37:14'),
-(7, 6, 'Pengajuan', '2024-03-20 07:39:01', NULL, NULL, '2024-03-20 00:39:01', '2024-03-20 00:39:01'),
-(11, 2, 'CheckedU', '2024-03-20 18:55:20', NULL, NULL, '2024-03-20 11:55:20', '2024-03-20 11:55:20'),
-(12, 4, 'CheckedU', '2024-03-20 18:22:00', 'Sudah selesai', NULL, '2024-03-20 11:22:00', '2024-03-20 11:22:00'),
+(11, 2, 'CheckedU', '2024-03-20 18:55:20', 'Pengecekan pelayanan oleh user', NULL, '2024-03-20 11:55:20', '2024-03-20 11:55:20'),
+(12, 4, 'CheckedU', '2024-03-20 18:22:00', 'Pengecekan layanan oleh user', NULL, '2024-03-20 11:22:00', '2024-03-20 11:22:00'),
 (13, 3, 'Diproses', '2024-03-20 18:30:00', NULL, NULL, '2024-03-20 11:30:00', '2024-03-20 11:30:00'),
-(14, 3, 'Diproses', '2024-03-20 18:30:07', NULL, NULL, '2024-03-20 11:30:07', '2024-03-20 11:30:07'),
 (18, 2, 'Selesai', '2024-03-20 20:14:35', NULL, NULL, '2024-03-20 13:14:35', '2024-03-20 13:14:35'),
 (19, 7, 'Pengajuan', '2024-03-20 00:00:00', NULL, NULL, '2024-03-20 14:23:27', '2024-03-20 14:23:27'),
-(20, 7, 'Diproses', '2024-03-20 21:24:39', NULL, NULL, '2024-03-20 14:24:39', '2024-03-20 14:24:39');
+(20, 7, 'Diproses', '2024-03-20 21:24:39', NULL, NULL, '2024-03-20 14:24:39', '2024-03-20 14:24:39'),
+(21, 4, 'Selesai', '2024-03-20 21:54:45', NULL, NULL, '2024-03-20 14:54:45', '2024-03-20 14:54:45'),
+(30, 16, 'Pengajuan', '2024-03-22 15:47:47', NULL, NULL, '2024-03-22 08:47:47', '2024-03-22 08:47:47'),
+(39, 3, 'CheckedU', '2024-03-24 09:24:51', 'Pengecekan layanan oleh user', NULL, '2024-03-24 02:24:51', '2024-03-24 02:24:51'),
+(40, 17, 'Pengajuan', '2024-03-24 10:08:50', NULL, NULL, '2024-03-24 03:08:50', '2024-03-24 03:08:50'),
+(41, 18, 'Pengajuan', '2024-03-24 10:13:58', NULL, NULL, '2024-03-24 03:13:58', '2024-03-24 03:13:58'),
+(42, 18, 'reqAddTime', '2024-03-24 10:17:09', 'Pengerjaan membutuhkan tambahan waktu', NULL, '2024-03-24 03:17:09', '2024-03-24 03:17:09'),
+(43, 18, 'Diproses', '2024-03-24 11:22:32', 'Penambahan waktu diterima', NULL, '2024-03-24 04:22:32', '2024-03-24 04:22:32'),
+(44, 18, 'CheckedU', '2024-03-24 11:22:58', 'Pengecekan layanan oleh user', NULL, '2024-03-24 04:22:58', '2024-03-24 04:22:58'),
+(45, 3, 'Selesai', '2024-03-24 16:27:23', NULL, NULL, '2024-03-24 09:27:23', '2024-03-24 09:27:23'),
+(49, 20, 'Pengajuan', '2024-03-25 15:16:23', NULL, NULL, '2024-03-25 08:16:23', '2024-03-25 08:16:23'),
+(50, 17, 'reqAddTime', '2024-03-25 15:31:53', 'Penambahan waktu', NULL, '2024-03-25 08:31:53', '2024-03-25 08:31:53'),
+(51, 16, 'Diproses', '2024-03-25 15:55:59', NULL, NULL, '2024-03-25 08:55:59', '2024-03-25 08:55:59'),
+(52, 18, 'Selesai', '2024-03-25 15:59:14', NULL, NULL, '2024-03-25 08:59:14', '2024-03-25 08:59:14'),
+(53, 16, 'CheckedU', '2024-03-25 18:09:44', 'Pengecekan layanan oleh user', NULL, '2024-03-25 11:09:44', '2024-03-25 11:09:44'),
+(54, 16, 'Selesai', '2024-03-25 18:09:52', NULL, NULL, '2024-03-25 11:09:52', '2024-03-25 11:09:52'),
+(55, 20, 'ReqHapus', '2024-03-25 20:37:10', 'User mengajukan permintaan untuk menghapus laporan', NULL, '2024-03-25 13:37:10', '2024-03-25 13:37:10'),
+(56, 21, 'Pengajuan', '2024-03-25 20:41:59', NULL, NULL, '2024-03-25 13:41:59', '2024-03-25 13:41:59'),
+(57, 20, 'Dibatalkan', '2024-03-25 20:48:52', 'Pengajuan penghapusan permintaan disetujui oleh Admin IT, laporan dibatalkan.', NULL, '2024-03-25 13:48:52', '2024-03-25 13:48:52'),
+(58, 22, 'Pengajuan', '2024-03-25 21:08:00', NULL, NULL, '2024-03-25 14:08:00', '2024-03-25 14:08:00'),
+(59, 22, 'reqAddTime', '2024-03-25 21:08:37', 'Butuh min 1 minggu', NULL, '2024-03-25 14:08:37', '2024-03-25 14:08:37'),
+(63, 23, 'Pengajuan', '2024-03-29 15:54:49', NULL, NULL, '2024-03-29 08:54:49', '2024-03-29 08:54:49'),
+(64, 24, 'Pengajuan', '2024-03-29 15:57:33', NULL, NULL, '2024-03-29 08:57:33', '2024-03-29 08:57:33'),
+(65, 25, 'Pengajuan', '2024-03-29 15:59:34', NULL, NULL, '2024-03-29 08:59:34', '2024-03-29 08:59:34'),
+(66, 22, 'Diproses', '2024-03-29 16:22:03', 'Penambahan waktu diterima', NULL, '2024-03-29 09:22:03', '2024-03-29 09:22:03'),
+(67, 22, 'CheckedU', '2024-03-29 17:00:52', 'Pengecekan layanan oleh user', NULL, '2024-03-29 10:00:52', '2024-03-29 10:00:52');
 
 -- --------------------------------------------------------
 
@@ -182,6 +225,7 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `pelapor` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `id_admin_tj` bigint(20) DEFAULT NULL,
   `nama` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `nipp` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -189,6 +233,8 @@ CREATE TABLE `pelapor` (
   `jabatan` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `divisi` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `telepon` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `ttd` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -197,8 +243,9 @@ CREATE TABLE `pelapor` (
 -- Dumping data for table `pelapor`
 --
 
-INSERT INTO `pelapor` (`id`, `nama`, `nipp`, `email`, `password`, `jabatan`, `divisi`, `telepon`, `created_at`, `updated_at`) VALUES
-(4, 'Pelapor 1', '123456789', 'pelapor@gmail.com', '$2y$10$1YUlOgoolnU4ysHY5fLRgOT63g7veTDX6t9viSeKir.LsokEO3iOO', 'Marketing', 'Pemasaran', '08123456789', '2024-03-19 20:59:44', '2024-03-19 20:59:44');
+INSERT INTO `pelapor` (`id`, `id_admin_tj`, `nama`, `nipp`, `email`, `password`, `jabatan`, `divisi`, `telepon`, `status`, `ttd`, `created_at`, `updated_at`) VALUES
+(4, 2, 'Pelapor 1', '123456789', 'pelapor1@gmail.com', '$2y$10$1YUlOgoolnU4ysHY5fLRgOT63g7veTDX6t9viSeKir.LsokEO3iOO', 'Marketing', 'Pemasaran', '08123456789', 1, '4_1711758896_sign-pelapor.png', '2024-03-19 20:59:44', '2024-03-19 20:59:44'),
+(5, NULL, 'Pelapor 2', '123456789', 'pelapor2@gmail.com', '$2y$10$9cr5mTQuQL1BP7F/40omG.FJPv0orZuRCffo9w.GRuioXj7mnUcXO', 'Manager', 'Makerting', '1234567890', 0, NULL, '2024-03-20 14:46:19', '2024-03-20 14:46:19');
 
 -- --------------------------------------------------------
 
@@ -212,9 +259,17 @@ CREATE TABLE `pengawas` (
   `nipp` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ttd` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pengawas`
+--
+
+INSERT INTO `pengawas` (`id`, `nama`, `nipp`, `email`, `password`, `ttd`, `created_at`, `updated_at`) VALUES
+(1, 'Pengawas 1', '1234567', 'pengawas@gmail.com', '$2y$10$RwFfEnbJKyAZuEgowHHmNOBKR4dHv3CwDRLypXQalWmv4CfQwMzmW', '1_1711759235_ttd2.png', '2024-03-25 09:52:04', '2024-03-25 09:52:04');
 
 -- --------------------------------------------------------
 
@@ -254,7 +309,10 @@ ALTER TABLE `admin`
 -- Indexes for table `laporan`
 --
 ALTER TABLE `laporan`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_pelapor` (`id_pelapor`),
+  ADD KEY `id_pengawas` (`id_pengawas`),
+  ADD KEY `id_admin` (`id_admin`);
 
 --
 -- Indexes for table `laporanakhir`
@@ -307,25 +365,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `laporan`
 --
 ALTER TABLE `laporan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `laporanakhir`
 --
 ALTER TABLE `laporanakhir`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `laporanhist`
 --
 ALTER TABLE `laporanhist`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -337,13 +395,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `pelapor`
 --
 ALTER TABLE `pelapor`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pengawas`
 --
 ALTER TABLE `pengawas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
