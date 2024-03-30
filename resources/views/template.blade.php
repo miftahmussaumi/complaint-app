@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Quixlab - Bootstrap Admin Dashboard </title>
+    <title>IT KAI DAOP 4 SEMARANG</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('quixlab/images/favicon.png')}}">
     <!-- Pignose Calender -->
@@ -61,14 +61,34 @@
         ***********************************-->
         <div class="nav-header">
             <div class="brand-logo">
-                <a href="index.html">
-                    <!-- <b class="logo-abbr"><img src="{{asset('quixlab/images/logo.png')}}" alt=""> </b> -->
+                @if (Str::length(Auth::guard('pelapor')->user()) > 0)
+                <a href="/profile-pelapor">
+                    <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
                     <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
-                    <!-- <span class="brand-title">
-                        <img src="{{asset('quixlab/images/logo-text.png')}}" alt="">
-                    </span> -->
-                    <h4 style="color: white;">Gambar Logo</h4>
+                    <span class="brand-title">
+                        <img src="{{asset('storage/img/kai.png')}}" width="100" height="50" style="margin-left: 40px; margin-bottom: 10px;">
+                    </span>
+                    <!-- <h4 style="color: white;">Gambar Logo</h4> -->
                 </a>
+                @elseif (Str::length(Auth::guard('admin')->user()) > 0)
+                <a href="/profile-admin">
+                    <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
+                    <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
+                    <span class="brand-title">
+                        <img src="{{asset('storage/img/kai.png')}}" width="100" height="50" style="margin-left: 40px; margin-bottom: 10px;">
+                    </span>
+                    <!-- <h4 style="color: white;">Gambar Logo</h4> -->
+                </a>
+                @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
+                <a href="/profile-pengawas">
+                    <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
+                    <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
+                    <span class="brand-title">
+                        <img src="{{asset('storage/img/kai.png')}}" width="100" height="50" style="margin-left: 40px; margin-bottom: 10px;">
+                    </span>
+                    <!-- <h4 style="color: white;">Gambar Logo</h4> -->
+                </a>
+                @endif
             </div>
         </div>
         <!--**********************************
@@ -158,8 +178,8 @@
 
                                 </div>
                             </div>
-                        </li>
-                        <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+                        </li> -->
+                        <!-- <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
                                 <i class="mdi mdi-bell-outline"></i>
                                 <span class="badge badge-pill gradient-2">3</span>
                             </a>
@@ -212,20 +232,10 @@
 
                                 </div>
                             </div>
-                        </li>
-                        <li class="icons dropdown d-none d-md-flex">
-                            <a href="javascript:void(0)" class="log-user" data-toggle="dropdown">
-                                <span>English</span> <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i>
-                            </a>
-                            <div class="drop-down dropdown-language animated fadeIn  dropdown-menu">
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li><a href="javascript:void()">English</a></li>
-                                        <li><a href="javascript:void()">Dutch</a></li>
-                                    </ul>
-                                </div>
-                            </div>
                         </li> -->
+                        <li class="icons dropdown d-none d-md-flex">
+                            {{Auth::guard('pengawas')->user()->nama}}
+                        </li>
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <span class="activity active"></span>
