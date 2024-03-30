@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Pengawas;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -23,6 +26,55 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function profile()
+    {
+        $dt = DB::table('admin')
+        ->where('id', '=', Auth::guard('admin')->user()->id)
+        ->first();
+
+        // dd($dt);
+
+        return view('it.profile', compact('dt'));
+    }
+
+    public function ttd(Request $request)
+    {
+        $ttd = $request->ttd;
+
+        $getttd = DB::table('admin')
+        ->select('ttd')
+        ->where('id', Auth::guard('admin')->user()->id)
+            ->first();
+
+        $cekttd = $getttd->ttd;
+
+        if ($cekttd == '') {
+            $nama_file_ttd = Auth::guard('admin')->user()->id . "_" . time() . "_" . $ttd->getClientOriginalName();
+            $ttd->move(storage_path() . '/app/public/img/admin', $nama_file_ttd);
+
+            DB::table('admin')
+            ->where('id', Auth::guard('admin')->user()->id)
+                ->update([
+                    'ttd'  => $nama_file_ttd
+                ]);
+        } else if ($cekttd != '') {
+            $nama_file_ttd = Auth::guard('admin')->user()->id . "_" . time() . "_" . $ttd->getClientOriginalName();
+            $ttd->move(storage_path() . '/app/public/img/admin', $nama_file_ttd);
+
+            DB::table('admin')
+            ->where('id', Auth::guard('admin')->user()->id)
+                ->update([
+                    'ttd'  => $nama_file_ttd
+                ]);
+
+            $old_ttd = $request->ttd_old;
+            unlink(storage_path('app/public/img/admin/' . $old_ttd));
+        }
+
+        // dd($ttd, $filettd);
+        return redirect('profile-admin');
+    }
     public function create()
     {
         //

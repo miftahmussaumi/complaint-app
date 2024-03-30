@@ -30,6 +30,8 @@ Route::get('/test', function () {
 
 Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
     // ==============ROUTE UNTUK BAGIAN USER PELAPOR============== //
+    Route::get('/profile-pelapor', [PelaporController::class, 'profile']);
+    Route::post('/save-ttd-pelapor/{id}', [PelaporController::class, 'ttd'])->name('save-ttd-pelapor');;
     Route::get('/dashboard-user', [LaporanController::class, 'dashU']);
     Route::get('/form-comp', function () { return view('pelapor.comp-create');});
     Route::get('/comp', [LaporanController::class, 'index']);
@@ -41,6 +43,8 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
     Route::get('/getNoInventarisOptions', [LaporanController::class, 'getNoInventarisOptions']);
 
     // ==============ROUTE UNTUK BAGIAN USER IT============== //
+    Route::get('/profile-admin', [AdminController::class, 'profile']);
+    Route::post('/save-ttd-admin/{id}', [AdminController::class, 'ttd'])->name('save-ttd-admin');;
     Route::get('/it', [LaporanController::class, 'indexit']);
     Route::post('/proses-laporan/{idlap}',[LaporanController::class, 'editit'])->name('proses-laporan');
     Route::post('/tambah-waktu/{idlap}', [LaporanController::class, 'tambahwaktu'])->name('tambah-waktu');
@@ -55,7 +59,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
         return view('pengawas.dashboard');
     });
     Route::get('/profile-pengawas', [PengawasController::class, 'profile']);
-    Route::post('/save-ttd-pengawas/{id}', [PengawasController::class, 'ttdP'])->name('save-ttd-pengawas');;
+    Route::post('/save-ttd-pengawas/{id}', [PengawasController::class, 'ttd'])->name('save-ttd-pengawas');;
     Route::get('/list-akun', [PengawasController::class, 'akun']);
     Route::get('/list-laporan', [PengawasController::class, 'laporan']);
     Route::post('/pilih-pjuser/{id}', [PengawasController::class, 'pjuser'])->name('pilih-pjuser');

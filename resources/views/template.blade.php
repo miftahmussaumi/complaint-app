@@ -231,19 +231,6 @@
                                 <span class="activity active"></span>
                                 <img src="{{asset('quixlab/images/user/1.png')}}" height="40" width="40" alt="">
                             </div>
-                            <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li>
-                                            @if (Str::length(Auth::guard('pengawas')->user()) > 0)
-                                            <a href="/profile-pengawas"><i class="icon-user"></i> <span>Profile</span></a>
-                                            @elseif (Str::length(Auth::guard('pelapor')->user()) > 0)
-                                            @elseif (Str::length(Auth::guard('admin')->user()) > 0)
-                                            @endif
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
                         </li>
                     </ul>
                 </div>
@@ -262,6 +249,11 @@
                     <!-- <li class="nav-label">Dashboard</li> -->
                     @if (Str::length(Auth::guard('pelapor')->user()) > 0)
                     <li>
+                        <a href="/profile-pelapor">
+                            <i class="fa fa-user"></i><span class="nav-text">Profile</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/dashboard-user">
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
@@ -278,6 +270,11 @@
                     </li>
                     @elseif (Str::length(Auth::guard('admin')->user()) > 0)
                     <li>
+                        <a href="/profile-admin">
+                            <i class="fa fa-user"></i><span class="nav-text">Profile</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/it">
                             <i class="fa fa-download"></i><span class="nav-text">Pengajuan Layanan</span>
                         </a>
@@ -288,6 +285,11 @@
                         </a>
                     </li>
                     @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
+                    <li>
+                        <a href="/profile-pengawas">
+                            <i class="fa fa-user"></i><span class="nav-text">Profile</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="/list-akun">
                             <i class="fa fa-users"></i><span class="nav-text">Pengguna</span>

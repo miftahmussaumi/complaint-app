@@ -304,13 +304,17 @@
             <table style="width: 100%;">
                 <tr>
                     <td style="padding: 5px; width: 33%;" align="center">
-                        Staf IT <br><br><br><br><br><br>
+                        Staf IT <br>
+                        <img src="{{storage_path('app/public/img/admin/'.$dt->ttd_admin)}}" width="130px" height="100px">
+                        <br>
                         <u>{{$dt->nama_admin}}</u><br>
                         NIPP.{{$dt->nipp_admin}}
                     </td>
                     <td style="padding: 5px; width: 33%;"></td>
                     <td style="padding: 5px; width: 33%;" align="center">
-                        User <br><br><br><br><br><br>
+                        User <br>
+                        <img src="{{storage_path('app/public/img/pelapor/'.$dt->ttd_pelapor)}}" width="130px" height="100px">
+                        <br>
                         <u>{{$dt->nama_pelapor}}</u><br>
                         NIPP.{{$dt->nipp_pelapor}}
                     </td>
@@ -319,7 +323,7 @@
                     <td></td>
                     <td align="center">
                         Mengetahui, <br> Manager <br>
-                        <img src="{{storage_path('app/public/img/pengawas/'.$dt->ttd_pengawas)}}" width="120px" height="100px">
+                        <img src="{{storage_path('app/public/img/pengawas/'.$dt->ttd_pengawas)}}" width="130px" height="100px">
                         <br>
                         <u>{{$dt->nama_pengawas}}</u><br>
                         NIPP.{{$dt->nipp_pengawas}}

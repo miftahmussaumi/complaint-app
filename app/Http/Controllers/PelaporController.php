@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pelapor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class PelaporController extends Controller
 {
@@ -53,6 +55,56 @@ class PelaporController extends Controller
         // dd($pass1, $pass);
         return view('welcome2');
     }
+
+    public function profile()
+    {
+        $dt = DB::table('pelapor')
+        ->where('id', '=', Auth::guard('pelapor')->user()->id)
+            ->first();
+
+        // dd($dt);
+
+        return view('pelapor.profile', compact('dt'));
+    }
+
+    public function ttd(Request $request)
+    {
+        $ttd = $request->ttd;
+
+        $getttd = DB::table('pelapor')
+        ->select('ttd')
+        ->where('id', Auth::guard('pelapor')->user()->id)
+            ->first();
+
+        $cekttd = $getttd->ttd;
+
+        if ($cekttd == '') {
+            $nama_file_ttd = Auth::guard('pelapor')->user()->id . "_" . time() . "_" . $ttd->getClientOriginalName();
+            $ttd->move(storage_path() . '/app/public/img/pelapor', $nama_file_ttd);
+
+            DB::table('pelapor')
+            ->where('id', Auth::guard('pelapor')->user()->id)
+                ->update([
+                    'ttd'  => $nama_file_ttd
+                ]);
+        } else if ($cekttd != '') {
+            $nama_file_ttd = Auth::guard('pelapor')->user()->id . "_" . time() . "_" . $ttd->getClientOriginalName();
+            $ttd->move(storage_path() . '/app/public/img/pelapor', $nama_file_ttd);
+
+            DB::table('pelapor')
+            ->where('id', Auth::guard('pelapor')->user()->id)
+                ->update([
+                    'ttd'  => $nama_file_ttd
+                ]);
+
+            $old_ttd = $request->ttd_old;
+            unlink(storage_path('app/public/img/pelapor/' . $old_ttd));
+        }
+
+        // dd($ttd, $filettd);
+        return redirect('profile-pelapor');
+    }
+
 
     /**
      * Display the specified resource.

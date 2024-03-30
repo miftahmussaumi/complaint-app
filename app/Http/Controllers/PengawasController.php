@@ -28,7 +28,7 @@ class PengawasController extends Controller
         return view('pengawas.profile',compact('dt'));
     }
 
-    public function ttdP(Request $request)
+    public function ttd(Request $request)
     {
         $ttd = $request->ttd;
         
@@ -40,7 +40,7 @@ class PengawasController extends Controller
         $cekttd = $getttd->ttd;
         
         if($cekttd == ''){
-            $nama_file_ttd = Auth::guard('pengawas')->user()->id . "_" . $ttd->getClientOriginalName() . time();
+            $nama_file_ttd = Auth::guard('pengawas')->user()->id . "_" . time() . "_" . $ttd->getClientOriginalName() ;
             $ttd->move(storage_path().'/app/public/img/pengawas', $nama_file_ttd);
 
             DB::table('pengawas')
@@ -49,7 +49,7 @@ class PengawasController extends Controller
                 'ttd'  => $nama_file_ttd
             ]);
         } else if($cekttd != '' ){
-            $nama_file_ttd = Auth::guard('pengawas')->user()->id . "_" . $ttd->getClientOriginalName() . time();
+            $nama_file_ttd = Auth::guard('pengawas')->user()->id . "_" . time() . "_" . $ttd->getClientOriginalName() ;
             $ttd->move(storage_path() . '/app/public/img/pengawas', $nama_file_ttd);
 
             DB::table('pengawas')
@@ -138,9 +138,9 @@ class PengawasController extends Controller
         ->leftJoin('pelapor', 'pelapor.id','=', 'laporan.id_pelapor')
         ->leftJoin('pengawas','pengawas.id','=','laporan.id_pengawas')
         ->select(
-            'pelapor.nama AS nama_pelapor', 'pelapor.divisi','pelapor.email','pelapor.telepon','pelapor.nipp as nipp_pelapor',
+            'pelapor.nama AS nama_pelapor', 'pelapor.divisi','pelapor.email','pelapor.telepon','pelapor.nipp as nipp_pelapor', 'pelapor.ttd as ttd_pelapor',
             'pengawas.nama as nama_pengawas','pengawas.nipp as nipp_pengawas', 'pengawas.ttd as ttd_pengawas',
-            'admin.nama as nama_admin','admin.nipp as nipp_admin',
+            'admin.nama as nama_admin','admin.nipp as nipp_admin', 'admin.ttd as ttd_admin',
             'laporan.id as idlap','laporan.jenis_layanan','laporan.kat_layanan',
             'laporan.no_inv_aset', 'laporan.det_pekerjaan','laporan.ket_pekerjaan',
             'laporanakhir.no_ref',
