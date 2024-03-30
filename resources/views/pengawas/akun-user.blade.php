@@ -38,7 +38,7 @@
                                             <tr>
                                                 <?php $no++ ?>
                                                 <td>{{$no}}</td>
-                                                <td>{{$dtp->nama}} {{$dtp->id}}</td>
+                                                <td>{{$dtp->nama}}</td>
                                                 <td>{{$dtp->nipp}}</td>
                                                 <!-- <td>{{$dtp->jabatan}}</td>
                                                 <td>{{$dtp->divisi}}</td> -->
