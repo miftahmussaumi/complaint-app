@@ -12,10 +12,40 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
+        @if($datas == 'ada')
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{route('history-it')}}" method="get" id="filterForm">
+                        {{csrf_field()}}
+                        <div class="form-row">
+                            <div class="col-2">
+                                <select id="filter" name="filter" class="form-control">
+                                    <option value="" disabled selected>Pilih Filter</option>
+                                    <option value="tgl_masuk">Tanggal Masuk</option>
+                                    <option value="tgl_selesai">Tanggal Selesai</option>
+                                    <option value="no_inv_aset">No Inventaris</option>
+                                    <option value="kat_layanan">Kategori</option>
+                                </select>
+                            </div>
+                            <div id="additional-filters"></div>
+                            <div class="col">
+                                @if($filter != null)
+                                <button type="submit" name="action" value="filter" class="btn btn-primary">Filter</button>
+                                <!-- <button type="button" id="clearFilterBtn" class="btn btn-primary">Clear</button> -->
+                                <a href="/history-user"><button type="button" id="clearFilterBtn" class="btn btn-primary">Show All Data</button></a>
+                                @else
+                                <button type="submit" name="action" value="filter" class="btn btn-primary">Filter</button>
+                                <button type="button" id="clearFilterBtn" class="btn btn-primary">Clear</button>
+                                <!-- <a href="/history-user"><button type="button" id="clearFilterBtn" class="btn btn-primary">Show All Data</button></a> -->
+                                @endif
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="col-12">
-            <!-- <h4 class="d-inline">Cards Types</h4>
-            <p>The building block of a card is the <code class="highlighter-rouge">.card-body</code>. Use it whenever you need a padded section within a card.</p> -->
-            @if($datas != 1)
             @foreach($data as $dt)
             <div class="card text-left" style="color: #4F4B4B;">
                 <div class="card-body">
@@ -25,14 +55,14 @@
                             <b>Tanggal Kirim</b><br>
                             {{$dt->tgl_masuk}}<br><br>
                             <b>Tanggal Selesai</b><br>
-                            {{$dt->tgl_masuk}}
+                            {{$dt->tgl_selesai}}
                         </div>
                         <div class="col">
                             No Inventaris <br><br>
                             <b>{{$dt->no_inv_aset}}</b>
                         </div>
                         <div class="col">
-                            Kategori - Jenis <br><br>
+                            kat_layanan - Jenis <br><br>
                             <b>{{$dt->kat_layanan}} - {{$dt->jenis_layanan}}</b>
                         </div>
                         <div class="col">
@@ -46,7 +76,7 @@
                             @if($dt->waktu_tambahan == null OR $dt->waktu_tambahan == 0)
                             <i>tidak ada tambahan waktu</i>
                             @else
-                            <b>{{$dt->waktu_tambahan}}</b>
+                            <b>{{$dt->waktu_tambahan}}hari</b>
                             @endif
                         </div>
                     </div>
@@ -86,11 +116,11 @@
                                         </td>
                                         <td style="color: black;">{{$dthist->tanggal}}</td>
                                     </tr>
-                                    <tr>
+                                    <tr style="height: 30px;">
                                         @if($dthist->keterangan != null)
-                                        <td style="font-size: 12px; height: 30px;" valign=top>{{$dthist->keterangan}}</td>
+                                        <td style="font-size: 12px;" valign=top>{{$dthist->keterangan}}</td>
                                         @else
-                                        <td style="font-size: 12px; height: 30px;" valign=top><i>tidak ada keterangan</i></td>
+                                        <td style="font-size: 12px;" valign=top><i>tidak ada keterangan</i></td>
                                         @endif
                                     </tr>
                                 </table>
@@ -106,8 +136,53 @@
             @endforeach
             @else
             <h5>Data history belum ada</h5>
-            @endif
         </div>
+        @endif
     </div>
 </div>
+@endsection
+
+@section('script')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#filter').change(function() {
+            var filter = $(this).val();
+            $('#additional-filters').empty();
+            switch (filter) {
+                case 'tgl_masuk':
+                    $('#additional-filters').append('<select id="condition" name="tgl_masuk_f" class="form-control"><option value="=">Is</option><option value="!=">Is not</option><option value="<=">Is before</option><option value=">=">Is after</option></select>');
+                    $('#additional-filters').append('<input type="date" id="date" name="tgl_masuk" class="form-control">');
+                    break;
+                case 'tgl_selesai':
+                    $('#additional-filters').append('<select id="condition" name="tgl_selesai_f" class="form-control"><option value="=" class="form-control">Is</option><option value="!=">Is not</option><option value="<=">Is before</option><option value=">=">Is after</option></select>');
+                    $('#additional-filters').append('<input type="date" id="date" name="tgl_selesai" class="form-control">');
+                    break;
+                case 'no_inv_aset':
+                    $.ajax({
+                        url: '/getNoInventarisOptionsIT',
+                        type: 'GET',
+                        success: function(response) {
+                            $('#additional-filters').append('<select id="no_inv_aset" name="no_inv_aset" class="form-control">' + response.options + '</select>');
+                        }
+                    });
+                    break;
+                case 'kat_layanan':
+                    $('#additional-filters').append('<select id="condition" name="kat_layanan" class="form-control"><option value="Throubleshooting">Throubleshooting</option><option value="Instalasi">Instalasi</option>');
+                    break;
+                default:
+                    break;
+            }
+        });
+    });
+    $(document).ready(function() {
+        // Tangani klik tombol "Clear Filter"
+        $('#clearFilterBtn').click(function() {
+            // Bersihkan nilai input dan pilihan dropdown filter
+            $('#filterForm')[0].reset(); // Bersihkan formulir filter
+            $('#additional-filters').empty(); // Kosongkan div tambahan untuk filter tambahan
+        });
+    });
+</script>
+
 @endsection

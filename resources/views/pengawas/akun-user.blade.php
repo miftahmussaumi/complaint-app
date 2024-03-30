@@ -38,7 +38,7 @@
                                             <tr>
                                                 <?php $no++ ?>
                                                 <td>{{$no}}</td>
-                                                <td>{{$dtp->nama}}</td>
+                                                <td>{{$dtp->nama}} {{$dtp->id}}</td>
                                                 <td>{{$dtp->nipp}}</td>
                                                 <!-- <td>{{$dtp->jabatan}}</td>
                                                 <td>{{$dtp->divisi}}</td> -->
@@ -136,11 +136,11 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                         @if($dtmp->id_admin_tj == null)
-                                                        <button type="submit" class="btn btn-success" name="action" value="pilih_pj">Kirim</button>
+                                                        <button type="submit" class="btn btn-success">Kirim</button>
                                                         @endif
                                                     </div>
                                                 </div>
-                                                </formtion=>
+                                            </form>
                                         </div>
                                     </div>
                                     @endforeach

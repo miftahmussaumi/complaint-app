@@ -12,6 +12,8 @@ class Laporanakhir extends Model
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id', 'id_laporan', 'no_ref', 'tanggal', 'bisnis_area'
+        'id', 'id_laporan', 'no_ref', 'tanggal', 'bisnis_area',
+        'versi','halaman','nomor'
+
     ]; 
 }

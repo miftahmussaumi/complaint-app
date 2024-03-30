@@ -16,6 +16,57 @@ class PengawasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function profile ()
+    {
+        $dt = DB::table('pengawas')
+        ->where('id','=', Auth::guard('pengawas')->user()->id)
+        ->first();
+
+        // dd($dt);
+
+        return view('pengawas.profile',compact('dt'));
+    }
+
+    public function ttdP(Request $request)
+    {
+        $ttd = $request->ttd;
+        
+        $getttd = DB::table('pengawas')
+        ->select('ttd')
+        ->where('id', Auth::guard('pengawas')->user()->id)
+        ->first();
+
+        $cekttd = $getttd->ttd;
+        
+        if($cekttd == ''){
+            $nama_file_ttd = Auth::guard('pengawas')->user()->id . "_" . $ttd->getClientOriginalName() . time();
+            $ttd->move(storage_path().'/app/public/img/pengawas', $nama_file_ttd);
+
+            DB::table('pengawas')
+            ->where('id', Auth::guard('pengawas')->user()->id)
+            ->update([
+                'ttd'  => $nama_file_ttd
+            ]);
+        } else if($cekttd != '' ){
+            $nama_file_ttd = Auth::guard('pengawas')->user()->id . "_" . $ttd->getClientOriginalName() . time();
+            $ttd->move(storage_path() . '/app/public/img/pengawas', $nama_file_ttd);
+
+            DB::table('pengawas')
+            ->where('id', Auth::guard('pengawas')->user()->id)
+            ->update([
+                'ttd'  => $nama_file_ttd
+            ]);
+
+            $old_ttd = $request->ttd_old;
+            unlink(storage_path('app/public/img/pengawas/'.$old_ttd));
+
+        }
+        
+        // dd($ttd, $filettd);
+        return redirect('profile-pengawas');
+    }
+
     public function akun()
     {
         $pelapor = DB::table('pelapor as p')
@@ -56,18 +107,19 @@ class PengawasController extends Controller
     public function laporan()
     {
         $lap = DB::table('laporanakhir')
-        ->join('laporan','laporan.id','=','laporanakhir.id_laporan')
-        ->join('pelapor','laporan.id_pelapor','=','pelapor.id')
-        ->join('admin','admin.id','=','laporan.id_admin')
+        ->leftJoin('laporan','laporan.id','=','laporanakhir.id_laporan')
+        ->leftJoin('pelapor','laporan.id_pelapor','=','pelapor.id')
+        ->leftJoin('admin','admin.id','=','laporan.id_admin')
         ->select(
-            'pelapor.nama AS nama', 'admin.nama AS nama_admin',
-            'laporan.id AS idlap',
-            'laporan.id AS idlap',
-            'laporan.jenis_layanan',
-            'laporan.waktu_tambahan',
-            'laporan.kat_layanan',
-            'laporan.det_layanan',
-            'laporan.no_inv_aset', 'laporan.det_pekerjaan','laporan.ket_pekerjaan',
+            'pelapor.nama AS nama', 'admin.nama AS nama_admin', 'pelapor.divisi','pelapor.nipp',
+            'laporan.id AS idlap', 'laporan.id AS idlap','laporan.jenis_layanan', 'laporan.waktu_tambahan',
+            'laporan.kat_layanan','laporan.det_layanan', 'laporan.no_inv_aset', 'laporan.det_pekerjaan','laporan.ket_pekerjaan',
+            'laporanakhir.no_ref',
+            'laporanakhir.tanggal',
+            'laporanakhir.bisnis_area',
+            'laporanakhir.versi',
+            'laporanakhir.halaman',
+            'laporanakhir.nomor',
             DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%d-%m-%Y') AS tgl_masuk"),
             DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d-%m-%Y (%H:%i WIB)') AS tgl_awal_pengerjaan"),
             DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d-%m-%Y  (%H:%i WIB)') AS tgl_akhir_pengerjaan"),
@@ -81,15 +133,26 @@ class PengawasController extends Controller
     public function cetak($idlap)
     {
         $dt = DB::table('laporanakhir')
-        ->join('laporan','laporan.id','=','laporanakhir.id_laporan')
-        ->join('pelapor','laporan.id_pelapor','=','pelapor.id')
-        ->join('admin','admin.id','=','laporan.id_admin')
+        ->rightJoin('laporan','laporan.id','=','laporanakhir.id_laporan')
+        ->leftJoin('admin','admin.id','=','laporan.id_admin')
+        ->leftJoin('pelapor', 'pelapor.id','=', 'laporan.id_pelapor')
+        ->leftJoin('pengawas','pengawas.id','=','laporan.id_pengawas')
         ->select(
             'pelapor.nama AS nama_pelapor', 'pelapor.divisi','pelapor.email','pelapor.telepon','pelapor.nipp as nipp_pelapor',
-            'admin.nama AS nama_admin','admin.nipp as nipp_admin',
-            'laporan.id AS idlap','laporan.jenis_layanan','laporan.kat_layanan',
+            'pengawas.nama as nama_pengawas','pengawas.nipp as nipp_pengawas', 'pengawas.ttd as ttd_pengawas',
+            'admin.nama as nama_admin','admin.nipp as nipp_admin',
+            'laporan.id as idlap','laporan.jenis_layanan','laporan.kat_layanan',
             'laporan.no_inv_aset', 'laporan.det_pekerjaan','laporan.ket_pekerjaan',
+            'laporanakhir.no_ref',
+            'laporanakhir.bisnis_area',
+            'laporanakhir.versi',
+            'laporanakhir.halaman',
+            'laporanakhir.nomor',
+            DB::raw("DATE_FORMAT(laporanakhir.tanggal, '%d-%m-%Y') AS tanggal"),
             DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%d-%m-%Y') AS tgl_masuk"),
+            DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%H:%i WIB') AS waktu_masuk"),
+            DB::raw("DATE_FORMAT(laporan.tgl_selesai, '%d-%m-%Y') AS tgl_selesai"),
+            DB::raw("DATE_FORMAT(laporan.tgl_selesai, '%H:%i WIB') AS waktu_selesai"),
             DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d-%m-%Y') AS tgl_awal_pengerjaan"),
             DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%H:%i WIB') AS waktu_awal_pengerjaan"),
             DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d-%m-%Y') AS tgl_akhir_pengerjaan"),
@@ -103,7 +166,7 @@ class PengawasController extends Controller
             fn () => print($pdf),
             "laporan.pdf"
         );
-        // dd($lap);
+        // dd($dt);
 
         // return view('pengawas.cetak', compact('dt'));
     }
@@ -116,20 +179,16 @@ class PengawasController extends Controller
      */
     public function pjuser(Request $request, $id)
     {
-        $action         = $request->input('action');
+        // $action         = $request->input('action');
         $id_admin_tj    = $request->id_admin_tj;
 
-        if ($action === 'pilih_pj') {
-            DB::table('pelapor')
-            ->where('id', $id)
-            ->update([
-                'id_admin_tj'  => $id_admin_tj,
-                'status'       => 1 
-            ]);
-        }
-
+        DB::table('pelapor')
+        ->where('id', $id)
+        ->update([
+            'id_admin_tj'  => $id_admin_tj,
+            'status'       => 1 
+        ]);
         return redirect('list-akun');
-        // dd($action, $id_admin_tj);
     }
 
     /**
@@ -138,9 +197,40 @@ class PengawasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($idlap)
     {
-        //
+        $dtp = DB::table('laporanakhir')
+        ->leftJoin('laporan', 'laporan.id', '=', 'laporanakhir.id_laporan')
+        ->leftJoin('pelapor', 'laporan.id_pelapor', '=', 'pelapor.id')
+        ->leftJoin('admin', 'admin.id', '=', 'laporan.id_admin')
+        ->select(
+            'pelapor.nama AS nama',
+            'admin.nama AS nama_admin',
+            'pelapor.divisi',
+            'pelapor.nipp',
+            'laporanakhir.id_laporan AS idlap',
+            'laporan.jenis_layanan',
+            'laporan.waktu_tambahan',
+            'laporan.kat_layanan',
+            'laporan.det_layanan',
+            'laporan.no_inv_aset',
+            'laporan.det_pekerjaan',
+            'laporan.ket_pekerjaan',
+            'laporanakhir.no_ref',
+            'laporanakhir.tanggal',
+            'laporanakhir.bisnis_area',
+            'laporanakhir.versi',
+            'laporanakhir.halaman',
+            'laporanakhir.nomor',
+            DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%d-%m-%Y') AS tgl_masuk"),
+            DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d-%m-%Y (%H:%i WIB)') AS tgl_awal_pengerjaan"),
+            DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d-%m-%Y  (%H:%i WIB)') AS tgl_akhir_pengerjaan"),
+        )
+        ->where('laporan.id','=',$idlap)
+        ->first();
+
+        // dd($dtp);
+        return view('pengawas.detail', compact('dtp'));
     }
 
     /**

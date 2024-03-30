@@ -109,10 +109,7 @@ class LaporanController extends Controller
                 'laporanhist.id AS idhist'
             )
             ->whereNotIn('laporanhist.status_laporan', ['Selesai', 'Dibatalkan'])
-            ->where(function ($query) {
-                $query->where('laporan.id_admin', Auth::guard('admin')->user()->id)
-                    ->orWhereNull('laporan.id_admin');
-            })
+            ->where('laporan.id_admin', Auth::guard('admin')->user()->id)
             ->get();
 
         // FORMAT TANGGAL '%d/%m/%Y %H:%i'
@@ -143,9 +140,16 @@ class LaporanController extends Controller
         $akhir_pengerjaan = $tgl_akhir . ' ' . $waktu_konversi_akhir;
         $tgl_akhir_pengerjaan = date('Y-m-d H:i:s', strtotime($akhir_pengerjaan));
 
+        $pelapor = DB::table('pelapor')->where('id','=', Auth::guard('pelapor')->user()->id)->get();
+
+        foreach ($pelapor as $dtp ){
+            $id_admin = $dtp->id_admin_tj;
+        }
+
         if ($request->jenis_layanan === "Lainnya") {
             $laporan = Laporan::create([
                 'id_pelapor'    => Auth::guard('pelapor')->user()->id,
+                'id_admin'      => $id_admin,
                 'no_inv_aset'   => $request->no_inv_aset,
                 'kat_layanan'   => $request->kat_layanan,
                 'jenis_layanan' => $request->layanan_lain,
@@ -163,6 +167,7 @@ class LaporanController extends Controller
         } else {
             $laporan = Laporan::create([
                 'id_pelapor'    => Auth::guard('pelapor')->user()->id,
+                'id_admin'      => $id_admin,
                 'no_inv_aset'   => $request->no_inv_aset,
                 'kat_layanan'   => $request->kat_layanan,
                 'jenis_layanan' => $request->jenis_layanan,
@@ -178,8 +183,8 @@ class LaporanController extends Controller
                 'tanggal'       => $tgl_masuk
             ]);
         }
+        // dd($tgl_masuk, $id_admin);
         return redirect('comp');
-        // dd($tgl_masuk, $tgl_awal_pengerjaan, $tgl_akhir_pengerjaan);
     }
 
     /**
@@ -365,14 +370,14 @@ class LaporanController extends Controller
             ->update([
                 'det_pekerjaan' => $det_pekerjaan,
                 'ket_pekerjaan' => $ket_pekerjaan,
-                'id_admin'      => Auth::guard('admin')->user()->id 
+                // 'id_admin'      => Auth::guard('admin')->user()->id 
             ]);
         } else {
             DB::table('laporan')
             ->where('id', $idlap)
             ->update([
                 'det_pekerjaan' => $det_pekerjaan,
-                'id_admin'      => Auth::guard('admin')->user()->id 
+                // 'id_admin'      => Auth::guard('admin')->user()->id 
             ]);
         }
 
@@ -533,41 +538,191 @@ class LaporanController extends Controller
         return response()->json(['options' => $options]);
     }
 
-    public function historyA($id)
+    public function historyA(Request $request)
     {
-        $data = DB::table('laporan')
-        ->where('laporan.id_admin', '=', $id)
-        ->join('laporanhist','laporanhist.id_laporan','=','laporan.id')
-        ->orderBy('laporan.tgl_masuk', 'desc')
-        ->select(
-            'laporan.id AS id','no_inv_aset','tgl_selesai','kat_layanan',
-            'jenis_layanan','det_layanan',
-            'waktu_tambahan','laporan.foto',
-            'det_pekerjaan','ket_pekerjaan',
-            DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
-            DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
-            DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
-        )
-        ->where('laporanhist.status_laporan', ['Selesai', 'Dibatalkan'])
-        ->where('laporan.id_pelapor', '=', Auth::guard('admin')->user()->id)
-        ->get();
+        $filter = $request->filter;
+        $tgl_masuk = $request->tgl_masuk;
+        $tgl_masuk_f = $request->tgl_masuk_f;
+        $tgl_selesai = $request->tgl_selesai;
+        $tgl_selesai_f = $request->tgl_selesai_f;
+        $no_inv_aset = $request->no_inv_aset;
+        $kat_layanan = $request->kat_layanan;
+
+        if ($filter == null) {
+            $data = DB::table('laporan')
+            ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+            ->select(
+                'laporan.id AS id',
+                'no_inv_aset',
+                'tgl_selesai',
+                'kat_layanan',
+                'jenis_layanan',
+                'det_layanan',
+                'waktu_tambahan',
+                'laporan.foto',
+                'det_pekerjaan',
+                'ket_pekerjaan',
+                DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
+                DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+            )
+                ->orderBy('laporanhist.tanggal', 'desc')
+                ->where(function ($query) {
+                    $query->where('laporanhist.status_laporan', '=', 'Selesai')
+                    ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
+                })
+                ->where('laporan.id_admin', '=', Auth::guard('admin')->user()->id)
+                ->get();
+        } else {
+            if ($kat_layanan != null) {
+                $data = DB::table('laporan')
+                ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+                ->orderBy('laporan.tgl_masuk', 'desc')
+                    ->select(
+                        'laporan.id AS id',
+                        'no_inv_aset',
+                        'tgl_selesai',
+                        'kat_layanan',
+                        'jenis_layanan',
+                        'det_layanan',
+                        'waktu_tambahan',
+                        'laporan.foto',
+                        'det_pekerjaan',
+                        'ket_pekerjaan',
+                        DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                        DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                        DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                    )
+                    ->where(function ($query) {
+                        $query->where('laporanhist.status_laporan', '=', 'Selesai')
+                        ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
+                    })
+                    ->where('laporan.kat_layanan', '=', $kat_layanan)
+                    ->where('laporan.id_admin', '=', Auth::guard('admin')->user()->id)
+                    ->get();
+                // dd($data);
+            } else if ($no_inv_aset != null) {
+                $data = DB::table('laporan')
+                ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+                ->orderBy('laporan.tgl_masuk', 'desc')
+                    ->select(
+                        'laporan.id AS id',
+                        'no_inv_aset',
+                        'tgl_selesai',
+                        'kat_layanan',
+                        'jenis_layanan',
+                        'det_layanan',
+                        'waktu_tambahan',
+                        'laporan.foto',
+                        'det_pekerjaan',
+                        'ket_pekerjaan',
+                        DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                        DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                        DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                    )
+                    ->where(function ($query) {
+                        $query->where('laporanhist.status_laporan', '=', 'Selesai')
+                        ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
+                    })
+                    ->where('laporan.no_inv_aset', '=', $no_inv_aset)
+                    ->where('laporan.id_admin', '=', Auth::guard('admin')->user()->id)
+                    ->get();
+                // dd($data);
+            } else if ($tgl_masuk != null) {
+                $data = DB::table('laporan')
+                ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+                ->orderBy('laporan.tgl_masuk', 'desc')
+                    ->select(
+                        'laporan.id AS id',
+                        'no_inv_aset',
+                        'tgl_selesai',
+                        'kat_layanan',
+                        'jenis_layanan',
+                        'det_layanan',
+                        'waktu_tambahan',
+                        'laporan.foto',
+                        'det_pekerjaan',
+                        'ket_pekerjaan',
+                        DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                        DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                        DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                    )
+                    ->where(function ($query) {
+                        $query->where('laporanhist.status_laporan', '=', 'Selesai')
+                        ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
+                    })
+                    ->where('laporan.tgl_masuk', $tgl_masuk_f, $tgl_masuk)
+                    ->where('laporan.id_admin', '=', Auth::guard('admin')->user()->id)
+                    ->get();
+                // dd($data);
+            } else if ($tgl_selesai != null) {
+                $data = DB::table('laporan')
+                ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+                ->orderBy('laporan.tgl_masuk', 'desc')
+                    ->select(
+                        'laporan.id AS id',
+                        'no_inv_aset',
+                        'tgl_selesai',
+                        'kat_layanan',
+                        'jenis_layanan',
+                        'det_layanan',
+                        'waktu_tambahan',
+                        'laporan.foto',
+                        'det_pekerjaan',
+                        'ket_pekerjaan',
+                        DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                        DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                        DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                    )
+                    ->where(function ($query) {
+                        $query->where('laporanhist.status_laporan', '=', 'Selesai')
+                        ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
+                    })
+                    ->where('laporan.id_admin', '=', Auth::guard('admin')->user()->id)
+                    ->get();
+                // dd($data);
+            }
+        }
 
         foreach ($data as $laporan) {
             $laporan->history = DB::table('laporanhist')
             ->where('id_laporan', $laporan->id)
-            ->orderBy('tanggal', 'desc')
-            ->select(
-                'id','id_laporan','status_laporan','keterangan','foto',
-                DB::raw("DATE_FORMAT(tanggal, '%d %M %Y (%H:%i)') AS tanggal"),
-            )
-            ->get();
+                ->orderBy('tanggal', 'desc')
+                ->select(
+                    'id',
+                    'id_laporan',
+                    'status_laporan',
+                    'keterangan',
+                    'foto',
+                    DB::raw("DATE_FORMAT(tanggal, '%d %M %Y (%H:%i:%s)') AS tanggal"),
+                )
+                ->get();
         }
 
         if ($data->count() == 0) {
-            $datas = 1;
+            $datas = 'tidak ada';
+        } else {
+            $datas = 'ada';
+        }
+        return view('it.history-it', compact('data', 'datas', 'filter'));
+    }
+
+    public function getNoInventarisOptionsIT()
+    {
+        $options = '';
+
+        $noInventaris = DB::table('laporan')
+        ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+        ->where('laporanhist.status_laporan', ['Selesai', 'Dibatalkan'])
+        ->where('laporan.id_pelapor', '=', Auth::guard('admin')->user()->id)
+            ->get();
+
+        foreach ($noInventaris as $noInv) {
+            $options .= '<option name=""no_inv_aset" value="' . $noInv->no_inv_aset . '">' . $noInv->no_inv_aset . '</option>';
         }
 
-        return view('pelapor.history-u', compact('data', 'datas'));
+        return response()->json(['options' => $options]);
     }
 
     /**

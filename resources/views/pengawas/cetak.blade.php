@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{asset('font-awesome/css/font-awesome.min.css')}}">
     <title>Document</title>
 </head>
 
@@ -12,7 +13,7 @@
         <table style="width: 100%;" class="table1">
             <tr valign="center">
                 <td rowspan="4" style="width: 25%;" align="center">
-                    <img src="{{asset('img/logo.png')}}" width="130" height="130" />
+                    <img src="{{storage_path('img/kai.png')}}" width="200" height="50" />
                 </td>
                 <td rowspan="2">
                     PT. Saku Sekolah Indonesia <br> Sistem Informasi
@@ -107,7 +108,7 @@
                 <td>1.1</td;>
                 <td>Aplikasi</td>
                 <td></td>
-                <td></td>
+                <td align="center"><i class="fa fa-check"></i></td>
                 <td></td>
                 <td></td>
             </tr>

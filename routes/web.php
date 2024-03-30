@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LaporanakhirController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelaporController;
@@ -38,7 +39,6 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
     // Route::get('/history-user', [LaporanController::class, 'historyU'])->name('history-user');
     Route::get('/delete-laporan/{idlap}', [LaporanController::class, 'delete'])->name('delete-laporan');
     Route::get('/getNoInventarisOptions', [LaporanController::class, 'getNoInventarisOptions']);
-    Route::get('/getKategoriOptions', [LaporanController::class, 'getKategoriOptions']);
 
     // ==============ROUTE UNTUK BAGIAN USER IT============== //
     Route::get('/it', [LaporanController::class, 'indexit']);
@@ -46,16 +46,23 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas']], function () {
     Route::post('/tambah-waktu/{idlap}', [LaporanController::class, 'tambahwaktu'])->name('tambah-waktu');
     Route::get('/comp-detail/{idlap}', [LaporanController::class, 'detail'])->name('comp-detail');
     Route::post('/pelayanan-selesai/{idlap}', [LaporanController::class, 'pelayananS'])->name('pelayanan-selesai');
-    Route::get('/history-admin/{id}', [LaporanController::class, 'historyA']);
+    Route::match(['get', 'post'], '/history-it', [LaporanController::class, 'historyA'])->name('history-it');
+    Route::get('/getNoInventarisOptionsIT', [LaporanController::class, 'getNoInventarisOptionsIT']);
+
 
     // ==============ROUTE UNTUK BAGIAN USER PENGAWAS============== //
     Route::get('/dashboard-pengawas', function () {
         return view('pengawas.dashboard');
     });
+    Route::get('/profile-pengawas', [PengawasController::class, 'profile']);
+    Route::post('/save-ttd-pengawas/{id}', [PengawasController::class, 'ttdP'])->name('save-ttd-pengawas');;
     Route::get('/list-akun', [PengawasController::class, 'akun']);
     Route::get('/list-laporan', [PengawasController::class, 'laporan']);
     Route::post('/pilih-pjuser/{id}', [PengawasController::class, 'pjuser'])->name('pilih-pjuser');
     Route::get('/cetak-laporan/{idlap}', [PengawasController::class, 'cetak'])->name('cetak-laporan');
+    Route::get('/detail-laporan/{idlap}', [PengawasController::class, 'show'])->name('detail-laporan');
+    Route::post('/laporan-akhir/{idlap}', [LaporanakhirController::class, 'store'])->name('laporan-akhir');
+    
     Route::get('/cetak', function () {
         return view('pengawas.cetak');
     });

@@ -14,23 +14,37 @@
                         <table style="color: #2D3134;" class="table table-striped table-bordered zero-configuration">
                             <thead>
                                 <tr>
-                                    <th>Pelapor</th>
                                     <th>No Inventaris</th>
+                                    <th>Pelapor</th>
                                     <th>Kategori Layanan</th>
                                     <th>Jenis Layanan</th>
+                                    <th>No Ref</th>
+                                    <th>Bisnis Area</th>
                                     <th>#</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($lap as $dt)
                                 <tr>
-                                    <td>{{$dt->nama}}</td>
                                     <td>{{$dt->no_inv_aset}}</td>
+                                    <td>{{$dt->nama}}</td>
                                     <td>{{$dt->kat_layanan}}</td>
                                     <td>{{$dt->jenis_layanan}}</td>
+                                    @if($dt->no_ref != null or $dt->bisnis_area)
+                                    <td>{{$dt->no_ref}}</td>
+                                    <td>{{$dt->bisnis_area}}</td>
+                                    @else
+                                    <td><i>belum diinput</i></td>
+                                    <td><i>belum diinput</i></td>
+                                    @endif
                                     <td>
+                                        <a href="{{route('detail-laporan', $dt->idlap)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
+                                        @if($dt->nomor != null or $dt->tanggal != null or $dt->no_ref != null or $dt->bisnis_area != null or $dt->versi != null or $dt->halaman != null)
                                         <a href="{{route('cetak-laporan', $dt->idlap)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
-                                        <a data-toggle="modal" data-target="#exampleModal{{$dt->idlap}}" data-whatever="@getbootstrap"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
+                                        @else
+                                        <a href="{{route('cetak-laporan', $dt->idlap)}}"><button disabled class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
+                                        @endif
+                                        <!-- <a data-toggle="modal" data-target="#exampleModal{{$dt->idlap}}" data-whatever="@getbootstrap"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a> -->
                                     </td>
                                 </tr>
                                 @endforeach
