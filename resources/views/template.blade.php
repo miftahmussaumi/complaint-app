@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>IT KAI DAOP 4 SEMARANG</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('storage/img/kai-mini.png')}}">
+    <link rel="icon" type="image/png" sizes="5x5" width href="{{asset('storage/img/logo kai atas.png')}}">
     <!-- Pignose Calender -->
     <link href="{{asset('quixlab/plugins/pg-calendar/css/pignose.calendar.min.css')}}" rel="stylesheet">
     <!-- Chartist -->
@@ -234,7 +234,13 @@
                             </div>
                         </li> -->
                         <li class="icons dropdown d-none d-md-flex">
+                            @if (Str::length(Auth::guard('pelapor')->user()) > 0)
+                            {{Auth::guard('pelapor')->user()->nama}}
+                            @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
                             {{Auth::guard('pengawas')->user()->nama}}
+                            @elseif (Str::length(Auth::guard('admin')->user()) > 0)
+                            {{Auth::guard('admin')->user()->nama}}
+                            @endif
                         </li>
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">

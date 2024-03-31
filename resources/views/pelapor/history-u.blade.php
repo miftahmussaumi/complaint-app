@@ -151,11 +151,11 @@
             $('#additional-filters').empty();
             switch (filter) {
                 case 'tgl_masuk':
-                    $('#additional-filters').append('<select id="condition" name="tgl_masuk_f" class="form-control"><option value="=">Is</option><option value="!=">Is not</option><option value="<=">Is before</option><option value=">=">Is after</option></select>');
+                    $('#additional-filters').append('<select id="condition" name="tgl_masuk_f" class="form-control"><option value="<=">Is before</option><option value=">=">Is after</option></select>');
                     $('#additional-filters').append('<input type="date" id="date" name="tgl_masuk" class="form-control">');
                     break;
                 case 'tgl_selesai':
-                    $('#additional-filters').append('<select id="condition" name="tgl_selesai_f" class="form-control"><option value="=" class="form-control">Is</option><option value="!=">Is not</option><option value="<=">Is before</option><option value=">=">Is after</option></select>');
+                    $('#additional-filters').append('<select id="condition" name="tgl_selesai_f" class="form-control"><option value="<=">Is before</option><option value=">=">Is after</option></select>');
                     $('#additional-filters').append('<input type="date" id="date" name="tgl_selesai" class="form-control">');
                     break;
                 case 'no_inv_aset':
