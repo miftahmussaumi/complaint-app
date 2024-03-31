@@ -68,8 +68,8 @@ class AdminController extends Controller
                     'ttd'  => $nama_file_ttd
                 ]);
 
-            $old_ttd = $request->ttd_old;
-            unlink(storage_path('app/public/img/admin/' . $old_ttd));
+            // $old_ttd = $request->ttd_old;
+            // unlink(storage_path('app/public/img/admin/' . $old_ttd));
         }
 
         // dd($ttd, $filettd);

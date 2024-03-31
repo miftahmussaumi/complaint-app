@@ -59,8 +59,8 @@ class PengawasController extends Controller
                 'ttd'  => $nama_file_ttd
             ]);
 
-            $old_ttd = $request->ttd_old;
-            unlink(storage_path('app/public/img/pengawas/'.$old_ttd));
+            // $old_ttd = $request->ttd_old;
+            // unlink(storage_path('app/public/img/pengawas/'.$old_ttd));
 
         }
         

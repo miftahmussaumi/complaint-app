@@ -27,6 +27,8 @@ class CreateLaporanTable extends Migration
             $table->dateTime('tgl_akhir_pengerjaan')->nullable();
             $table->integer('waktu_tambahan')->nullable();
             $table->string('foto')->nullable();
+            $table->text('det_pekerjaan')->nullable();
+            $table->text('ket_pekerjaan')->nullable();
             $table->timestamps();
         });
     }

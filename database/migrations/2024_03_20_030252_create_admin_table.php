@@ -20,6 +20,7 @@ class CreateAdminTable extends Migration
             $table->string('jabatan', 15);
             $table->string('email', 30);  
             $table->string('password', 30);
+            $table->string('ttd')->nullable();
             $table->timestamps();
         });
     } 

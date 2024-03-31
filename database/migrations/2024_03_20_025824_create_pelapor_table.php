@@ -15,6 +15,7 @@ class CreatePelaporTable extends Migration
     {
         Schema::create('pelapor', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('id_admin_tj');
             $table->string('nama', 50);
             $table->string('nipp', 15);
             $table->string('email', 30);
@@ -22,6 +23,8 @@ class CreatePelaporTable extends Migration
             $table->string('jabatan', 15);
             $table->string('divisi',15);
             $table->string('telepon', 15);
+            $table->integer('status');
+            $table->string('ttd')->nullable();
             $table->timestamps();
         });
     }

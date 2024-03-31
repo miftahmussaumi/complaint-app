@@ -19,6 +19,7 @@ class CreatePengawasTable extends Migration
             $table->string('nipp', 15);
             $table->string('email', 30);
             $table->string('password');
+            $table->string('ttd')->nullable();
             $table->timestamps();
         });
     }
