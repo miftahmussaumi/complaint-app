@@ -147,7 +147,7 @@
                     <td>Jaringan</td>
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'Jaringan')
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -162,7 +162,7 @@
                     <td>PC/Laptop</td>
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'PC/Laptop')
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -177,7 +177,7 @@
                     <td>Printer</td>
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'Printer')
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -192,7 +192,7 @@
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan != 'Aplikasi' && $dt->jenis_layanan != 'Jaringan' && $dt->jenis_layanan != 'PC/Laptop' && $dt->jenis_layanan != 'Printer')
                     <td>Lainnya : <br>{{$dt->jenis_layanan}}</td>
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -210,7 +210,7 @@
                     <td>Aplikasi</td>
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Aplikasi')
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -225,7 +225,7 @@
                     <td>Sistem Operasi</td>
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Sistem Operasi')
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -240,7 +240,7 @@
                     <td>Jaringan</td>
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Jaringan')
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -255,7 +255,7 @@
                     <td>PC/Laptop</td>
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'PC/Laptop')
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -270,7 +270,7 @@
                     <td>Printer</td>
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Printer')
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
@@ -285,7 +285,7 @@
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan != 'Aplikasi' && $dt->jenis_layanan != 'Jaringan' && $dt->jenis_layanan != 'PC/Laptop' && $dt->jenis_layanan != 'Printer' && $dt->jenis_layanan != 'Sistem Operasi')
                     <td>Lainnya : <br>{{$dt->jenis_layanan}}</td>
                     <td>{{$dt->det_pekerjaan}}</td>
-                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
                     @else
