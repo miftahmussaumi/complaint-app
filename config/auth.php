@@ -62,6 +62,11 @@ return [
             'provider' => 'pengawas'
         ],
 
+        'teknisi' => [
+            'driver' => 'session',
+            'provider' => 'teknisi'
+        ],
+
         'user' => [
             'driver' => 'session',
             'provider' => 'users'
@@ -104,6 +109,11 @@ return [
         'pengawas' => [
             'driver' => 'eloquent',
             'model' => App\Models\Pengawas::class,
+        ],
+
+        'teknisi' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Teknisi::class,
         ],
 
         // 'users' => [

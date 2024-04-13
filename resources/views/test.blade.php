@@ -1,189 +1,341 @@
-@if($data->waktu_tambahan != null && $data->status_terbaru != 'reqAddTime')
-<!-- CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-<?php
-$tanggalDeadline = $data->deadline;
-$waktu_tambahan = $data->waktu_tambahan;
-$tanggalBaruTimestamp = strtotime(date('Y-m-d H:i', strtotime(str_replace('-', '/', $tanggalDeadline))) . " +$waktu_tambahan days");
-$tanggalBaru = date('d-m-Y', $tanggalBaruTimestamp);
-$tanggalBaruF = date('d-m-Y', $tanggalBaruTimestamp) . ' (' . date('H:i', $tanggalBaruTimestamp) . ' WIB)';
-?>
-<!-- END CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
+<!DOCTYPE html>
+<html lang="en">
 
-<!-- CODINGAN H-1 DEADLINE SESUAI DENGAN TANGGAL BARU -->
-<?php
-$tanggalDeadline = $tanggalBaru;
-$tanggalObjek = new DateTime($tanggalDeadline);
-$tanggalHariIni = new DateTime();
-$tanggalHariIni->modify('+1 day');
-?>
-<span style="color: #3167D5;">{{ $tanggalBaruF }}</span>
-@if($data->status_terbaru != 'CheckedU')
-@if ($tanggalObjek->format('Y-m-d') > $tanggalHariIni->format('Y-m-d'))
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-@elseif ($tanggalObjek->format('Y-m-d') == $tanggalHariIni->format('Y-m-d'))
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-<a data-toggle="modal" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"></i></a>
-<br>
-<i style="color: #DF1839; font-size: 12px;">Deadline 1 hari lagi </i>
-@endif
-@endif
-<!-- END CODINGAN H-1 DEADLINE SESUAI DENGAN TANGGAL BARU -->
-@else
-{{ $data->tgl_akhir_pengerjaan }}
-<!-- CODINGAN H-1 DEADLINE SESUAI DENGAN TANGGAL BARU -->
-<?php
-$tanggalDeadline = $data->deadline;
-$tanggalObjek = new DateTime($tanggalDeadline);
-$tanggalHariIni = new DateTime(); //Tanggal hari ini
-$tanggalHariIni->modify('+1 day');
-?>
-@if ($tanggalObjek->format('Y-m-d') > $tanggalHariIni->format('Y-m-d'))
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-@elseif ($tanggalObjek->format('Y-m-d') == $tanggalHariIni->format('Y-m-d'))
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-<a data-toggle="modal" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"></i></a>
-<br>
-<i style="color: #DF1839; font-size: 12px;">Deadline 1 hari lagi </i>
-@endif
-<!-- END CODINGAN H-1 DEADLINE SESUAI DENGAN TANGGAL BARU -->
-@endif
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .table1 {
+            border-collapse: collapse;
+            border-spacing: 10px;
+        }
 
+        .table1 th,
+        .table1 td {
+            border: 1px solid black;
+            padding: 2px;
+        }
 
+        .table2 {
+            border-collapse: collapse;
+            border-spacing: 10px;
+        }
 
+        .table2 th,
+        .table2 td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+    </style>
+</head>
 
-@if($data->waktu_tambahan != null && $data->status_terbaru == 'reqAddTime')
-{{$data->tgl_akhir_pengerjaan}}
+<body>
+    <div class="container">
+        <div style="font-family: Arial, sans-serif; font-size: 10;">
+            <table style="width: 100%;" class="table1">
+                <tr>
+                    <td rowspan="4" style="width: 25%; margin-top: 5px;" valign="center" align="center">
+                        <img src="{{storage_path('app/public/img/kai.png')}}" width="100" height="60" />
+                    </td>
+                    <td rowspan="2" valign="center">
+                        PT. Kereta Api Indonesia <br> Sistem Informasi
+                    </td>
+                    <td style="width: 10%;">Nomor</td>
+                    <td style="width: 25%;">{{$lap->nomor}}</td>
+                </tr>
+                <tr>
+                    <td>Tanggal</td>
+                    <td>{{$lap->tanggal}}</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        BERITA ACARA INSTALASI DAN <br>TROUBLESHOOTING LAYANAN IT
+                    </td>
+                    <td>Versi</td>
+                    <td>{{$lap->versi}}</td>
+                </tr>
+                <tr>
+                    <td>Halaman</td>
+                    <td>{{$lap->halaman}}</td>
+                </tr>
+            </table>
+            <br>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="padding: 2px; width: 15%;">No. Ref</td>
+                    <td style="padding: 2px; width: 2%;">:</td>
+                    <td style="padding: 2px; width: 63%;">{{$lap->no_ref}}</td>
+                </tr>
+                <tr>
+                    <td>Tanggal</td>
+                    <td>:</td>
+                    <td>{{$lap->tanggal}}</td>
+                </tr>
+                <tr>
+                    <td>Business Area</td>
+                    <td>:</td>
+                    <td>{{$lap->bisnis_area}}</td>
+                </tr>
+            </table>
+            <br>
+            <table style="width: 100%;">
+                <tr>
+                    <td colspan="3" style="width: 100%;">Permintaan Layanan dari :</td>
+                </tr>
+                <tr>
+                    <td style="width: 15%;">Nama</td>
+                    <td style="width: 2%;">:</td>
+                    <td style="width: 63%;">{{$lap->nama_pelapor}}</td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td>:</td>
+                    <td>{{$lap->divisi}}</td>
+                </tr>
+                <tr>
+                    <td>Telepon / Email</td>
+                    <td>:</td>
+                    <td>{{$lap->telepon}} / {{$lap->email}}</td>
+                </tr>
+                <tr>
+                    <td>Waktu Pengerjaan</td>
+                    <td>:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="width: 100%;" colspan="3">Tanggal : {{$lap->tgl_awal_pengerjaan}}. Pukul : {{$lap->waktu_awal_pengerjaan}} s.d Tanggal : {{$lap->tgl_akhir_pengerjaan}} Pukul : {{$lap->waktu_akhir_pengerjaan}}</td>
+                </tr>
+            </table>
+            <br>
+            <table style="width: 100%;" class="table2">
+                <tr>
+                    <td style="width: 19%;" colspan="2">Nomor Inventaris Aset</td>
+                    <td style="width: 70%;" colspan="6">: {{$lap->no_inv_aset}}</td>
+                </tr>
+                <tr align="center">
+                    <td style="width: 4%;" rowspan="2">No</td>
+                    <td style="width: 15%;" rowspan="2">Kategori Layanan</td>
+                    <td style="width: 15%;" rowspan="2" colspan="2">Jenis Layanan</td>
+                    <td style="width: 30%;" rowspan="2">Detail Pekerjaan</td>
+                    <td style="width: 6%;" colspan="2">Status</td>
+                    <td style="width: 30%;" rowspan="2">Keterangan</td>
+                </tr>
+                <tr align="center">
+                    <td style="width: 3%;">V</td>
+                    <td style="width: 3%;">X</td>
+                </tr>
+                @foreach($detlap as $dt)
+                @if($jml_trou > 0)
+                <tr>
+                    <td rowspan="5" align="center">1</tdstyle=>
+                    <td rowspan="{{$jml_trou}}">Troubleshooting</td>
+                    <td>1.1</td;>
+                    <td>Aplikasi</td>
+                    @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'Aplikasi')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>1.2</td>
+                    <td>Jaringan</td>
+                    @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'Jaringan')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>1.3</td>
+                    <td>PC/Laptop</td>
+                    @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'PC/Laptop')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>1.4</td>
+                    <td>Printer</td>
+                    @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'Printer')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>1.5</td>
+                    @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan != 'Aplikasi' && $dt->jenis_layanan != 'Jaringan' && $dt->jenis_layanan != 'PC/Laptop' && $dt->jenis_layanan != 'Printer')
+                    <td>Lainnya : <br>{{$dt->jenis_layanan}}</td>
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td>Lainnya : <br>.......</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td rowspan="6" align="center">2</td>
+                    <td rowspan="6">Instalasi </td>
+                    <td>2.1</td>
+                    <td>Aplikasi</td>
+                    @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Aplikasi')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>2.2</td>
+                    <td>Sistem Operasi</td>
+                    @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Sistem Operasi')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>2.3</td>
+                    <td>Jaringan</td>
+                    @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Jaringan')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>2.4</td>
+                    <td>PC/Laptop</td>
+                    @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'PC/Laptop')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>2.5</td>
+                    <td>Printer</td>
+                    @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Printer')
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                <tr>
+                    <td>2.6</td>
+                    @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan != 'Aplikasi' && $dt->jenis_layanan != 'Jaringan' && $dt->jenis_layanan != 'PC/Laptop' && $dt->jenis_layanan != 'Printer' && $dt->jenis_layanan != 'Sistem Operasi')
+                    <td>Lainnya : <br>{{$dt->jenis_layanan}}</td>
+                    <td>{{$dt->det_pekerjaan}}</td>
+                    <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
+                    <td></td>
+                    <td>{{$dt->ket_pekerjaan}}</td>
+                    @else
+                    <td>Lainnya : <br>.......</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @endif
+                </tr>
+                @endforeach
+            </table>
+            <p>*v: selesai; x : gagal <br>
+                Menyatakan bahwa, Penanganan instalasi dan atau troubleshooting telah diperiksa dan dilakukan oleh pihak sistem
+                informasi dan pihak {{$lap->nama_pelapor}} dengan hasil seperti dijelaskan diatas.</p>
+            <br>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="padding: 5px; width: 33%;" align="center">
+                        Staf IT <br>
+                        <img src="{{storage_path('app/public/img/admin/'.$lap->ttd_teknisi)}}" width="130px" height="100px">
+                        <br>
+                        <u>{{$lap->nama_teknisi}}</u><br>
+                        NIPP.{{$lap->nipp_teknisi}}
+                    </td>
+                    <td style="padding: 5px; width: 33%;"></td>
+                    <td style="padding: 5px; width: 33%;" align="center">
+                        User <br>
+                        <img src="{{storage_path('app/public/img/pelapor/'.$lap->ttd_pelapor)}}" width="130px" height="100px">
+                        <br>
+                        <u>{{$lap->nama_pelapor}}</u><br>
+                        NIPP.{{$lap->nipp_pelapor}}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td align="center">
+                        Mengetahui, <br> Manager <br>
+                        <img src="{{storage_path('app/public/img/pengawas/'.$lap->ttd_pengawas)}}" width="130px" height="100px">
+                        <br>
+                        <u>{{$lap->nama_pengawas}}</u><br>
+                        NIPP.{{$lap->nipp_pengawas}}
+                    </td>
+                    <td> </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
 
-@elseif($data->waktu_tambahan != null && $data->status_terbaru == 'Diproses')
-<!-- CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-<?php
-$tanggalDeadline = $data->deadline;
-$waktu_tambahan = $data->waktu_tambahan;
-$tanggalBaruTimestamp = strtotime(date('Y-m-d H:i', strtotime(str_replace('-', '/', $tanggalDeadline))) . " +$waktu_tambahan days");
-$tanggalBaru = date('d-m-Y', $tanggalBaruTimestamp);
-$tanggalBaruF = date('d-m-Y', $tanggalBaruTimestamp) . ' (' . date('H:i', $tanggalBaruTimestamp) . ' WIB)';
-?>
-<!-- END CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-
-<!-- CODINGAN MERUBAH WARNA TANGGAL SETELAH PENAMBAHAN WAKTU-->
-<?php
-$tanggalDeadline = $tanggalBaru;
-$newDeadline = new DateTime($tanggalDeadline);
-$today = new DateTime();
-$tanggalHariIni = new DateTime();
-$tanggalHariIni->modify('+1 day');
-?>
-<!-- END CODINGAN MERUBAH WARNA TANGGAL SETELAH PENAMBAHAN WAKTU-->
-
-<!-- CODINGAN PENAMBAHAN BUTTON +WAKTU-->
-@if ($newDeadline->format('Y-m-d') > $tanggalHariIni->format('Y-m-d'))
-<span style="color: #3167D5;">{{ $tanggalBaruF }}</span>
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-@elseif ($newDeadline->format('Y-m-d') == $tanggalHariIni->format('Y-m-d'))
-<span style="color: #3167D5;">{{ $tanggalBaruF }}</span>
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-<br>
-<i style="color: #DF1839; font-size: 12px;">Deadline 1 hari lagi </i>
-@else
-<span style="color: #3167D5;">{{ $tanggalBaruF }}</span>
-<i style="color: #DF1839; font-size: 12px;">Deadline sudah lewat </i>
-@endif
-<!-- END CODINGAN PENAMBAHAN BUTTON +WAKTU-->
-
-@elseif($data->waktu_tambahan != null && $data->status_terbaru == 'CheckedU')
-<!-- CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-<?php
-$tanggalDeadline = $data->deadline;
-$waktu_tambahan = $data->waktu_tambahan;
-$tanggalBaruTimestamp = strtotime(date('Y-m-d H:i', strtotime(str_replace('-', '/', $tanggalDeadline))) . " +$waktu_tambahan days");
-$tanggalBaru = date('d-m-Y', $tanggalBaruTimestamp);
-$tanggalBaruF = date('d-m-Y', $tanggalBaruTimestamp) . ' (' . date('H:i', $tanggalBaruTimestamp) . ' WIB)';
-?>
-<!-- END CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-
-<!-- CODINGAN MERUBAH WARNA TANGGAL SETELAH PENAMBAHAN WAKTU-->
-<?php
-$tanggalDeadline = $tanggalBaru;
-$newDeadline = new DateTime($tanggalDeadline);
-$today = new DateTime();
-$tanggalHariIni = new DateTime();
-$tanggalHariIni->modify('+1 day');
-?>
-<!-- END CODINGAN MERUBAH WARNA TANGGAL SETELAH PENAMBAHAN WAKTU-->
-<span style="color: #3167D5;">{{ $tanggalBaruF }}</span>
-
-
-@elseif($data->waktu_tambahan == null && $data->status_terbaru != 'CheckedU')
-<!-- CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-<?php
-$tanggalDeadline = $data->deadline;
-$waktu_tambahan = $data->waktu_tambahan;
-$tanggalBaruTimestamp = strtotime(date('Y-m-d H:i', strtotime(str_replace('-', '/', $tanggalDeadline))) . " +$waktu_tambahan days");
-$tanggalBaru = date('d-m-Y', $tanggalBaruTimestamp);
-$tanggalBaruF = date('d-m-Y', $tanggalBaruTimestamp) . ' (' . date('H:i', $tanggalBaruTimestamp) . ' WIB)';
-?>
-<!-- END CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-
-<!-- CODINGAN MERUBAH WARNA TANGGAL SETELAH PENAMBAHAN WAKTU-->
-<?php
-$tanggalDeadline = $tanggalBaru;
-$newDeadline = new DateTime($tanggalDeadline);
-$today = new DateTime();
-$tanggalHariIni = new DateTime();
-$tanggalHariIni->modify('+1 day');
-?>
-<!-- END CODINGAN MERUBAH WARNA TANGGAL SETELAH PENAMBAHAN WAKTU-->
-
-<!-- CODINGAN PENAMBAHAN BUTTON +WAKTU-->
-@if ($newDeadline->format('Y-m-d') > $tanggalHariIni->format('Y-m-d'))
-{{$data->tgl_akhir_pengerjaan}}
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-@elseif ($newDeadline->format('Y-m-d') == $tanggalHariIni->format('Y-m-d'))
-{{$data->tgl_akhir_pengerjaan}}
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-<br>
-<i style="color: #DF1839; font-size: 12px;">Deadline 1 hari lagi </i>
-@else
-{{$data->tgl_akhir_pengerjaan}}
-<i style="color: #DF1839; font-size: 12px;">Deadline sudah lewat </i>
-@endif
-<!-- END CODINGAN PENAMBAHAN BUTTON +WAKTU-->
-
-@elseif($data->waktu_tambahan == null && $data->status_terbaru != 'reqAddTime')
-<!-- CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-<?php
-$tanggalDeadline = $data->deadline;
-$waktu_tambahan = $data->waktu_tambahan;
-$tanggalBaruTimestamp = strtotime(date('Y-m-d H:i', strtotime(str_replace('-', '/', $tanggalDeadline))) . " +$waktu_tambahan days");
-$tanggalBaru = date('d-m-Y', $tanggalBaruTimestamp);
-$tanggalBaruF = date('d-m-Y', $tanggalBaruTimestamp) . ' (' . date('H:i', $tanggalBaruTimestamp) . ' WIB)';
-?>
-<!-- END CODINGAN PENAMBAHAN TANGGAL DEADLINE -->
-
-<!-- CODINGAN MERUBAH WARNA TANGGAL SETELAH PENAMBAHAN WAKTU-->
-<?php
-$tanggalDeadline = $tanggalBaru;
-$newDeadline = new DateTime($tanggalDeadline);
-$today = new DateTime();
-$tanggalHariIni = new DateTime();
-$tanggalHariIni->modify('+1 day');
-?>
-<!-- END CODINGAN MERUBAH WARNA TANGGAL SETELAH PENAMBAHAN WAKTU-->
-
-<!-- CODINGAN PENAMBAHAN BUTTON +WAKTU-->
-@if ($newDeadline->format('Y-m-d') > $tanggalHariIni->format('Y-m-d'))
-{{$data->tgl_akhir_pengerjaan}}
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-@elseif ($newDeadline->format('Y-m-d') == $tanggalHariIni->format('Y-m-d'))
-{{$data->tgl_akhir_pengerjaan}}
-<a data-toggle="modal" style="color: #3167D5;" data-target="#exampleModalWaktu{{$data->idlap}}" data-whatever="@getbootstrap"><i class="fa fa-plus"></i></a>
-<br>
-<i style="color: #DF1839; font-size: 12px;">Deadline 1 hari lagi </i>
-@else
-{{$data->tgl_akhir_pengerjaan}}
-<i style="color: #DF1839; font-size: 12px;">Deadline sudah lewat </i>
-@endif
-<!-- END CODINGAN PENAMBAHAN BUTTON +WAKTU-->
-
-
-@endif
+</html>

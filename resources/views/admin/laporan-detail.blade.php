@@ -13,7 +13,7 @@
 <div class="row page-titles mx-0">
     <div class="col p-md-0">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/list-laporan">Laporan</a></li>
+            <li class="breadcrumb-item"><a href="/laporan-admin">Laporan</a></li>
             <li class="breadcrumb-item active"><a>Detail</a></li>
         </ol>
     </div>
@@ -83,8 +83,55 @@
                                 @endif
                             </td>
                         </tr>
-                    </table>
+                    </table> <br>
+                    @if($laporan->status_terakhir == 'Selesai')
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{$laporan->id}}" data-whatever="@getbootstrap">Laporan</button>
+                    @endif
                 </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="{{route('manager',$laporan->id)}}" method="post">
+                    {{csrf_field()}}
+                    <div class="modal-content">
+                        <!-- <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                            </button>
+                        </div> -->
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Nomor Referensi</label>
+                                <input name="lap_no_ref" type="text" class="form-control" readonly value="{{$nomorReferensi}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Nomor Laporan</label>
+                                <input name="lap_nomor" type="text" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label>Tanggal</label>
+                                <input name="lap_tanggal" type="date" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label>Versi</label>
+                                <input name="lap_versi" type="text" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label>Halaman</label>
+                                <input name="lap_halaman" type="text" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label>Bisnis Area</label>
+                                <input name="lap_bisnis_area" type="text" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Send to Manager</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="col-lg-6 col-xl-7">

@@ -33,10 +33,12 @@ class LoginController extends Controller
 
         if (Auth::guard('pelapor')->attempt($credentials)) {
             return redirect('/profile-pelapor');
-        } elseif (Auth::guard('admin')->attempt($credentials)) {
-            return redirect('/profile-admin');
+        } elseif (Auth::guard('teknisi')->attempt($credentials)) {
+            return redirect('/profile-teknisi');
         } elseif (Auth::guard('pengawas')->attempt($credentials)) {
             return redirect('/profile-pengawas');
+        } elseif (Auth::guard('admin')->attempt($credentials)) {
+            return redirect('/laporan-admin');
         }
         return redirect('/login');
     }

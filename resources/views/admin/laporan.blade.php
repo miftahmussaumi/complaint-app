@@ -6,14 +6,6 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex bd-highlight mb-3">
-                        <div class="mr-auto p-2 bd-highlight">
-                            <h3>Data Permintaan Layanan</h3>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <button onclick="window.location='/form-comp'" type=" button" class="btn mb-1 btn-primary">Permintaan <span class="btn-icon-right"><i class="fa fa-plus"></i></span>
-                        </div>
-                    </div>
                     <div class="table-responsive">
                         <table style="color: #2D3134;" class="table table-striped table-bordered zero-configuration">
                             <thead>
@@ -21,7 +13,7 @@
                                     <th>Tanggal Permintaan</th>
                                     <th>No Inventaris</th>
                                     <th>Batas Akhir Pengerjaan</th>
-                                    <th>Waktu Tambahan</th>
+                                    <th>Teknisi</th>
                                     <th>Status</th>
                                     <th>#</th>
                                 </tr>
@@ -47,12 +39,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($data->waktu_tambahan != null)
-                                        {{ $data->waktu_tambahan }} hari
+                                        @if($data->id_teknisi != null)
+                                        {{$data->nama_teknisi}}
                                         @else
-                                        -
+                                        <i>Teknisi belum dipilih</i>
                                         @endif
                                     </td>
+
                                     <td>
                                         @if($data->status_terakhir == 'Pengajuan')
                                         <span class="badge badge-primary">Open</span>
@@ -63,20 +56,53 @@
                                         @elseif($data->status_terakhir == 'ReqHapus')
                                         <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
                                         @elseif($data->status_terakhir == 'reqAddTime')
-                                        <span class="badge badge-warning">User Check</span>
+                                        <span class="badge badge-warning">Request <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                        @elseif($data->status_terakhir == 'Selesai')
+                                        <span class="badge badge-success">Closed</span>
+                                        @elseif($data->status_terakhir == 'Manager')
+                                        <span class="badge badge-success">Manager</span>
                                         @endif
                                     </td>
 
                                     <td>
-                                        <a href="{{url('detail-comp',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        <a href="{{url('delete-laporan',$data->id)}}" onclick="return confirm('Apakah Yakin Hapus Data Ini?')" style="color: #C63F56;"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a>
+                                        <a href="{{url('detail-laporan-admin',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
+                                        @if($data->id_teknisi == null)
+                                        <a data-toggle="modal" data-target="#exampleModalDetail{{$data->id}}" data-whatever="@getbootstrap"><button class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button></a>
+                                        @else
+                                        <a data-toggle="modal" data-target="#exampleModalDetail{{$data->id}}" data-whatever="@getbootstrap"><button disabled class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button></a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
                         </table>
-                        <!-- ========= MODAL ========= -->
-
-                        <!-- ========= END MODAL ========= -->
+                        @foreach ($dtLap as $detail)
+                        <div class="modal fade" id="exampleModalDetail{{$detail->id}}">
+                            <div class="modal-dialog" role="document">
+                                <form action="{{route('pilih-teknisi',$detail->id)}}" method="post">
+                                    {{csrf_field()}}
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Proses Laporan</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <select name="id_teknisi" class="form-control">
+                                                <option value="" selected disabled>Pilih Teknisi</option>
+                                                @foreach ($teknisi as $dtt)
+                                                <option value="{{$dtt->id}}">{{$dtt->nama}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success">Kirim</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

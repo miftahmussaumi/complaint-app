@@ -15,7 +15,7 @@ class Pelapor extends Authenticatable
 
     protected $fillable = [
         'id', 'nama', 'jabatan', 'nipp', 'email','telepon','divisi',
-        'status','password', 'id_admin_tj','ttd'
+        'status','password', 'id_admin_tj','ttd','profile'
     ];
 
     protected $hidden = [

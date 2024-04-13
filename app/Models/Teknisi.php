@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Admin extends Authenticatable
+class Teknisi extends Authenticatable
 {
     use HasFactory;
-    protected $table = "admin"; //cek
+
+    protected $table = "teknisi"; //cek
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id','nama','email','password'
+        'id', 'nama', 'jabatan', 'nipp', 'email', 'password', 'ttd', 'foto'
     ];
 
     protected $hidden = [

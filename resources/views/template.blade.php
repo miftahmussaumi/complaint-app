@@ -8,6 +8,7 @@
     <title>IT KAI DAOP 4 SEMARANG</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="5x5" width href="{{asset('storage/img/logo kai atas.png')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <!-- Pignose Calender -->
     <link href="{{asset('quixlab/plugins/pg-calendar/css/pignose.calendar.min.css')}}" rel="stylesheet">
     <!-- Chartist -->
@@ -29,6 +30,7 @@
     <link href="{{asset('quixlab/plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
 
     <link href="{{asset('quixlab/plugins/sweetalert/css/sweetalert.css')}}" rel="stylesheet">
+
     <!-- Custom Stylesheet -->
     <link href="{{asset('quixlab/css/style.css')}}" rel="stylesheet">
     @yield('style')
@@ -70,8 +72,17 @@
                     </span>
                     <!-- <h4 style="color: white;">Gambar Logo</h4> -->
                 </a>
+                @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
+                <a href="/profile-teknisi">
+                    <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
+                    <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
+                    <span class="brand-title">
+                        <img src="{{asset('storage/img/kai.png')}}" width="100" height="50" style="margin-left: 40px; margin-bottom: 10px;">
+                    </span>
+                    <!-- <h4 style="color: white;">Gambar Logo</h4> -->
+                </a>
                 @elseif (Str::length(Auth::guard('admin')->user()) > 0)
-                <a href="/profile-admin">
+                <a href="/laporan-admin">
                     <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
                     <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
                     <span class="brand-title">
@@ -238,6 +249,8 @@
                             {{Auth::guard('pelapor')->user()->nama}}
                             @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
                             {{Auth::guard('pengawas')->user()->nama}}
+                            @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
+                            {{Auth::guard('teknisi')->user()->nama}}
                             @elseif (Str::length(Auth::guard('admin')->user()) > 0)
                             {{Auth::guard('admin')->user()->nama}}
                             @endif
@@ -245,7 +258,16 @@
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <span class="activity active"></span>
+                                @if (Str::length(Auth::guard('pelapor')->user()) > 0)
+                                <img src="{{asset('storage/img/profile/pelapor/'. Auth::guard('pelapor')->user()->profile )}}" height="40" width="40" alt="">
+                                @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
                                 <img src="{{asset('quixlab/images/user/1.png')}}" height="40" width="40" alt="">
+                                @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
+                                <img src="{{asset('quixlab/images/user/1.png')}}" height="40" width="40" alt="">
+                                @elseif (Str::length(Auth::guard('admin')->user()) > 0)
+                                <img src="{{asset('quixlab/images/user/1.png')}}" height="40" width="40" alt="">
+                                @endif
+
                             </div>
                         </li>
                     </ul>
@@ -286,7 +308,13 @@
                     </li>
                     @elseif (Str::length(Auth::guard('admin')->user()) > 0)
                     <li>
-                        <a href="/profile-admin">
+                        <a href="/laporan-admin">
+                            <i class="fa fa-desktop"></i><span class="nav-text">Laporan</span>
+                        </a>
+                    </li>
+                    @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
+                    <li>
+                        <a href="/profile-teknisi">
                             <i class="fa fa-user"></i><span class="nav-text">Profile</span>
                         </a>
                     </li>
@@ -395,7 +423,6 @@
 
     <script src="{{asset('quixlab/plugins/sweetalert/js/sweetalert.min.js')}}"></script>
     <script src="{{asset('quixlab/plugins/sweetalert/js/sweetalert.init.js')}}"></script>
-
 
     @yield('script')
 </body>

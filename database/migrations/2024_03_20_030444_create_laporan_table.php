@@ -19,16 +19,12 @@ class CreateLaporanTable extends Migration
             $table->bigInteger('id_pengawas')->nullable();
             $table->bigInteger('id_admin')->nullable(); 
             $table->string('no_inv_aset', 30)->nullable();
+            $table->dateTime('tgl_masuk')->nullable();  
             $table->dateTime('tgl_selesai')->nullable();  
-            $table->string('kat_layanan', 30)->nullable();
-            $table->string('jenis_layanan', 30)->nullable();
-            $table->text('det_layanan')->nullable();
             $table->dateTime('tgl_awal_pengerjaan')->nullable();
             $table->dateTime('tgl_akhir_pengerjaan')->nullable();
             $table->integer('waktu_tambahan')->nullable();
-            $table->string('foto')->nullable();
-            $table->text('det_pekerjaan')->nullable();
-            $table->text('ket_pekerjaan')->nullable();
+            $table->integer('waktu_tambahan_peng')->nullable();
             $table->timestamps();
         });
     }

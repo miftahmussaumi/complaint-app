@@ -25,34 +25,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Kategori Layanan</label>
-                                <div class="col-sm-10">
-                                    <select name="kat_layanan" id="kat_layanan" onchange="showJenisLayanan()" class="form-control">
-                                        <option value="">Pilih satu</option>
-                                        <option value="Throubleshooting">Throubleshooting</option>
-                                        <option value="Instalasi">Instalasi</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Kategori Layanan</label>
-                                <div class="col-sm-10">
-                                    <div class="basic-form">
-                                        <div class="form-row">
-                                            <div class="col">
-                                                <select name="jenis_layanan" id="jenis_layanan" onchange="showLainnya()" class="form-control">
-                                                    <!-- Opsi dinamis akan dimasukkan di sini menggunakan JavaScript -->
-                                                </select>
-                                            </div>
-                                            <div class="col" id="LainnyaInput" style="display: none;">
-                                                <input type="text" name="layanan_lain" id="LainnyaInput" class="form-control" placeholder="Jenis Layanan Lainnya">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Periode Pengerjaan :</label>
+                                <label class="col-sm-2 col-form-label"><b>Periode Pelaporan :</b></label>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Awal</label>
@@ -61,7 +34,7 @@
                                         <div class="form-row">
                                             <div class="col">
                                                 <div class="input-group">
-                                                    <input type="text" name="tgl_awal" class="form-control mydatepicker" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                                                    <input type="text" id="tgl_awal" name="tgl_awal" class="form-control datepicker" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
                                                 </div>
                                             </div>
                                             <div class="col">
@@ -74,13 +47,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Awal</label>
+                                <label class="col-sm-2 col-form-label">Akhir</label>
                                 <div class="col-sm-10">
                                     <div class="basic-form">
                                         <div class="form-row">
                                             <div class="col">
                                                 <div class="input-group">
-                                                    <input type="text" name="tgl_akhir" class="form-control" id="datepicker-autoclose" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                                                    <input type="text" id="tgl_akhir" name="tgl_akhir" class="form-control datepicker" id="datepicker-autoclose" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
                                                 </div>
                                             </div>
                                             <div class="col">
@@ -93,16 +66,56 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Permasalahan</label>
-                                <div class="col-sm-10">
-                                    <textarea style="height: 120px;" type="text" name="det_layanan" class="form-control" placeholder="Masukkan detail permasalahan"></textarea>
-                                </div>
+                                <label class="col-sm-2 col-form-label"><b>Isi Pelaporan</b></label>
                             </div>
-                            <button type="submit" class="btn btn-primary">Kirim</button>
-                            <div class="form-group row">
-                                <div class="col-sm-10">
-                                </div>
+                            <!-- FORM MULTIINPUT -->
+                            <div id="laporanInputs">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td style="width: 17%;">
+                                            <label>Kategori/Jenis</label>
+                                        </td>
+                                        <td colspan="2" style="height: 95px;">
+                                            <div class="form-row">
+                                                <div class="col">
+                                                    <div class="input-group">
+                                                        <select name="kat_layanan[]" class="form-control kat-layanan">
+                                                            <option value="">Pilih satu</option>
+                                                            <option value="Throubleshooting">Throubleshooting</option>
+                                                            <option value="Instalasi">Instalasi</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                        <div class="col">
+                                                            <select name="jenis_layanan[]" class="form-control jenis-layanan">
+                                                            </select>
+                                                        </div>
+                                                        <div class="col lainnya-input" style="display: none;">
+                                                            <input type="text" name="layanan_lain[]" class="form-control" placeholder="Jenis Layanan Lainnya">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
+                                            <label>Permasalahan</label>
+                                        </td>
+                                        <td>
+                                            <textarea style="height: 120px;" name="det_layanan[]" class="form-control det-layanan" placeholder="Masukkan detail permasalahan"></textarea>
+                                        </td>
+                                        <td align="center">
+                                            <!-- Tombol hapus disini dihapus -->
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
+                            <!-- END FORM MULTIINPUT -->
+                            <button type="submit" class="btn btn-success">SUBMIT</button>
+                            <button type="button" id="addLaporan" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Tambah Laporan"><i class="fa fa-plus" aria-hidden="true"></i></button>
                         </form>
                     </div>
                 </div>
@@ -115,51 +128,115 @@
 
 @section('script')
 <script>
-    function showJenisLayanan() {
-        var firstOption = document.getElementById('kat_layanan').value;
-        var secondDropdown = document.getElementById('secondDropdown');
-        var LainnyaInput = document.getElementById('LainnyaInput');
+    $(function() {
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+        });
+        $("#tgl_awal").on('changeDate', function(selected) {
+            var startDate = new Date(selected.date.valueOf());
+            $("#tgl_akhir").datepicker('setStartDate', startDate);
+            if ($("#tgl_awal").val() > $("#tgl_akhir").val()) {
+                $("#tgl_akhir").val($("#tgl_awal").val());
+            }
+        });
+    });
+
+    function showJenisLayanan(selectElement) {
+        var selectedOption = selectElement.value;
+        var jenisDropdown = selectElement.closest('.form-row').querySelector('.jenis-layanan');
+        var lainnyaInput = selectElement.closest('.form-row').querySelector('.lainnya-input');
 
         // Hapus opsi sebelumnya
-        var secondOptionDropdown = document.getElementById('jenis_layanan');
-        secondOptionDropdown.innerHTML = "";
+        jenisDropdown.innerHTML = "";
 
-        if (firstOption === 'Throubleshooting') {
+        if (selectedOption === 'Throubleshooting') {
             var options = ["Aplikasi", "Jaringan", "PC/Laptop", "Printer", "Lainnya"];
             options.forEach(function(option) {
                 var opt = document.createElement('option');
                 opt.value = option;
                 opt.innerHTML = option;
-                secondOptionDropdown.appendChild(opt);
+                jenisDropdown.appendChild(opt);
             });
-            secondDropdown.style.display = 'block';
-            LainnyaInput.style.display = 'none';
-        } else if (firstOption === 'Instalasi') {
+            jenisDropdown.style.display = 'block';
+            lainnyaInput.style.display = 'none';
+        } else if (selectedOption === 'Instalasi') {
             var options = ["Aplikasi", "Sistem Operasi", "Jaringan", "PC/Laptop", "Printer", "Lainnya"];
             options.forEach(function(option) {
                 var opt = document.createElement('option');
                 opt.value = option;
                 opt.innerHTML = option;
-                secondOptionDropdown.appendChild(opt);
+                jenisDropdown.appendChild(opt);
             });
-            secondDropdown.style.display = 'block';
-            LainnyaInput.style.display = 'none';
+            jenisDropdown.style.display = 'block';
+            lainnyaInput.style.display = 'none';
         } else {
-            secondDropdown.style.display = 'none';
-            LainnyaInput.style.display = 'none';
+            jenisDropdown.style.display = 'none';
+            lainnyaInput.style.display = 'none';
         }
     }
 
-    function showLainnya() {
-        var secondOption = document.getElementById('jenis_layanan').value;
-        var LainnyaInput = document.getElementById('LainnyaInput');
+    function showLainnya(selectElement) {
+        var selectedOption = selectElement.value;
+        var lainnyaInput = selectElement.closest('.form-row').querySelector('.lainnya-input');
 
-        if (secondOption === 'Lainnya') {
-            LainnyaInput.style.display = 'block';
+        if (selectedOption === 'Lainnya') {
+            lainnyaInput.style.display = 'block';
         } else {
-            LainnyaInput.style.display = 'none';
+            lainnyaInput.style.display = 'none';
         }
     }
+
+    document.getElementById('addLaporan').addEventListener('click', function() {
+        var laporanInputs = document.getElementById('laporanInputs');
+        var clonedInput = laporanInputs.firstElementChild.cloneNode(true);
+
+        // Kosongkan nilai input pada form yang baru ditambahkan
+        clonedInput.querySelectorAll('input, textarea').forEach(function(inputElement) {
+            inputElement.value = '';
+        });
+
+        laporanInputs.appendChild(clonedInput);
+
+        // Mendaftarkan event listener untuk dropdown baru yang ditambahkan
+        clonedInput.querySelectorAll('.kat-layanan').forEach(function(selectElement) {
+            selectElement.addEventListener('change', function() {
+                showJenisLayanan(this);
+            });
+        });
+
+        clonedInput.querySelectorAll('.jenis-layanan').forEach(function(selectElement) {
+            selectElement.addEventListener('change', function() {
+                showLainnya(this);
+            });
+        });
+
+        var deleteButton = document.createElement('button');
+        deleteButton.setAttribute('type', 'button');
+        deleteButton.setAttribute('class', 'btn btn-danger remove-laporan');
+        deleteButton.setAttribute('data-toggle', 'tooltip');
+        deleteButton.setAttribute('data-placement', 'right');
+        deleteButton.setAttribute('title', 'Hapus Laporan');
+        deleteButton.innerHTML = '<i class="fa fa-trash" aria-hidden="true"></i>';
+        deleteButton.addEventListener('click', function() {
+            this.closest('table').remove();
+        });
+
+        clonedInput.querySelector('tr:nth-child(2) td:last-child').appendChild(deleteButton);
+    });
+
+    document.querySelectorAll('.kat-layanan').forEach(function(selectElement) {
+        selectElement.addEventListener('change', function() {
+            showJenisLayanan(this);
+        });
+    });
+
+    document.querySelectorAll('.jenis-layanan').forEach(function(selectElement) {
+        selectElement.addEventListener('change', function() {
+            showLainnya(this);
+        });
+    });
 </script>
 
 @endsection

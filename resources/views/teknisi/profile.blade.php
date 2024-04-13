@@ -35,11 +35,11 @@
                     <div class="col-7">
                         <b>Tanda Tangan</b><br>
                         <table style="width: 100%;">
-                            <form action="{{route('save-ttd-admin',$dt->id)}}" method="POST" enctype="multipart/form-data">
+                            <form action="{{route('save-ttd-teknisi',$dt->id)}}" method="POST" enctype="multipart/form-data">
                                 {{csrf_field()}}
                                 <tr>
                                     <td style="width: 50%; padding: 5px;">
-                                        <img src="{{asset('storage/img/admin/'. $dt->ttd)}}" style="border: 1px #2D3134 solid;" width="150px" height="150px">
+                                        <img src="{{asset('storage/img/teknisi/'. $dt->ttd)}}" style="border: 1px #2D3134 solid;" width="150px" height="150px">
                                         <input type="hidden" name="ttd_old" value="{{$dt->ttd}}">
                                         <p style="color: red; font-size: 11px;">*Pastikan gambar tanda tangan sudah tidak memiliki background</p>
                                     </td>
