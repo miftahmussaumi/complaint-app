@@ -68,7 +68,8 @@
                 </div>
                 <div class="overlay-panel overlay-right">
                     <img src="{{asset('storage/img/kai.png')}}" width="150" height="80" />
-                    <h3>PT. Kereta Api Indonesia <br> Sistem Informasi Pelayanan</h3>
+                    <h3>DAOP 4 Kota Semarang <br> PT. Kereta Api Indonesia</h3>
+                    <h5>Sistem Informasi Pelayanan</h5>
                     <!-- <p style="font-size: 15px;">Login menggunakan Email dan Password yang terdaftar</p> -->
                     <button class="ghost" id="signUp">Sign Up</button>
                 </div>
