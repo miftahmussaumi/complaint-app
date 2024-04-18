@@ -5,10 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .table1 {
+            border-collapse: collapse;
+            border-spacing: 10px;
+        }
+
+        .table1 td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 
-<body>
-    <h2>Selamat Datang di Permintaan Layanan</h2>
+<body align="center">
+    <!-- <h2>Selamat Datang di Permintaan Layanan</h2> -->
+    <!-- <table style="width: 50%;">
+        <tr align="center">
+            <td style="font-size: 25px;">
+                PT. Kereta Api Indonesia
+            </td>
+        </tr>
+        <tr align="center">
+            <td style="font-size: 20px;">
+                Sistem Informasi Pelayanan
+            </td>
+        </tr>
+    </table> <br> <br> -->
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form action="{{route('regist-pelapor')}}" method="post">
@@ -31,6 +53,7 @@
             <form action="{{route('postlogin')}}" method="post">
                 {{csrf_field()}}
                 <h1>Sign in</h1>
+                <!-- <p>Silahkan Login menggunakan Email dan Password yang sudah terdaftar</p> -->
                 <input type="email" name="email" placeholder="Email" />
                 <input type="password" name="password" placeholder="Password" />
                 <button type="submit">Sign In</button>
@@ -44,8 +67,9 @@
                     <button class="ghost" id="signIn">Sign In</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h1>Hello!</h1>
-                    <p>Silahkan Login menggunakan Email dan Password yang sudah terdaftar</p>
+                    <img src="{{asset('storage/img/kai.png')}}" width="150" height="80" />
+                    <h3>PT. Kereta Api Indonesia <br> Sistem Informasi Pelayanan</h3>
+                    <!-- <p style="font-size: 15px;">Login menggunakan Email dan Password yang terdaftar</p> -->
                     <button class="ghost" id="signUp">Sign Up</button>
                 </div>
             </div>
@@ -77,9 +101,9 @@
         margin: 0;
     }
 
-    h2 {
+    /* h2 {
         text-align: center;
-    }
+    } */
 
     p {
         font-size: 14px;

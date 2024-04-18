@@ -125,19 +125,23 @@
                     <td style="width: 3%;">V</td>
                     <td style="width: 3%;">X</td>
                 </tr>
-                @foreach($detlap as $dt)
-                @if($jml_trou > 0)
                 <tr>
                     <td rowspan="5" align="center">1</tdstyle=>
-                    <td rowspan="{{$jml_trou}}">Troubleshooting</td>
+                    <td rowspan="5">Troubleshooting</td>
                     <td>1.1</td;>
                     <td>Aplikasi</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'Aplikasi')
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -147,12 +151,18 @@
                 <tr>
                     <td>1.2</td>
                     <td>Jaringan</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'Jaringan')
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -162,12 +172,18 @@
                 <tr>
                     <td>1.3</td>
                     <td>PC/Laptop</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'PC/Laptop')
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -177,12 +193,18 @@
                 <tr>
                     <td>1.4</td>
                     <td>Printer</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan == 'Printer')
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -191,13 +213,19 @@
                 </tr>
                 <tr>
                     <td>1.5</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Throubleshooting' && $dt->jenis_layanan != 'Aplikasi' && $dt->jenis_layanan != 'Jaringan' && $dt->jenis_layanan != 'PC/Laptop' && $dt->jenis_layanan != 'Printer')
                     <td>Lainnya : <br>{{$dt->jenis_layanan}}</td>
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td>Lainnya : <br>.......</td>
                     <td></td>
                     <td></td>
@@ -205,17 +233,27 @@
                     <td></td>
                     @endif
                 </tr>
+
+                <!-- ==== INSTALASI ==== -->
                 <tr>
                     <td rowspan="6" align="center">2</td>
                     <td rowspan="6">Instalasi </td>
                     <td>2.1</td>
                     <td>Aplikasi</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Aplikasi')
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -225,12 +263,18 @@
                 <tr>
                     <td>2.2</td>
                     <td>Sistem Operasi</td>
-                    @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Sistem Operasi')
-                    <td>{{$dt->det_pekerjaan}}</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt2)
+                    @if($dt2->kat_layanan == 'Instalasi' && $dt2->jenis_layanan == 'Sistem Operasi')
+                    <td>{{$dt2->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
-                    <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <td>{{$dt2->ket_pekerjaan}}</td>
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -240,12 +284,18 @@
                 <tr>
                     <td>2.3</td>
                     <td>Jaringan</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Jaringan')
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -255,12 +305,18 @@
                 <tr>
                     <td>2.4</td>
                     <td>PC/Laptop</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'PC/Laptop')
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -270,12 +326,18 @@
                 <tr>
                     <td>2.5</td>
                     <td>Printer</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan == 'Printer')
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td></td>
                     <td></td>
                     <td></td>
@@ -284,13 +346,19 @@
                 </tr>
                 <tr>
                     <td>2.6</td>
+                    <?php $data = 0; ?>
+                    @foreach($detlap as $dt)
                     @if($dt->kat_layanan == 'Instalasi' && $dt->jenis_layanan != 'Aplikasi' && $dt->jenis_layanan != 'Jaringan' && $dt->jenis_layanan != 'PC/Laptop' && $dt->jenis_layanan != 'Printer' && $dt->jenis_layanan != 'Sistem Operasi')
                     <td>Lainnya : <br>{{$dt->jenis_layanan}}</td>
                     <td>{{$dt->det_pekerjaan}}</td>
                     <td align="center" valign="center"><img src="{{storage_path('app/public/img/check.png')}}" width="15" height="15" /></i></td>
                     <td></td>
                     <td>{{$dt->ket_pekerjaan}}</td>
-                    @else
+                    <?php $data = 1; ?>
+                    @endif
+                    @endforeach
+
+                    @if($data != 1)
                     <td>Lainnya : <br>.......</td>
                     <td></td>
                     <td></td>
@@ -298,7 +366,6 @@
                     <td></td>
                     @endif
                 </tr>
-                @endforeach
             </table>
             <p>*v: selesai; x : gagal <br>
                 Menyatakan bahwa, Penanganan instalasi dan atau troubleshooting telah diperiksa dan dilakukan oleh pihak sistem

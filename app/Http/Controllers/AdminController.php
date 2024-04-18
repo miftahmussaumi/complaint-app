@@ -70,22 +70,21 @@ class AdminController extends Controller
         $lastReferenceNumber = DB::table('laporan')
         ->whereNotNull('lap_no_ref')
         ->orderBy('id', 'desc')
-            ->value('lap_no_ref');
+        ->value('lap_no_ref');
 
-        // Dapatkan tanggal hari ini dengan format "dd/mm/yyyy"
-        $tanggal = Carbon::now()->format('d/m/Y');
+        $tanggal = Carbon::now()->format('m/Y');
+        $bulan = Carbon::now()->format('m');
 
-        // Parsing nomor referensi terakhir untuk mendapatkan bagian nomor auto-increment
+        // Code Auto Increament
         $autoIncrement = 1;
         if ($lastReferenceNumber) {
             $lastReferenceNumberParts = explode('/', $lastReferenceNumber);
-            $autoIncrement = intval($lastReferenceNumberParts[0]) + 1;
+            // Periksa jika masih dibulan yang sama
+            if ($lastReferenceNumberParts[1] === $bulan) {
+                $autoIncrement = intval($lastReferenceNumberParts[0]) + 1;
+            }
         }
-
-        // Format nomor referensi baru
         $nomorReferensi = sprintf('%03d', $autoIncrement) . '/' . $tanggal;
-
-        // dd($nomorReferensi);
 
         return view('admin.laporan-detail', compact('laporan', 'detlaporan', 'nomorReferensi'));
     }
@@ -175,6 +174,7 @@ class AdminController extends Controller
         DB::table('laporan')
         ->where('id', $id)
         ->update([
+            'id_pengawas'       => 1,
             'lap_no_ref'        => $request->lap_no_ref,
             'lap_tanggal'       => $request->lap_tanggal,
             'lap_bisnis_area'   => $request->lap_bisnis_area,

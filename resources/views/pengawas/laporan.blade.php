@@ -41,7 +41,7 @@
                                     </td>
                                     <td>
                                         <a href="{{url('detail-laporan',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        <a href=""><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
+                                        <a href="{{url('cetak-laporan',$data->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
                                     </td>
                                 </tr>
                                 @endforeach

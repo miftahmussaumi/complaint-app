@@ -74,7 +74,7 @@ class TeknisiController extends Controller
             'id','id_teknisi',
             'laporan.tgl_akhir_pengerjaan AS deadline',
         )
-            ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan'])
+            ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan','Manager'])
             ->where('id_teknisi', '=', Auth::guard('teknisi')->user()->id)
             ->orderBy('tgl_masuk')
             ->get();
@@ -153,18 +153,22 @@ class TeknisiController extends Controller
                 'teknisi.nama','status_terakhir',
                 'laporan.tgl_akhir_pengerjaan AS deadline',
                 DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                DB::raw("DATE_FORMAT(laporan.tgl_selesai, '%d %M %Y') AS tgl_selesai"),
                 DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d %M %Y, %H:%i WIB') AS tgl_awal_pengerjaan"),
                 DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
             )
             ->first();
 
         $detlaporan = DB::table('detlaporan')
+        ->leftJoin('laporan','laporan.id','=','detlaporan.id_laporan')
         ->where('id_laporan', '=', $id)->get();
 
         $count = DetLaporan::where('id_laporan', $id)
         ->whereNull('det_pekerjaan')
         ->whereNull('ket_pekerjaan')
         ->count();
+
+        // dd($detlaporan);
 
         return view('teknisi.comp-detail-it', compact('laporan', 'detlaporan','count'));
         
@@ -218,21 +222,18 @@ class TeknisiController extends Controller
         if ($filter == null) {
             $data = DB::table('laporan')
             ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+            ->join('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
             ->select(
                 'laporan.id AS id',
                 'no_inv_aset',
                 'tgl_selesai',
-                'kat_layanan',
-                'jenis_layanan',
-                'det_layanan',
                 'waktu_tambahan',
-                'laporan.foto',
-                'det_pekerjaan',
-                'ket_pekerjaan',
+                'teknisi.nama as nama_teknisi',
                 DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
                 DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
                 DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
                 DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                'laporan.lap_no_ref'
             )
                 ->orderBy('laporanhist.tanggal', 'desc')
                 ->where(function ($query) {
@@ -245,49 +246,53 @@ class TeknisiController extends Controller
             if ($kat_layanan != null) {
                 $data = DB::table('laporan')
                 ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+                ->join('detlaporan', 'detlaporan.id_laporan', '=', 'laporan.id')
+                ->join('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
                 ->orderBy('laporan.tgl_masuk', 'desc')
-                ->select(
-                    'laporan.id AS id',
-                    'no_inv_aset',
-                    'tgl_selesai',
-                    'kat_layanan',
-                    'jenis_layanan',
-                    'det_layanan',
-                    'waktu_tambahan',
-                    'laporan.foto',
-                    'det_pekerjaan',
-                    'ket_pekerjaan',
-                    DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
-                    DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
-                    DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
-                )
+                    ->select(
+                        'laporan.id AS id',
+                        'no_inv_aset',
+                        'tgl_selesai',
+                        'kat_layanan',
+                        'jenis_layanan',
+                        'det_layanan',
+                        'waktu_tambahan',
+                        'detlaporan.foto',
+                        'det_pekerjaan',
+                        'ket_pekerjaan',
+                        'kat_layanan',
+                        'jenis_layanan',
+                        'teknisi.nama as nama_teknisi',
+                        DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                        DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                        DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                        'laporan.lap_no_ref'
+                    )
                     ->where(function ($query) {
                         $query->where('laporanhist.status_laporan', '=', 'Selesai')
                         ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
                     })
-                    ->where('laporan.kat_layanan', '=', $kat_layanan)
+                    ->where('detlaporan.kat_layanan', '=', $kat_layanan)
                     ->where('laporan.id_teknisi', '=', Auth::guard('teknisi')->user()->id)
                     ->get();
                 // dd($data);
             } else if ($no_inv_aset != null) {
                 $data = DB::table('laporan')
                 ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+                ->join('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
                 ->orderBy('laporan.tgl_masuk', 'desc')
-                ->select(
-                    'laporan.id AS id',
-                    'no_inv_aset',
-                    'tgl_selesai',
-                    'kat_layanan',
-                    'jenis_layanan',
-                    'det_layanan',
-                    'waktu_tambahan',
-                    'laporan.foto',
-                    'det_pekerjaan',
-                    'ket_pekerjaan',
-                    DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
-                    DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
-                    DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
-                )
+                    ->select(
+                        'laporan.id AS id',
+                        'no_inv_aset',
+                        'tgl_selesai',
+                        'waktu_tambahan',
+                        'teknisi.nama as nama_teknisi',
+                        DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                        DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
+                        DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                        DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                        'laporan.lap_no_ref'
+                    )
                     ->where(function ($query) {
                         $query->where('laporanhist.status_laporan', '=', 'Selesai')
                         ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
@@ -299,22 +304,20 @@ class TeknisiController extends Controller
             } else if ($tgl_masuk != null) {
                 $data = DB::table('laporan')
                 ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+                ->join('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
                 ->orderBy('laporan.tgl_masuk', 'desc')
-                ->select(
-                    'laporan.id AS id',
-                    'no_inv_aset',
-                    'tgl_selesai',
-                    'kat_layanan',
-                    'jenis_layanan',
-                    'det_layanan',
-                    'waktu_tambahan',
-                    'laporan.foto',
-                    'det_pekerjaan',
-                    'ket_pekerjaan',
-                    DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
-                    DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
-                    DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
-                )
+                    ->select(
+                        'laporan.id AS id',
+                        'no_inv_aset',
+                        'tgl_selesai',
+                        'waktu_tambahan',
+                        'teknisi.nama as nama_teknisi',
+                        DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                        DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
+                        DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                        DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                        'laporan.lap_no_ref'
+                    )
                     ->where(function ($query) {
                         $query->where('laporanhist.status_laporan', '=', 'Selesai')
                         ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
@@ -326,22 +329,20 @@ class TeknisiController extends Controller
             } else if ($tgl_selesai != null) {
                 $data = DB::table('laporan')
                 ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+                ->join('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
                 ->orderBy('laporan.tgl_masuk', 'desc')
-                ->select(
-                    'laporan.id AS id',
-                    'no_inv_aset',
-                    'tgl_selesai',
-                    'kat_layanan',
-                    'jenis_layanan',
-                    'det_layanan',
-                    'waktu_tambahan',
-                    'laporan.foto',
-                    'det_pekerjaan',
-                    'ket_pekerjaan',
-                    DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
-                    DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
-                    DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
-                )
+                    ->select(
+                        'laporan.id AS id',
+                        'no_inv_aset',
+                        'tgl_selesai',
+                        'waktu_tambahan',
+                        'teknisi.nama as nama_teknisi',
+                        DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                        DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
+                        DB::raw("DATE_FORMAT(tgl_awal_pengerjaan, '%d %M %Y (%H:%i)') AS tgl_awal_pengerjaan"),
+                        DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y  (%H:%i)') AS tgl_akhir_pengerjaan"),
+                        'laporan.lap_no_ref'
+                    )
                     ->where(function ($query) {
                         $query->where('laporanhist.status_laporan', '=', 'Selesai')
                         ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
@@ -372,7 +373,7 @@ class TeknisiController extends Controller
         } else {
             $datas = 'ada';
         }
-        return view('teknisi.history-it', compact('data', 'datas', 'filter'));
+        return view('teknisi.history-it', compact('data', 'datas', 'filter', 'kat_layanan'));
     }
 
     public function getNoInventarisOptionsIT()

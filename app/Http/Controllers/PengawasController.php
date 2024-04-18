@@ -138,18 +138,6 @@ class PengawasController extends Controller
         ->where('id_laporan','=',$idlap)
         ->get();
 
-        $Instalasi = DB::table('detlaporan')
-        ->where('kat_layanan', '=', 'Instalasi')
-        ->where('id_laporan', '=', $idlap)
-        ->get();
-        $jml_ins = $Instalasi->count();
-
-        $Troubleshooting = DB::table('detlaporan')
-        ->where('kat_layanan', '=', 'Troubleshooting')
-        ->where('id_laporan', '=', $idlap)
-        ->get();
-        $jml_trou = $Troubleshooting->count();
-
         $lap = DB::table('laporan')
         ->leftJoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
         ->leftJoin('pelapor', 'pelapor.id', '=', 'laporan.id_pelapor')
@@ -187,15 +175,15 @@ class PengawasController extends Controller
             ->where('laporan.id', '=', $idlap)
             ->first();
 
-        // $jenis_layanan = ['Instalasi', 'Aplikasi', 'Verifikasi', 'Troubleshooting', 'Lainnya'];
-        // $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap'))->setPaper('a4', 'portrait')->output();
-        // return response()->streamDownload(
-        //     fn () => print($pdf),
-        //     "laporan.pdf"
-        // );
+        $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap'))->setPaper('legal', 'portrait')->output();
+        return response()->streamDownload(
+            fn () => print($pdf),
+            "laporan.pdf"
+        );
         // dd($jml_ins, $jml_trou);
+        // dd($detlap);
 
-        return view('test', compact('lap','detlap', 'jml_ins', 'jml_trou'));
+        // return view('test', compact('lap','detlap'));
     }
 
     /**

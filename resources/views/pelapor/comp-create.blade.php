@@ -10,6 +10,14 @@
     </div>
 </div>
 <div class="container-fluid">
+    @if ($errors->any())
+    @foreach ($errors->all() as $error)
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+        </button> <strong>Terdapat Data Serupa!</strong> {{ $error }}
+    </div>
+    @endforeach
+    @endif
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -21,7 +29,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">No Inventaris Aset</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="no_inv_aset" class="form-control" placeholder="Nomor Inventaris Aset">
+                                    <input required type="text" value="{{ old('no_inv_aset') }}" name="no_inv_aset" class="form-control" placeholder="Nomor Inventaris Aset">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -34,12 +42,12 @@
                                         <div class="form-row">
                                             <div class="col">
                                                 <div class="input-group">
-                                                    <input type="text" id="tgl_awal" name="tgl_awal" class="form-control datepicker" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                                                    <input required type="text" value="{{ old('tgl_awal') }}" id="tgl_awal" name="tgl_awal" class="form-control datepicker" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
-                                                    <input type="text" name="waktu_awal" class="form-control" value="13:14"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                    <input required type="text" value="{{ old('waktu_awal') }}" name="waktu_awal" class="form-control" placeholder="hh:mm"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -53,12 +61,12 @@
                                         <div class="form-row">
                                             <div class="col">
                                                 <div class="input-group">
-                                                    <input type="text" id="tgl_akhir" name="tgl_akhir" class="form-control datepicker" id="datepicker-autoclose" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                                                    <input required type="text" value="{{ old('tgl_akhir') }}" id="tgl_akhir" name="tgl_akhir" class="form-control datepicker" id="datepicker-autoclose" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
-                                                    <input type="text" name="waktu_akhir" class="form-control" value="13:14"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                    <input required type="text" value="{{ old('waktu_akhir') }}" name="waktu_akhir" class="form-control" placeholder="hh:mm"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -79,7 +87,7 @@
                                             <div class="form-row">
                                                 <div class="col">
                                                     <div class="input-group">
-                                                        <select name="kat_layanan[]" class="form-control kat-layanan">
+                                                        <select required name="kat_layanan[]" class="form-control kat-layanan">
                                                             <option value="">Pilih satu</option>
                                                             <option value="Throubleshooting">Throubleshooting</option>
                                                             <option value="Instalasi">Instalasi</option>
@@ -89,7 +97,7 @@
                                                 <div class="col">
                                                     <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
                                                         <div class="col">
-                                                            <select name="jenis_layanan[]" class="form-control jenis-layanan">
+                                                            <select required name="jenis_layanan[]" class="form-control jenis-layanan">
                                                             </select>
                                                         </div>
                                                         <div class="col lainnya-input" style="display: none;">
@@ -105,7 +113,7 @@
                                             <label>Permasalahan</label>
                                         </td>
                                         <td>
-                                            <textarea style="height: 120px;" name="det_layanan[]" class="form-control det-layanan" placeholder="Masukkan detail permasalahan"></textarea>
+                                            <textarea required style="height: 120px;" name="det_layanan[]" class="form-control det-layanan" placeholder="Masukkan detail permasalahan"></textarea>
                                         </td>
                                         <td align="center">
                                             <!-- Tombol hapus disini dihapus -->
@@ -148,33 +156,37 @@
         var jenisDropdown = selectElement.closest('.form-row').querySelector('.jenis-layanan');
         var lainnyaInput = selectElement.closest('.form-row').querySelector('.lainnya-input');
 
+        // Mengambil semua kategori yang telah dipilih
+        var selectedKategori = [];
+        document.querySelectorAll('.kat-layanan').forEach(function(selectElement) {
+            if (selectElement.value !== "") {
+                selectedKategori.push(selectElement.value);
+            }
+        });
+
         // Hapus opsi sebelumnya
         jenisDropdown.innerHTML = "";
 
+        var options = [];
+
         if (selectedOption === 'Throubleshooting') {
-            var options = ["Aplikasi", "Jaringan", "PC/Laptop", "Printer", "Lainnya"];
-            options.forEach(function(option) {
-                var opt = document.createElement('option');
-                opt.value = option;
-                opt.innerHTML = option;
-                jenisDropdown.appendChild(opt);
-            });
-            jenisDropdown.style.display = 'block';
-            lainnyaInput.style.display = 'none';
+            options = ["Aplikasi", "Jaringan", "PC/Laptop", "Printer", "Lainnya"];
         } else if (selectedOption === 'Instalasi') {
-            var options = ["Aplikasi", "Sistem Operasi", "Jaringan", "PC/Laptop", "Printer", "Lainnya"];
-            options.forEach(function(option) {
+            options = ["Aplikasi", "Sistem Operasi", "Jaringan", "PC/Laptop", "Printer", "Lainnya"];
+        }
+
+        options.forEach(function(option) {
+            // Periksa apakah opsi sudah dipilih sebelumnya, jika sudah, lewati
+            if (!selectedKategori.includes(option)) {
                 var opt = document.createElement('option');
                 opt.value = option;
                 opt.innerHTML = option;
                 jenisDropdown.appendChild(opt);
-            });
-            jenisDropdown.style.display = 'block';
-            lainnyaInput.style.display = 'none';
-        } else {
-            jenisDropdown.style.display = 'none';
-            lainnyaInput.style.display = 'none';
-        }
+            }
+        });
+
+        jenisDropdown.style.display = 'block';
+        lainnyaInput.style.display = 'none';
     }
 
     function showLainnya(selectElement) {
@@ -238,5 +250,4 @@
         });
     });
 </script>
-
 @endsection

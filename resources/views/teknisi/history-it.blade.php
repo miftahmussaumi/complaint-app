@@ -12,11 +12,10 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        @if($datas == 'ada')
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{route('history-it')}}" method="get" id="filterForm">
+                    <form action="{{route('history-user')}}" method="get" id="filterForm">
                         {{csrf_field()}}
                         <div class="form-row">
                             <div class="col-2">
@@ -32,12 +31,10 @@
                             <div class="col">
                                 @if($filter != null)
                                 <button type="submit" name="action" value="filter" class="btn btn-primary">Filter</button>
-                                <!-- <button type="button" id="clearFilterBtn" class="btn btn-primary">Clear</button> -->
                                 <a href="/history-user"><button type="button" id="clearFilterBtn" class="btn btn-primary">Show All Data</button></a>
                                 @else
                                 <button type="submit" name="action" value="filter" class="btn btn-primary">Filter</button>
                                 <button type="button" id="clearFilterBtn" class="btn btn-primary">Clear</button>
-                                <!-- <a href="/history-user"><button type="button" id="clearFilterBtn" class="btn btn-primary">Show All Data</button></a> -->
                                 @endif
                             </div>
                         </div>
@@ -45,6 +42,7 @@
                 </div>
             </div>
         </div>
+        @if($datas == 'ada')
         <div class="col-12">
             @foreach($data as $dt)
             <div class="card text-left" style="color: #4F4B4B;">
@@ -58,31 +56,32 @@
                             {{$dt->tgl_selesai}}
                         </div>
                         <div class="col">
+                            Nomor Referensi <br><br>
+                            @if($dt->lap_no_ref == null)
+                            <b><i>Belum ada</i></b>
+                            @else
+                            <b>{{$dt->lap_no_ref}}</b>
+                            @endif
+                        </div>
+                        <div class="col">
                             No Inventaris <br><br>
                             <b>{{$dt->no_inv_aset}}</b>
                         </div>
+                        @if($kat_layanan != null)
                         <div class="col">
-                            kat_layanan - Jenis <br><br>
-                            <b>{{$dt->kat_layanan}} - {{$dt->jenis_layanan}}</b>
+                            Kategori / Jenis Layanan <br><br>
+                            <b>{{$dt->kat_layanan}} / {{$dt->jenis_layanan}}</b>
                         </div>
+                        @endif
                         <div class="col">
-                            Pengerjaan <br><br>
-                            <b>{{$dt->tgl_awal_pengerjaan}}</b><br>
-                            <div class="garis_verikal"></div>
-                            <b>{{$dt->tgl_akhir_pengerjaan}}</b>
-                        </div>
-                        <div class="col">
-                            Waktu Tambahan <br><br>
-                            @if($dt->waktu_tambahan == null OR $dt->waktu_tambahan == 0)
-                            <i>tidak ada tambahan waktu</i>
-                            @else
-                            <b>{{$dt->waktu_tambahan}}hari</b>
-                            @endif
+                            Nama Teknisi <br><br>
+                            <b>{{$dt->nama_teknisi}}</b>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <button type="button" class="btn mb-1 btn-outline-primary" data-toggle="modal" data-target="#basicModal{{$dt->id}}">Detail</button>
+                    <a href="{{url('detail-comp-it',$dt->id)}}"><button class="btn mb-1 btn-outline-primary">Detail</button></a>
+                    <button type="button" class="btn mb-1 btn-outline-primary" data-toggle="modal" data-target="#basicModal{{$dt->id}}">History</button>
                 </div>
                 <div class="modal fade" id="basicModal{{$dt->id}}">
                     <div class="modal-dialog" role="document">
@@ -96,32 +95,38 @@
                                 @foreach($dt->history as $dthist)
                                 <table>
                                     <tr>
-                                        <td style="width: 80px;" rowspan="2" align=left valign=top>
+                                        <td style="width: 90px; margin-right: 100px;" rowspan="2" valign=top align="right">
                                             @if($dthist->status_laporan == 'Pengajuan')
-                                            <span class="badge badge-dark">Pengajuan</span>
+                                            <span class="badge badge-primary">Open</span>
                                             @elseif($dthist->status_laporan == 'Diproses')
-                                            <span class="badge badge-info">Diproses</span>
+                                            <span class="badge badge-info">Process</span>
                                             @elseif($dthist->status_laporan == 'Selesai')
-                                            <span class="badge badge-success">Selesai</span>
+                                            <span class="badge badge-success">Closed</span>
                                             @elseif($dthist->status_laporan == 'Dibatalkan')
-                                            <span class="badge badge-danger">Dibatalkan</span>
+                                            <span class="badge badge-danger">Cancel</span>
                                             @elseif($dthist->status_laporan == 'ReqHapus')
                                             <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
                                             @elseif($dthist->status_laporan == 'CheckedU')
-                                            <span class="badge badge-warning">User Check</span>
+                                            <span class="badge badge-warning">User Checking</span>
                                             @elseif($dthist->status_laporan == 'reqAddTime')
-                                            <span class="badge badge-warning">Request <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                            <span class="badge badge-info">Process</span>
                                             @endif
-                                            <!-- <span class="badge badge-primary">{{$dthist->status_laporan}}</span> -->
                                         </td>
+                                        <td style="width: 10px;"></td>
                                         <td style="color: black;">{{$dthist->tanggal}}</td>
                                     </tr>
                                     <tr style="height: 30px;">
-                                        @if($dthist->keterangan != null)
-                                        <td style="font-size: 12px;" valign=top>{{$dthist->keterangan}}</td>
-                                        @else
-                                        <td style="font-size: 12px;" valign=top><i>tidak ada keterangan</i></td>
-                                        @endif
+                                        <td style="width: 10px;"></td>
+                                        <td style="font-size: 12px;" valign=top>
+                                            @if($dthist->keterangan != null)
+                                            @if($dthist->status_laporan == 'reqAddTime')
+                                            Pengajuan penambahan waktu -
+                                            @endif
+                                            {{$dthist->keterangan}}
+                                            @else
+                                            <i>tidak ada keterangan</i>
+                                            @endif
+                                        </td>
                                     </tr>
                                 </table>
                                 @endforeach
@@ -134,8 +139,14 @@
                 </div>
             </div>
             @endforeach
-            @else
-            <h5>Data history belum ada</h5>
+        </div>
+        @else
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 style="text-align: center;">Maaf, Data Tidak Ditemukan</h5>
+                </div>
+            </div>
         </div>
         @endif
     </div>
@@ -151,16 +162,16 @@
             $('#additional-filters').empty();
             switch (filter) {
                 case 'tgl_masuk':
-                    $('#additional-filters').append('<select id="condition" name="tgl_masuk_f" class="form-control"><option value="=">Is</option><option value="!=">Is not</option><option value="<=">Is before</option><option value=">=">Is after</option></select>');
+                    $('#additional-filters').append('<select id="condition" name="tgl_masuk_f" class="form-control"><option value="<=">Is before</option><option value=">=">Is after</option></select>');
                     $('#additional-filters').append('<input type="date" id="date" name="tgl_masuk" class="form-control">');
                     break;
                 case 'tgl_selesai':
-                    $('#additional-filters').append('<select id="condition" name="tgl_selesai_f" class="form-control"><option value="=" class="form-control">Is</option><option value="!=">Is not</option><option value="<=">Is before</option><option value=">=">Is after</option></select>');
+                    $('#additional-filters').append('<select id="condition" name="tgl_selesai_f" class="form-control"><option value="<=">Is before</option><option value=">=">Is after</option></select>');
                     $('#additional-filters').append('<input type="date" id="date" name="tgl_selesai" class="form-control">');
                     break;
                 case 'no_inv_aset':
                     $.ajax({
-                        url: '/getNoInventarisOptionsIT',
+                        url: '/getNoInventarisOptions',
                         type: 'GET',
                         success: function(response) {
                             $('#additional-filters').append('<select id="no_inv_aset" name="no_inv_aset" class="form-control">' + response.options + '</select>');

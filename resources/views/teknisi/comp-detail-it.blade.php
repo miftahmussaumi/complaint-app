@@ -13,7 +13,7 @@
 <div class="row page-titles mx-0">
     <div class="col p-md-0">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/it">Daftar Laporan</a></li>
+            <li class="breadcrumb-item"><a href="javascript:history.back()">Daftar Laporan</a></li>
             <li class="breadcrumb-item active"><a>Detail</a></li>
         </ol>
     </div>
@@ -38,6 +38,10 @@
                                 <span class="badge badge-warning">User Check</span>
                                 @elseif($laporan->status_terakhir == 'reqAddTime')
                                 <span class="badge badge-warning" data-toggle="tooltip" data-placement="right" title="Persetujuan tambah waktu">User Check</span>
+                                @elseif($laporan->status_terakhir == 'Selesai')
+                                <span class="badge badge-success">Closed</span>
+                                @elseif($laporan->status_terakhir == 'Manager')
+                                <span class="badge badge-success">Manager</span>
                                 @endif
                             </td>
                         </tr>
@@ -46,6 +50,13 @@
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->tgl_masuk}}</td>
                         </tr>
+                        @if($laporan->tgl_selesai != null)
+                        <tr>
+                            <td style="width: 150px; height: 25px;">Tanggal Selesai</td>
+                            <td style="width: 15px;">:</td>
+                            <td>{{$laporan->tgl_selesai}}</td>
+                        </tr>
+                        @endif
                         <tr>
                             <td style="width: 150px; height: 25px;">No Inventaris Aset</td>
                             <td style="width: 15px;">:</td>
@@ -83,6 +94,7 @@
                     </table> <br>
                     <table>
                         <tr>
+                            @if($laporan->status_terakhir != 'Selesai' && $laporan->status_terakhir != 'Manager')
                             @if($laporan->status_terakhir == 'Pengajuan')
                             <td>
                                 <form action="{{route('proses-laporan',$laporan->id)}}" method="post">
@@ -107,6 +119,7 @@
                                     @endif
                                 </form>
                             </td>
+                            @endif
                             @endif
                         </tr>
                     </table>
@@ -159,9 +172,11 @@
                         <div class="mr-auto p-2 bd-highlight">
                             <b>Laporan {{$no}}</b>
                         </div>
+                        @if($dtl->status_terakhir != 'Selesai' && $dtl->status_terakhir != 'Manager')
                         <div class="p-2 bd-highlight">
                             <i style="color: #3167D5" type="button" data-toggle="modal" data-target="#exampleModalP{{$dtl->id}}" data-whatever="@getbootstrap" class="fa fa-pencil-square-o"></i>
                         </div>
+                        @endif
                     </div>
                     <table style="color: #2D3134;">
                         <tr>

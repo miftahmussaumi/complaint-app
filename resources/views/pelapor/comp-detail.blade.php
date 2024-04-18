@@ -55,6 +55,13 @@
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->tgl_masuk}}</td>
                         </tr>
+                        @if($laporan->tgl_selesai != null)
+                        <tr>
+                            <td style="width: 150px; height: 25px;">Tanggal Selesai</td>
+                            <td style="width: 15px;">:</td>
+                            <td>{{$laporan->tgl_selesai}}</td>
+                        </tr>
+                        @endif
                         <tr>
                             <td style="width: 150px; height: 25px;">Teknisi IT</td>
                             <td style="width: 15px;">:</td>

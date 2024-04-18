@@ -68,6 +68,20 @@ class LaporanController extends Controller
         $tgl_akhir_pengerjaan = date('Y-m-d H:i:s', strtotime($akhir_pengerjaan));
         // END KONVERSI TANGGAL AWAL DAN AKHIR PENGERJAAN
 
+
+        $katLayanan = $request->kat_layanan;
+        $jenisLayanan = $request->jenis_layanan;
+
+        // Pengecekan antara kat_layanan dan jenis_layanan dengan nomor array yang sama
+        // $data = '';
+        for ($i = 1; $i < count($katLayanan); $i++) {
+            for ($j = 0; $j < $i; $j++) {
+                if ($katLayanan[$i] === $katLayanan[$j] && $jenisLayanan[$i] === $jenisLayanan[$j]) {
+                    // Jika data sama dengan data sebelumnya, kembalikan response error
+                    return back()->withInput()->withErrors(['error' => 'Kategori dan Jenis Laporan tidak boleh ada yang serupa saat memasukkan laporan lebih dari satu']);
+                }
+            }
+        }
         $laporan = Laporan::create([
             'id_pelapor'            => Auth::guard('pelapor')->user()->id,
             'no_inv_aset'           => $request->no_inv_aset,
@@ -113,7 +127,7 @@ class LaporanController extends Controller
 
 
         
-        // dd($request->all());
+        // dd($data);
         return redirect('comp');
     }
 

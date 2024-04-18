@@ -53,6 +53,7 @@ class PelaporController extends Controller
         ->where('laporan.id','=',$id)
         ->select(
             DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+            DB::raw("DATE_FORMAT(laporan.tgl_selesai, '%d %M %Y') AS tgl_selesai"),
             DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d %M %Y, %H:%i WIB') AS tgl_awal_pengerjaan"),
             DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
             'no_inv_aset','waktu_tambahan','id_teknisi','teknisi.nama',
@@ -69,7 +70,7 @@ class PelaporController extends Controller
         ->orderBy('tanggal', 'desc')
         ->first();
 
-        // dd($hislap);
+        // dd($laporan);
         return view('pelapor.comp-detail', compact('laporan','detlaporan','hislap'));
     }
 
