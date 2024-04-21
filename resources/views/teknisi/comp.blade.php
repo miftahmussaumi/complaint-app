@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container-fluid">
+    @if(Session::has('success'))
+    <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+        </button> <strong>Laporan Diselesaikan !</strong> {{ Session::get('success') }}
+    </div>
+    @endif
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -16,6 +22,7 @@
                             <thead>
                                 <tr>
                                     <th>Tanggal Permintaan</th>
+                                    <th>Nama Pelapor</th>
                                     <th>No Inventaris</th>
                                     <th>Batas Akhir Pengerjaan</th>
                                     <th>Status</th>
@@ -26,6 +33,7 @@
                                 @foreach ($dtLap as $data)
                                 <tr>
                                     <td>{{ $data->tgl_masuk }}</td>
+                                    <td>{{ $data->nama_pelapor }}</td>
                                     <td>{{ $data->no_inv_aset }}</td>
                                     <td>
                                         @if($data->waktu_tambahan != null)
@@ -47,24 +55,24 @@
                                         @if ($tanggalDeadlineBaru->format('Y-m-d') == $cekDeadline->format('Y-m-d'))
                                         <i style="color: #DF1839; font-size: 12px;">1 hari lagi </i>
                                         @elseif($tanggalDeadlineBaru->format('Y-m-d') < $tanggalHariIni->format('Y-m-d'))
-                                        <i style="color: #DF1839; font-size: 12px;">Melewati batas waktu, selesaikan laporan! </i>
-                                        @endif
+                                            <i style="color: #DF1839; font-size: 12px;">Melewati batas waktu, selesaikan laporan! </i>
+                                            @endif
 
-                                        @else
-                                        {{ $data->tgl_akhir_pengerjaan }} <br>
-                                        <?php
-                                        $tanggalDeadline        = $data->deadline;
-                                        $tanggalDeadlineBaru    = new DateTime($tanggalDeadline);
-                                        $tanggalHariIni         = new DateTime();
-                                        $cekDeadline            = $tanggalHariIni->modify('+1 day');
-                                        ?>
-                                        @if ($tanggalDeadlineBaru->format('Y-m-d') == $cekDeadline->format('Y-m-d'))
-                                        <i style="color: #DF1839; font-size: 12px;">1 hari lagi </i>
-                                        @elseif($tanggalDeadlineBaru->format('Y-m-d') < $tanggalHariIni->format('Y-m-d'))
-                                        <i style="color: #DF1839; font-size: 12px;">Melewati batas waktu, selesaikan laporan! </i>
-                                        @endif
+                                            @else
+                                            {{ $data->tgl_akhir_pengerjaan }} <br>
+                                            <?php
+                                            $tanggalDeadline        = $data->deadline;
+                                            $tanggalDeadlineBaru    = new DateTime($tanggalDeadline);
+                                            $tanggalHariIni         = new DateTime();
+                                            $cekDeadline            = $tanggalHariIni->modify('+1 day');
+                                            ?>
+                                            @if ($tanggalDeadlineBaru->format('Y-m-d') == $cekDeadline->format('Y-m-d'))
+                                            <i style="color: #DF1839; font-size: 12px;">1 hari lagi </i>
+                                            @elseif($tanggalDeadlineBaru->format('Y-m-d') < $tanggalHariIni->format('Y-m-d'))
+                                                <i style="color: #DF1839; font-size: 12px;">Melewati batas waktu, selesaikan laporan! </i>
+                                                @endif
 
-                                        @endif
+                                                @endif
                                     </td>
 
                                     <td>
@@ -78,11 +86,13 @@
                                         <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
                                         @elseif($data->status_terakhir == 'reqAddTime')
                                         <span class="badge badge-warning">Request <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                        @elseif($data->status_terakhir == 'Dibatalkan')
+                                        <span class="badge badge-danger">Cancel</span>
                                         @endif
                                     </td>
                                     <td>
                                         <a href="{{url('detail-comp-it',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        <a href="{{url('delete-laporan',$data->id)}}" onclick="return confirm('Apakah Yakin Hapus Data Ini?')" style="color: #C63F56;"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a>
+                                        <!-- <a href="{{url('delete-laporan',$data->id)}}" onclick="return confirm('Apakah Yakin Hapus Data Ini?')" style="color: #C63F56;"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a> -->
                                     </td>
                                 </tr>
                                 @endforeach

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Session; 
 
 class TeknisiController extends Controller
 {
@@ -65,14 +66,15 @@ class TeknisiController extends Controller
     public function index()
     {
         $dtLap = DB::table('laporan')
+        ->join('pelapor','pelapor.id','=','laporan.id_pelapor')
         ->select(
             DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
             DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
             'no_inv_aset',
             'waktu_tambahan',
             'status_terakhir',
-            'id','id_teknisi',
-            'laporan.tgl_akhir_pengerjaan AS deadline',
+            'laporan.id','id_teknisi',
+            'laporan.tgl_akhir_pengerjaan AS deadline','pelapor.nama as nama_pelapor'
         )
             ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan','Manager'])
             ->where('id_teknisi', '=', Auth::guard('teknisi')->user()->id)
@@ -105,7 +107,7 @@ class TeknisiController extends Controller
                 'id_laporan'        => $id,
                 'status_laporan'    => 'Dibatalkan',
                 'tanggal'           => $tgl_masuk,
-                'keterangan'        => 'Permintaan laporan dibatalkan oleh Teknisi'
+                'keterangan'        => $request->keterangan
             ]);
             DB::table('laporan')
                 ->where('id', $id)
@@ -145,6 +147,7 @@ class TeknisiController extends Controller
     {
         $laporan = DB::table('laporan')
         ->leftjoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
+        ->leftJoin('pelapor','pelapor.id','=','laporan.id_pelapor')
         ->where('laporan.id', '=', $id)
             ->select(
                 'no_inv_aset',
@@ -156,11 +159,19 @@ class TeknisiController extends Controller
                 DB::raw("DATE_FORMAT(laporan.tgl_selesai, '%d %M %Y') AS tgl_selesai"),
                 DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d %M %Y, %H:%i WIB') AS tgl_awal_pengerjaan"),
                 DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
+                'pelapor.nama as nama_pelapor', 'pelapor.jabatan as jabatan_pelapor'
             )
             ->first();
 
         $detlaporan = DB::table('detlaporan')
         ->leftJoin('laporan','laporan.id','=','detlaporan.id_laporan')
+        ->select(
+            'detlaporan.id as id_det','laporan.id as id_lap','detlaporan.kat_layanan',
+            'detlaporan.jenis_layanan',
+            'detlaporan.det_layanan',
+            'detlaporan.det_pekerjaan',
+            'detlaporan.ket_pekerjaan', 'laporan.status_terakhir'
+        )
         ->where('id_laporan', '=', $id)->get();
 
         $count = DetLaporan::where('id_laporan', $id)
@@ -174,22 +185,24 @@ class TeknisiController extends Controller
         
     }
 
-    public function pekerjaanIT(Request $request, $id)
+    public function pekerjaanIT(Request $request, $id_det)
     {
         $det_pekerjaan = $request->det_pekerjaan;
         $ket_pekerjaan = $request->ket_pekerjaan;
 
         DB::table('detlaporan')
-            ->where('id', $id)
+            ->where('id', $id_det)
             ->update([
                 'det_pekerjaan' => $det_pekerjaan,
                 'ket_pekerjaan' => $ket_pekerjaan,
             ]);
 
+            // dd($request->all());
+
         return redirect()->back();
     }
 
-    public function selesai(Request $request, $id)
+    public function selesai($id)
     {
         $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');
 
@@ -197,7 +210,7 @@ class TeknisiController extends Controller
             'id_laporan'        => $id,
             'status_laporan'    => 'CheckedU',
             'tanggal'           => $tgl_masuk,
-            'keterangan'        => 'Pengecekan hasil penyelesaian laporan oleh Use/rPelapor'
+            'keterangan'        => 'Pengecekan hasil penyelesaian laporan oleh User / Pelapor'
         ]);
 
         DB::table('laporan')
@@ -205,7 +218,10 @@ class TeknisiController extends Controller
             ->update([
                 'status_terakhir' => 'CheckedU'
             ]);
-        
+
+        $selesai = 'Menunggu Persetujuan Pelapor';
+        Session::flash('success', $selesai);
+
         return redirect('it');
     }
 

@@ -32,6 +32,16 @@
                             <td>{{$laporan->tgl_masuk}}</td>
                         </tr>
                         <tr>
+                            <td style="width: 150px; height: 25px;">Nama Pelapor</td>
+                            <td style="width: 15px;">:</td>
+                            <td>{{$laporan->nama_pelapor}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px; height: 25px;">Jabatan Pelapor</td>
+                            <td style="width: 15px;">:</td>
+                            <td>{{$laporan->jabatan_pelapor}}</td>
+                        </tr>
+                        <tr>
                             <td style="width: 150px; height: 25px;">Teknisi IT</td>
                             <td style="width: 15px;">:</td>
                             @if($laporan->id_teknisi != null)
@@ -80,6 +90,8 @@
                                 <span class="badge badge-success">Closed</span>
                                 @elseif($laporan->status_terakhir == 'Manager')
                                 <span class="badge badge-success">Manager</span>
+                                @elseif($laporan->status_terakhir == 'Dibatalkan')
+                                <span class="badge badge-danger">Cancel</span>
                                 @endif
                             </td>
                         </tr>

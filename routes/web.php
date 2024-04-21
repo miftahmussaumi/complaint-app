@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::post('/proses-tambah-waktu/{idlap}', [PelaporController::class, 'tambahwaktu'])->name('proses-tambah-waktu');
     Route::post('/acc-laporan/{idlap}', [PelaporController::class, 'acclap'])->name('acc-laporan');
     Route::match(['get', 'post'], '/history-user',[PelaporController::class, 'history'])->name('history-user');
-    Route::get('/delete-laporan/{idlap}', [LaporanController::class, 'delete'])->name('delete-laporan');
+    Route::post('/delete-laporan/{idlap}', [LaporanController::class, 'delete'])->name('delete-laporan');
     Route::get('/getNoInventarisOptions', [LaporanController::class, 'getNoInventarisOptions']);
 
 
@@ -55,7 +55,9 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/detail-laporan-admin/{id}', [AdminController::class, 'detail']);
     Route::post('/pilih-teknisi/{id}', [AdminController::class, 'teknisi'])->name('pilih-teknisi');
     Route::post('/manager/{id}', [AdminController::class, 'sendtoManager'])->name('manager');
-
+    Route::get('/dashboard-admin', [AdminController::class, 'dashboard']);
+    Route::get('/send-manager', [AdminController::class, 'manager']);
+    Route::match(['get', 'post'],'/history-admin', [AdminController::class, 'history'])->name('history-admin');
 
 
     // ==============ROUTE UNTUK BAGIAN TEKNISI IT============== //
@@ -68,7 +70,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::post('/laporan-selesai-it/{id}', [TeknisiController::class, 'selesai'])->name('laporan-selesai-it');
     Route::match(['get', 'post'], '/history-it', [TeknisiController::class, 'history'])->name('history-it');
     Route::get('/getNoInventarisOptionsIT', [TeknisiController::class, 'getNoInventarisOptionsIT']);
-    Route::post('/detail-pekerjaan-it/{id}', [TeknisiController::class, 'pekerjaanIT'])->name('detail-pekerjaan-it');
+    Route::post('/detail-pekerjaan-it/{id_det}', [TeknisiController::class, 'pekerjaanIT'])->name('detail-pekerjaan-it');
 
 
 

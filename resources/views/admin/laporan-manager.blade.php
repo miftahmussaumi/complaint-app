@@ -70,42 +70,71 @@
 
                                     <td>
                                         <a href="{{url('detail-laporan-admin',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        @if($data->id_teknisi == null)
-                                        <a data-toggle="modal" data-target="#exampleModalDetail{{$data->id}}" data-whatever="@getbootstrap"><button class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button></a>
-                                        @else
-                                        <a data-toggle="modal" data-target="#exampleModalDetail{{$data->id}}" data-whatever="@getbootstrap"><button disabled class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button></a>
-                                        @endif
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#basicModal{{$data->id}}"><i class="fa fa-history"></i></button>
+                                        <!-- <a data-toggle="modal" data-target="#exampleModalDetail{{$data->id}}" data-whatever="@getbootstrap"><button class="btn btn-primary btn-sm"><i class="fa fa-history"></i></button></a> -->
                                     </td>
                                 </tr>
                                 @endforeach
                         </table>
-                        @foreach ($dtLap as $detail)
-                        <div class="modal fade" id="exampleModalDetail{{$detail->id}}">
+                        @foreach($dtLap as $dt)
+                        <!-- ============= MODAL HISTORY USER ============= -->
+                        <div class="modal fade" id="basicModal{{$dt->id}}">
                             <div class="modal-dialog" role="document">
-                                <form action="{{route('pilih-teknisi',$detail->id)}}" method="post">
-                                    {{csrf_field()}}
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Proses Laporan</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <select name="id_teknisi" class="form-control">
-                                                <option value="" selected disabled>Pilih Teknisi</option>
-                                                @foreach ($teknisi as $dtt)
-                                                <option value="{{$dtt->id}}">{{$dtt->nama}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success">Kirim</button>
-                                        </div>
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Detail Permintaan Layanan</h5>
+                                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                        </button>
                                     </div>
-                                </form>
+                                    <div class="modal-body">
+                                        @foreach($dt->history as $dthist)
+                                        <table>
+                                            <tr>
+                                                <td style="width: 90px; margin-right: 100px;" rowspan="2" valign=top align="right">
+                                                    @if($dthist->status_laporan == 'Pengajuan')
+                                                    <span class="badge badge-primary">Open</span>
+                                                    @elseif($dthist->status_laporan == 'Diproses')
+                                                    <span class="badge badge-info">Process</span>
+                                                    @elseif($dthist->status_laporan == 'Selesai')
+                                                    <span class="badge badge-success">Closed</span>
+                                                    @elseif($dthist->status_laporan == 'Dibatalkan')
+                                                    <span class="badge badge-danger">Cancel</span>
+                                                    @elseif($dthist->status_laporan == 'ReqHapus')
+                                                    <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                                                    @elseif($dthist->status_laporan == 'CheckedU')
+                                                    <span class="badge badge-warning">User Checking</span>
+                                                    @elseif($dthist->status_laporan == 'reqAddTime')
+                                                    <span class="badge badge-info">Process</span>
+                                                    @elseif($dthist->status_laporan == 'Manager')
+                                                    <span class="badge badge-dark">Manager</span>
+                                                    @endif
+                                                </td>
+                                                <td style="width: 10px;"></td>
+                                                <td style="color: black;">{{$dthist->tanggal}}</td>
+                                            </tr>
+                                            <tr style="height: 30px;">
+                                                <td style="width: 10px;"></td>
+                                                <td style="font-size: 12px;" valign=top>
+                                                    @if($dthist->keterangan != null)
+                                                    @if($dthist->status_laporan == 'reqAddTime')
+                                                    Pengajuan penambahan waktu -
+                                                    @endif
+                                                    {{$dthist->keterangan}}
+                                                    @else
+                                                    <i>tidak ada keterangan</i>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        @endforeach
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <!-- ============= MODAL HISTORY USER ============= -->
                         @endforeach
                     </div>
                 </div>

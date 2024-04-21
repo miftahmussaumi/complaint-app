@@ -46,6 +46,16 @@
                             </td>
                         </tr>
                         <tr>
+                            <td style="width: 150px; height: 25px;">Nama Pelapor</td>
+                            <td style="width: 15px;">:</td>
+                            <td>{{$laporan->nama_pelapor}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px; height: 25px;">Jabatan Pelapor</td>
+                            <td style="width: 15px;">:</td>
+                            <td>{{$laporan->jabatan_pelapor}}</td>
+                        </tr>
+                        <tr>
                             <td style="width: 150px; height: 25px;">Tanggal Pelaporan</td>
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->tgl_masuk}}</td>
@@ -100,14 +110,14 @@
                                 <form action="{{route('proses-laporan',$laporan->id)}}" method="post">
                                     {{csrf_field()}}
                                     <button class="btn btn-primary" type="submit" name="action" value="process">Proses</button>
-                                    <button class="btn btn-danger" type="submit" name="action" value="reject" onclick="return confirm('Apakah Yakin Menolak Laporan Ini?')">Tolak</button>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{$laporan->id}}" data-whatever="@getbootstrap">Tolak</button>
                                 </form>
                             </td>
                             @endif
 
                             @if($laporan->waktu_tambahan_peng == null && $laporan->status_terakhir != 'Pengajuan' && $laporan->status_terakhir != 'CheckedU' && $laporan->status_terakhir != 'reqAddTime')
                             <td style="width: 100px;">
-                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i> Waktu</button>
+                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal1{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i> Waktu</button>
                             </td>
                             <td>
                                 <form action="{{route('laporan-selesai-it',$laporan->id)}}" method="POST">
@@ -123,11 +133,32 @@
                             @endif
                         </tr>
                     </table>
+                    <!-- ========= MODAL ALASAN PENOLAKAN ========= -->
+                    <div class="modal fade" id="exampleModal{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <form action="{{route('proses-laporan',$laporan->id)}}" method="post">
+                                {{csrf_field()}}
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Alasan Penolakan:</label>
+                                            <textarea name="keterangan" style="height: 100px;" class="form-control" placeholder="Masukkan Keterangan"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" name="action" value="reject" class="btn btn-primary">Kirim</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ========= END MODAL ALASAN PENOLAKAN ========= -->
                 </div>
             </div>
         </div>
         <!-- ========= MODAL PENAMBAHAN WAKTU ========= -->
-        <div class="modal fade" id="exampleModal{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal1{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <form action="{{route('tambah-waktu',$laporan->id)}}" method="post">
                     {{csrf_field()}}
@@ -174,7 +205,7 @@
                         </div>
                         @if($dtl->status_terakhir != 'Selesai' && $dtl->status_terakhir != 'Manager')
                         <div class="p-2 bd-highlight">
-                            <i style="color: #3167D5" type="button" data-toggle="modal" data-target="#exampleModalP{{$dtl->id}}" data-whatever="@getbootstrap" class="fa fa-pencil-square-o"></i>
+                            <i style="color: #3167D5" type="button" data-toggle="modal" data-target="#exampleModalP{{$dtl->id_det}}" data-whatever="@getbootstrap" class="fa fa-pencil-square-o"></i>
                         </div>
                         @endif
                     </div>
@@ -220,9 +251,9 @@
 
         <!-- ========= MODAL DETAIL DAN KETERANGAN PEKERJAAN ========= -->
         @foreach($detlaporan as $dtl2)
-        <div class="modal fade" id="exampleModalP{{$dtl2->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModalP{{$dtl2->id_det}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="{{route('detail-pekerjaan-it',$dtl2->id)}}" method="post">
+                <form action="{{route('detail-pekerjaan-it',$dtl2->id_det)}}" method="post">
                     {{csrf_field()}}
                     <div class="modal-content">
                         <div class="modal-header">

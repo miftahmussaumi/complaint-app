@@ -280,7 +280,7 @@ class PelaporController extends Controller
                 'id_laporan'        => $idlap,
                 'status_laporan'    => 'Dibatalkan',
                 'tanggal'           => $tgl_masuk,
-                'keterangan'        => 'Permintaan penambahan waktu tidak diterima'
+                'keterangan'        => $request->keterangan
             ]);
 
             DB::table('laporan')
@@ -418,7 +418,7 @@ class PelaporController extends Controller
                     ->where('laporan.tgl_masuk', $tgl_masuk_f, $tgl_masuk)
                     ->where('laporan.id_pelapor', '=', Auth::guard('pelapor')->user()->id)
                     ->get();
-                // dd($data);
+                // dd($data); 
             } else if ($tgl_selesai != null) {
                 $data = DB::table('laporan')
                 ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
@@ -449,6 +449,7 @@ class PelaporController extends Controller
         foreach ($data as $laporan) {
             $laporan->history = DB::table('laporanhist')
             ->where('id_laporan', $laporan->id)
+            ->where('laporanhist.status_laporan', '!=', 'Manager') 
                 ->orderBy('tanggal', 'desc')
                 ->select(
                     'id',

@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container-fluid">
+    @if(Session::has('batal'))
+    <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+        </button> <strong>Info !</strong> {{ Session::get('batal') }}
+    </div>
+    @endif
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -69,14 +75,35 @@
 
                                     <td>
                                         <a href="{{url('detail-comp',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        <a href="{{url('delete-laporan',$data->id)}}" onclick="return confirm('Apakah Yakin Hapus Data Ini?')" style="color: #C63F56;"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a>
+                                        <!-- <a href="{{url('delete-laporan',$data->id)}}" onclick="return confirm('Apakah Yakin Hapus Data Ini?')" style="color: #C63F56;"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a> -->
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal{{$data->id}}" data-whatever="@getbootstrap"><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
                                 @endforeach
                         </table>
-                        <!-- ========= MODAL ========= -->
-
-                        <!-- ========= END MODAL ========= -->
+                        @foreach($dtLap as $dt)
+                        <!-- ========= MODAL ALASAN PEMBATALAN ========= -->
+                        <div class="modal fade" id="exampleModal{{$dt->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <form action="{{url('delete-laporan',$dt->id)}}" method="post">
+                                    {{csrf_field()}}
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="message-text" class="col-form-label">Alasan Pembatalan Laporan:</label>
+                                                <textarea name="keterangan" style="height: 100px;" class="form-control" placeholder="Masukkan Keterangan"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" name="action" value="reject" class="btn btn-primary">Kirim</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- ========= END MODAL ALASAN PENOLAKAN ========= -->
+                        @endforeach
                     </div>
                 </div>
             </div>

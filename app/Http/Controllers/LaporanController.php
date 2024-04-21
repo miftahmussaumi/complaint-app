@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session; 
 
 class LaporanController extends Controller
 {
@@ -22,27 +23,17 @@ class LaporanController extends Controller
     public function dashU()
     {
         $dtLap = DB::table('laporan')
-        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
-            $join->on( 'laporan.id','=','latest_laporanhist.id_laporan'
-            );
-        })
-            ->leftJoin('laporanhist', function ($join) {
-                $join->on('laporan.id', '=', 'laporanhist.id_laporan')
-                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
-            })
-            ->leftJoin('pelapor', 'laporan.id_pelapor', '=', 'pelapor.id')
-            ->select('laporanhist.status_laporan AS status_terbaru')
-            ->where('laporan.id_pelapor', '=', Auth::guard('pelapor')->user()->id)
-            ->orderBy('laporan.tgl_masuk')
-            ->get();
+        ->select('status_terakhir')
+        ->where('laporan.id_pelapor', '=', Auth::guard('pelapor')->user()->id)
+        ->get();
 
-        $selesai    = $dtLap->where('status_terbaru', 'Selesai')->count();
-        $check      = $dtLap->where('status_terbaru', 'CheckedU')->count();
-        $proses     = $dtLap->where('status_terbaru', 'Diproses')->count();
+        $open      = $dtLap->where('status_terakhir', 'Pengajuan')->count();
+        $proses     = $dtLap->where('status_terakhir', 'Diproses')->count();
+        $selesai    = $dtLap->where('status_terakhir', 'Selesai')->count();
         $all        = $dtLap->count();
         
         // dd($statusSelesaiCount);
-        return view('pelapor.dashboard', compact('selesai','check','proses','all'));
+        return view('pelapor.dashboard', compact('selesai','open','proses'));
     }
     /**
      * Store a newly created resource in storage.
@@ -378,16 +369,25 @@ class LaporanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($idlap)
+    public function delete(Request $request, $idlap)
     {
         $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');
 
         Laporanhist::create([
             'id_laporan'        => $idlap,
-            'status_laporan'    => 'ReqHapus',
+            'status_laporan'    => 'Dibatalkan',
             'tanggal'           => $tgl_masuk,
-            'keterangan'        => 'User mengajukan permintaan untuk menghapus laporan'
+            'keterangan'        => $request->keterangan
         ]);
+
+        DB::table('laporan')
+        ->where('id', $idlap)
+        ->update([
+            'status_terakhir'  => 'Dibatalkan',
+        ]);
+
+        $batal = 'Laporan Berhasil Dibatalkan';
+        Session::flash('batal', $batal);
 
         return redirect('comp');
     }

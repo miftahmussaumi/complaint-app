@@ -15,7 +15,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{route('history-user')}}" method="get" id="filterForm">
+                    <form action="{{route('history-admin')}}" method="get" id="filterForm">
                         {{csrf_field()}}
                         <div class="form-row">
                             <div class="col-2">
@@ -31,7 +31,7 @@
                             <div class="col">
                                 @if($filter != null)
                                 <button type="submit" name="action" value="filter" class="btn btn-primary">Filter</button>
-                                <a href="/history-user"><button type="button" id="clearFilterBtn" class="btn btn-primary">Show All Data</button></a>
+                                <a href="/history-admin"><button type="button" id="clearFilterBtn" class="btn btn-primary">Show All Data</button></a>
                                 @else
                                 <button type="submit" name="action" value="filter" class="btn btn-primary">Filter</button>
                                 <button type="button" id="clearFilterBtn" class="btn btn-primary">Clear</button>

@@ -47,6 +47,8 @@
                                 <span class="badge badge-success">Closed</span>
                                 @elseif($laporan->status_terakhir == 'Manager')
                                 <span class="badge badge-success">Closed</span>
+                                @elseif($laporan->status_terakhir == 'Dibatalkan')
+                                <span class="badge badge-danger">Cancel</span>
                                 @endif
                             </td>
                         </tr>
@@ -118,7 +120,8 @@
                         {{csrf_field()}}
                         <input type="text" value="{{$laporan->waktu_tambahan_peng}}" hidden name="waktu_tambahan_peng">
                         <button class="btn btn-primary" type="submit" name="action" value="accept">Terima</button>
-                        <button class="btn btn-danger" type="submit" name="action" value="reject">Tolak</button>
+                        <!-- <button class="btn btn-danger" type="submit" name="action" value="reject">Tolak</button> -->
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal2{{$laporan->idlap}}" data-whatever="@getbootstrap">Tolak</button>
                     </form>
                     @endif
                     @if($laporan->status_terakhir == 'CheckedU')
@@ -152,6 +155,28 @@
             </div>
         </div>
         <!-- ========= END MODAL ALASAN PENOLAKAN ========= -->
+
+        <!-- ========= MODAL ALASAN PENOLAKAN PENAMBAHAN WAKTU ========= -->
+        <div class="modal fade" id="exampleModal2{{$laporan->idlap}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="{{route('proses-tambah-waktu',$laporan->idlap)}}" method="post">
+                    {{csrf_field()}}
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Alasan Penolakan Penambahan Waktu:</label>
+                                <textarea name="keterangan" style="height: 100px;" class="form-control" placeholder="Masukkan Keterangan"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" name="action" value="reject" class="btn btn-primary">Kirim</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- ========= END MODAL ALASAN PENOLAKAN PENAMBAHAN WAKTU ========= -->
 
         <div class="col-lg-6 col-xl-7">
             <?php $no = 0; ?>
