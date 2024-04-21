@@ -40,7 +40,7 @@ class LoginController extends Controller
         } elseif (Auth::guard('admin')->attempt($credentials)) {
             return redirect('/laporan-admin');
         }
-        return redirect('/login');
+        return redirect('/');
     }
 
     public function logout(Request $request)
@@ -49,8 +49,13 @@ class LoginController extends Controller
             Auth::guard('pelapor')->logout();
         } else if (Auth::guard('admin')->check()) {
             Auth::guard('admin')->logout();
+        } else if (Auth::guard('pengawas')->check()) {
+            Auth::guard('pengawas')->logout();
+        } else if (Auth::guard('teknisi')->check()) {
+            Auth::guard('teknisi')->logout();
         }
-        return redirect('/login');
+
+        return redirect('/');
     }
 
 }
