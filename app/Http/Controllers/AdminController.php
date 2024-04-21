@@ -50,7 +50,7 @@ class AdminController extends Controller
             DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
         )
         ->orderBy('laporan.tgl_masuk','asc')
-        ->where('laporan.status_terakhir','!=','Manager')
+        ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan', 'Manager'])
         ->get();
 
         $teknisi = DB::table('teknisi')->get();
