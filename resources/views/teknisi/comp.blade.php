@@ -7,7 +7,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
         </button> <strong>Laporan Diselesaikan !</strong> {{ Session::get('success') }}
     </div>
-    @endif
+    @endif 
     <div class="row">
         <div class="col-12">
             <div class="card">

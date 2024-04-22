@@ -220,7 +220,7 @@ class TeknisiController extends Controller
             ]);
 
         $selesai = 'Menunggu Persetujuan Pelapor';
-        Session::flash('success', $selesai);
+        Session::flash('success', $selesai); 
 
         return redirect('it');
     }

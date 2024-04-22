@@ -10,7 +10,7 @@ class LoginController extends Controller
 {
     public function login()
     {
-        return view('welcome2');
+        return view('login');
     }
 
     public function postlogin(Request $request)
@@ -25,12 +25,6 @@ class LoginController extends Controller
         // }
         $credentials = $request->only('email', 'password');
 
-        $pelapor = Pelapor::where('email', $request->email)->first();
-
-        if ($pelapor && $pelapor->status == 0) {
-            return redirect()->back()->with('error', 'Akun Anda belum disetujui.');
-        }
-
         if (Auth::guard('pelapor')->attempt($credentials)) {
             return redirect('/profile-pelapor');
         } elseif (Auth::guard('teknisi')->attempt($credentials)) {
@@ -38,7 +32,7 @@ class LoginController extends Controller
         } elseif (Auth::guard('pengawas')->attempt($credentials)) {
             return redirect('/profile-pengawas');
         } elseif (Auth::guard('admin')->attempt($credentials)) {
-            return redirect('/laporan-admin');
+            return redirect('/dashboard-admin');
         }
         return redirect('/');
     }

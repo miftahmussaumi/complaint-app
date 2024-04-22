@@ -11,6 +11,7 @@ use App\Models\Laporan;
 use App\Models\Laporanakhir;
 use App\Models\Laporanhist;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session; 
 
 class PelaporController extends Controller
 {
@@ -82,8 +83,12 @@ class PelaporController extends Controller
      */
     public function store(Request $request)
     {
-        // $pass1 = $request->password;
         $pass = bcrypt($request->password);
+
+        $existingUser = Pelapor::where('email', $request->email)->first();
+        if ($existingUser) {
+            return back()->withInput()->withErrors(['error' => 'Gunakan Email yang Lain']);
+        }
 
         Pelapor::create([
             'nama'      => $request->nama,
@@ -96,8 +101,10 @@ class PelaporController extends Controller
             'status'    => 0
         ]);
 
-        // dd($pass1, $pass);
-        return view('welcome2');
+        $msg = 'Akun Berhasil Dibuat';
+        Session::flash('success', $msg); 
+
+        return view('login');
     }
 
     public function profile()

@@ -23,9 +23,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome2');
+    return view('login');
 });
+
+Route::get('/register', function () {
+    return view('register');
+});
+
 Route::post('/regist-pelapor', [PelaporController::class, 'store'])->name('regist-pelapor');
+
 // Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/postlogin', [LoginController::class, 'postlogin'])->name('postlogin');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
