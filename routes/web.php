@@ -25,22 +25,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
-
 Route::get('/register', function () {
     return view('register');
 });
-
 Route::post('/regist-pelapor', [PelaporController::class, 'store'])->name('regist-pelapor');
-
-// Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/postlogin', [LoginController::class, 'postlogin'])->name('postlogin');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/test', function () {
-    return view('test');
-});
-Route::get('/test3', function () {
-    return view('test3');
-});
 
 Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function () {
     // ==============ROUTE UNTUK BAGIAN USER PELAPOR============== //
@@ -89,7 +79,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::post('/save-ttd-pengawas/{id}', [PengawasController::class, 'ttd'])->name('save-ttd-pengawas');;
     Route::get('/list-akun', [PengawasController::class, 'akun']);
     Route::get('/list-laporan', [PengawasController::class, 'laporan']);
-    Route::post('/pilih-pjuser/{id}', [PengawasController::class, 'pjuser'])->name('pilih-pjuser');
+    Route::post('/acc-akun/{id}', [PengawasController::class, 'accakun'])->name('acc-akun');
     Route::get('/cetak-laporan/{idlap}', [PengawasController::class, 'cetak'])->name('cetak-laporan');
     Route::get('/detail-laporan/{id}', [PengawasController::class, 'detail'])->name('detail-laporan');
     Route::post('/laporan-akhir/{idlap}', [LaporanakhirController::class, 'store'])->name('laporan-akhir');

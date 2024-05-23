@@ -84,13 +84,14 @@ class PelaporController extends Controller
     public function store(Request $request)
     {
         $pass = bcrypt($request->password);
+        $ttd = $request->ttd;
 
         $existingUser = Pelapor::where('email', $request->email)->first();
         if ($existingUser) {
             return back()->withInput()->withErrors(['error' => 'Gunakan Email yang Lain']);
         }
 
-        Pelapor::create([
+        $pelapor = Pelapor::create([
             'nama'      => $request->nama,
             'nipp'      => $request->nipp,
             'email'     => $request->email,
@@ -101,9 +102,21 @@ class PelaporController extends Controller
             'status'    => 0
         ]);
 
+        $id_pelapor = $pelapor->id; 
+
+        $nama_file_ttd = $id_pelapor . "_" . time() . "_" . $ttd->getClientOriginalName();
+        $ttd->move(storage_path() . '/app/public/img/pelapor', $nama_file_ttd);
+
+        DB::table('pelapor')
+            ->where('id', $id_pelapor)
+            ->update([
+                'ttd'  => $nama_file_ttd
+            ]);
+
         $msg = 'Akun Berhasil Dibuat';
         Session::flash('success', $msg); 
 
+        // dd($nama_file_ttd);
         return view('login');
     }
 
@@ -148,7 +161,7 @@ class PelaporController extends Controller
                     'ttd'  => $nama_file_ttd
                 ]);
 
-            // $old_ttd = $request->ttd_old;
+            $old_ttd = $request->ttd_old;
             // unlink(storage_path('app/public/img/pelapor/' . $old_ttd));
         }
 
@@ -169,7 +182,7 @@ class PelaporController extends Controller
 
         if ($cekprofile == '') {
             $nama_file_profile = Auth::guard('pelapor')->user()->id . "_" . time() . "_" . $profile->getClientOriginalName();
-            $profile->move(storage_path() . '/app/public/img/profile/pelapor', $nama_file_profile);
+            $profile->move(storage_path() . '/app/public/img/pp_pelapor/', $nama_file_profile);
 
             DB::table('pelapor')
             ->where('id', Auth::guard('pelapor')->user()->id)
@@ -178,7 +191,7 @@ class PelaporController extends Controller
                 ]);
         } else if ($cekprofile != '') {
             $nama_file_profile = Auth::guard('pelapor')->user()->id . "_" . time() . "_" . $profile->getClientOriginalName();
-            $profile->move(storage_path() . '/app/public/img/profile/pelapor', $nama_file_profile);
+            $profile->move(storage_path() . '/app/public/img/pp_pelapor/', $nama_file_profile);
 
             DB::table('pelapor')
             ->where('id', Auth::guard('pelapor')->user()->id)
@@ -186,9 +199,11 @@ class PelaporController extends Controller
                     'profile'  => $nama_file_profile
                 ]);
 
-            // $old_profile = $request->profile_old;
-            // unlink(storage_path('app/public/img/pelapor/' . $old_profile));
+            $old_profile = $request->profile_old;
+            // dd($old_profile);
+            // unlink(storage_path('app/public/img/pp_pelapor/' . $old_profile));
         }
+
 
         // dd($profile, $fileprofile);
         return redirect('profile-pelapor');

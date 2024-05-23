@@ -9,10 +9,12 @@
                         <b style="color: #2D3134;">Profile Pelapor</b><br>
                         <form action="{{route('save-foto-pelapor',$dt->id)}}" method="POST" enctype="multipart/form-data">
                             {{csrf_field()}}
+
                             @if($dt->profile == null)
                             <p>Foto belum ada</p>
                             @else
-                            <img src="{{asset('storage/img/profile/pelapor/'. $dt->profile)}}" style="border: 1px #2D3134 solid;" width="150px" height="150px">
+                            <img src="{{asset('storage/img/pp_pelapor/'. $dt->profile)}}" style="border: 1px #2D3134 solid;" width="150px" height="150px">
+                            <input type="hidden" name="profile_old" value="{{$dt->profile}}">
                             @endif
                             <div class="form-group">
                                 <input type="file" name="profile">

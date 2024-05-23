@@ -61,7 +61,7 @@
                 </tr>
             </table>
             <br>
-            <table style="width: 100%;">
+            <table style="width: 100%;"> 
                 <tr>
                     <td style="padding: 2px; width: 15%;">No. Ref</td>
                     <td style="padding: 2px; width: 2%;">:</td>
@@ -375,7 +375,7 @@
                 <tr>
                     <td style="padding: 5px; width: 33%;" align="center">
                         Staf IT <br>
-                        <img src="{{storage_path('app/public/img/admin/'.$lap->ttd_teknisi)}}" width="130px" height="100px">
+                        <img src="{{storage_path('app/public/img/teknisi/'.$lap->ttd_teknisi)}}" width="130px" height="100px">
                         <br>
                         <u>{{$lap->nama_teknisi}}</u><br>
                         NIPP.{{$lap->nipp_teknisi}}

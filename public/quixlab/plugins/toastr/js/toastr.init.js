@@ -70,6 +70,9 @@ $(document).ready(function () {
             case 'success':
                 toastr.success(message, positionClass, toastrOptions);
                 break;
+            case 'warning':
+                toastr.warning(message, positionClass, toastrOptions);
+                break;
             // Tambahan case untuk jenis toastr lainnya jika diperlukan
             default:
                 toastr.info(message, positionClass, toastrOptions);

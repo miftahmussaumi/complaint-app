@@ -45,7 +45,7 @@
                                 @endforeach
                                 @endif
 
-                                <form class="mt-8 mb-8 login-input" action="{{route('regist-pelapor')}}" method="post">
+                                <form class="mt-8 mb-8 login-input" action="{{route('regist-pelapor')}}" method="post" enctype="multipart/form-data">
                                     {{csrf_field()}}
                                     <div class="form-group">
                                         <input type="text" required class="form-control input-flat" value="{{ old('nama') }}" name="nama" placeholder="Nama" required>
@@ -76,6 +76,22 @@
                                     <div class="form-group">
                                         <input type="password" required class="form-control" value="{{ old('password') }}" name="password" placeholder="Password" required>
                                     </div>
+                                    <!-- <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <input type="email" class="form-control" placeholder="Upload Gambar Tanda Tangan" disabled>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <input type="file" class="form-control" value="{{ old('ttd') }}" name="ttd" placeholder="Upload TTD" required>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="">Upload Gambar Tanda Tangan</label>
+                                        <input type="file" class="form-control" value="{{ old('ttd') }}" name="ttd" placeholder="Upload TTD" required>
+                                    </div>
+
+                                    <!-- <div class="form-group">
+                                        <input type="file" required class="form-control" value="{{ old('ttd') }}" name="ttd" placeholder="Upload TTD" required>
+                                    </div> -->
                                     <button class="btn login-form__btn submit w-100">Register</button>
                                 </form>
                                 <p class="mt-5 login-form__footer">Have account <a href="/" class="text-primary">Login </a> now</p>

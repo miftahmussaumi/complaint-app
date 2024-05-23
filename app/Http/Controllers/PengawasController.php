@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Pengawas;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Facade\FlareClient\Stacktrace\File;
+use Illuminate\Support\Facades\Session; 
 
 class PengawasController extends Controller
 {
@@ -59,7 +60,7 @@ class PengawasController extends Controller
                 'ttd'  => $nama_file_ttd
             ]);
 
-            // $old_ttd = $request->ttd_old;
+            $old_ttd = $request->ttd_old;
             // unlink(storage_path('app/public/img/pengawas/'.$old_ttd));
 
         }
@@ -77,10 +78,13 @@ class PengawasController extends Controller
             'p.jabatan','p.divisi','p.telepon','p.status',
             DB::raw('COUNT(l.id) AS jumlah_laporan')
         )
+        ->where('status', '=', 1)
         ->groupBy('p.id', 'p.nama', 'p.nipp', 'p.email', 'p.password', 
-        'p.jabatan', 'p.divisi', 'p.telepon', 'p.status',
-            )
+        'p.jabatan', 'p.divisi', 'p.telepon', 'p.status',)
         ->get();
+
+        $acc    = DB::table('pelapor')->where('status','=',0)->get();
+        $cacc   = count($acc);
 
         $it = DB::table('teknisi as t')
         ->select(
@@ -95,7 +99,9 @@ class PengawasController extends Controller
         ->groupBy('t.id','t.nama','t.nipp','t.email','t.jabatan',
         )->get();
 
-        return view('pengawas.akun-user', compact('pelapor','it'));
+        // dd($acc);
+
+        return view('pengawas.akun-user', compact('pelapor','it','cacc','acc'));
     }
 
     /**
@@ -192,17 +198,21 @@ class PengawasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function pjuser(Request $request, $id)
+    public function accakun(Request $request, $id)
     {
-        // $action         = $request->input('action');
-        $id_admin_tj    = $request->id_admin_tj;
+        $action         = $request->action;
+        // $id_admin_tj    = $request->id_admin_tj;
 
-        DB::table('pelapor')
-        ->where('id', $id)
-        ->update([
-            'id_admin_tj'  => $id_admin_tj,
-            'status'       => 1 
-        ]);
+        if ($action == 'accept') {
+            DB::table('pelapor')
+            ->where('id', $id)
+            ->update([
+                'status'       => 1 
+            ]);
+        }
+        
+        Session::flash('success'); 
+
         return redirect('list-akun');
     }
 

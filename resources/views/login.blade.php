@@ -46,6 +46,10 @@
                                     @if(Session::has('success'))
                                     <div class="toastr-trigger" data-type="success" data-message="Silahkan Login" data-position-class="{{ Session::get('success') }}"></div>
                                     @endif
+
+                                    @if(Session::has('warning'))
+                                    <div class="toastr-trigger" data-type="warning" data-message="Silahkan hubungi Manajer" data-position-class="{{ Session::get('warning') }}"></div>
+                                    @endif
                                     <form action="{{route('postlogin')}}" method="post" class="mt-5 mb-5 login-input">
                                         {{csrf_field()}}
                                         <div class="form-group">

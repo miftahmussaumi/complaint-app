@@ -30,6 +30,7 @@
     <link href="{{asset('quixlab/plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
 
     <link href="{{asset('quixlab/plugins/sweetalert/css/sweetalert.css')}}" rel="stylesheet">
+    <link href="{{asset('quixlab/plugins/toastr/css/toastr.min.css')}}" rel="stylesheet">
 
     <!-- Custom Stylesheet -->
     <link href="{{asset('quixlab/css/style.css')}}" rel="stylesheet">
@@ -259,7 +260,7 @@
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <span class="activity active"></span>
                                 @if (Str::length(Auth::guard('pelapor')->user()) > 0)
-                                <img src="{{asset('storage/img/profile/pelapor/'. Auth::guard('pelapor')->user()->profile )}}" height="40" width="40" alt="">
+                                <img src="{{asset('storage/img/pp_pelapor/'. Auth::guard('pelapor')->user()->profile )}}" height="40" width="40" alt="">
                                 @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
                                 <img src="{{asset('quixlab/images/user/1.png')}}" height="40" width="40" alt="">
                                 @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
@@ -438,6 +439,9 @@
 
     <script src="{{asset('quixlab/plugins/sweetalert/js/sweetalert.min.js')}}"></script>
     <script src="{{asset('quixlab/plugins/sweetalert/js/sweetalert.init.js')}}"></script>
+
+    <script src="{{asset('quixlab/plugins/toastr/js/toastr.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/toastr/js/toastr.init.js')}}"></script>
 
     @yield('script')
 </body>

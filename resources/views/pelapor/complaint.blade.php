@@ -99,7 +99,7 @@
                                             <button type="submit" name="action" value="reject" class="btn btn-primary">Kirim</button>
                                         </div>
                                     </div>
-                                </form>
+                                </form> 
                             </div>
                         </div>
                         <!-- ========= END MODAL ALASAN PENOLAKAN ========= -->

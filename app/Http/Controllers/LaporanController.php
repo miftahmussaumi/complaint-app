@@ -81,7 +81,7 @@ class LaporanController extends Controller
             'tgl_akhir_pengerjaan'  => $tgl_akhir_pengerjaan,
             'status_terakhir'       => 'Pengajuan'
         ]);
-        $id_laporan = $laporan->id;
+        $id_laporan = $laporan->id; 
 
         if (count($request->kat_layanan) > 0) {
             foreach ($request->kat_layanan as $key => $value) {
