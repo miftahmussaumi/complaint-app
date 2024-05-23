@@ -62,7 +62,8 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     // ==============ROUTE UNTUK BAGIAN TEKNISI IT============== //
     Route::get('/profile-teknisi', [TeknisiController::class, 'profile']);
     Route::post('/save-ttd-teknisi/{id}', [TeknisiController::class, 'ttd'])->name('save-ttd-teknisi');;
-    Route::get('/it', [TeknisiController::class, 'index']);
+    Route::get('/layanan-it', [TeknisiController::class, 'index']); //All data
+    Route::get('/it', [TeknisiController::class, 'index2']);
     Route::get('/detail-comp-it/{id}', [TeknisiController::class, 'detail'])->name('detail-comp-it');
     Route::post('/proses-laporan/{id}',[TeknisiController::class, 'proses'])->name('proses-laporan');
     Route::post('/tambah-waktu/{id}', [TeknisiController::class, 'tambahwaktu'])->name('tambah-waktu');

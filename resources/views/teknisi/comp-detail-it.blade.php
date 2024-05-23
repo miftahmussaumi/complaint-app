@@ -110,7 +110,7 @@
                                 <form action="{{route('proses-laporan',$laporan->id)}}" method="post">
                                     {{csrf_field()}}
                                     <button class="btn btn-primary" type="submit" name="action" value="process">Proses</button>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{$laporan->id}}" data-whatever="@getbootstrap">Tolak</button>
+                                    <!-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{$laporan->id}}" data-whatever="@getbootstrap">Tolak</button> -->
                                 </form>
                             </td>
                             @endif

@@ -65,25 +65,49 @@ class TeknisiController extends Controller
 
     public function index()
     {
+        $dtLap = DB::table('laporan as l')
+        ->join('pelapor as p', 'p.id', '=', 'l.id_pelapor')
+        ->select(
+            DB::raw("DATE_FORMAT(l.tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+            DB::raw("DATE_FORMAT(l.tgl_akhir_pengerjaan, '%d %M %Y, %H:%i WIB') AS tgl_akhir_pengerjaan"),
+            'l.no_inv_aset',
+            'l.waktu_tambahan',
+            'l.status_terakhir',
+            'l.id',
+            'l.id_teknisi',
+            'l.tgl_akhir_pengerjaan AS deadline',
+            'p.nama as nama_pelapor'
+        )
+        ->where('l.status_terakhir', 'Pengajuan')
+        ->orderByDesc('l.created_at')
+        ->get();
+
+        return view('teknisi.comp', compact('dtLap'));
+    }
+
+    public function index2()
+    {
         $dtLap = DB::table('laporan')
-        ->join('pelapor','pelapor.id','=','laporan.id_pelapor')
+        ->join('pelapor', 'pelapor.id', '=', 'laporan.id_pelapor')
         ->select(
             DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
             DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
             'no_inv_aset',
             'waktu_tambahan',
             'status_terakhir',
-            'laporan.id','id_teknisi',
-            'laporan.tgl_akhir_pengerjaan AS deadline','pelapor.nama as nama_pelapor'
+            'laporan.id',
+            'id_teknisi',
+            'laporan.tgl_akhir_pengerjaan AS deadline',
+            'pelapor.nama as nama_pelapor'
         )
-            ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan','Manager'])
-            ->where('id_teknisi', '=', Auth::guard('teknisi')->user()->id)
-            ->orderBy('tgl_masuk')
-            ->get();
+        ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan', 'Manager'])
+        ->where('id_teknisi', '=', Auth::guard('teknisi')->user()->id)
+        ->orderByDesc('laporan.created_at')
+        ->get();
 
         // FORMAT TANGGAL '%d/%m/%Y %H:%i'
 
-        return view('teknisi.comp', compact('dtLap'));
+        return view('teknisi.comp2', compact('dtLap'));
     }
 
     public function proses(Request $request, $id)
@@ -100,23 +124,25 @@ class TeknisiController extends Controller
             DB::table('laporan')
                 ->where('id', $id)
                 ->update([
-                    'status_terakhir' => 'Diproses'
+                    'status_terakhir' => 'Diproses',
+                    'id_teknisi'  => Auth::guard('teknisi')->user()->id,
             ]);
-        } else if ($action == 'reject') {
-            Laporanhist::create([
-                'id_laporan'        => $id,
-                'status_laporan'    => 'Dibatalkan',
-                'tanggal'           => $tgl_masuk,
-                'keterangan'        => $request->keterangan
-            ]);
-            DB::table('laporan')
-                ->where('id', $id)
-                ->update([
-                    'status_terakhir' => 'Dibatalkan'
-                ]);
-        }
+        } 
+        // else if ($action == 'reject') {
+        //     Laporanhist::create([
+        //         'id_laporan'        => $id,
+        //         'status_laporan'    => 'Dibatalkan',
+        //         'tanggal'           => $tgl_masuk,
+        //         'keterangan'        => $request->keterangan
+        //     ]);
+        //     DB::table('laporan')
+        //         ->where('id', $id)
+        //         ->update([
+        //             'status_terakhir' => 'Dibatalkan'
+        //         ]);
+        // }
 
-        return redirect()->back();
+        return redirect('layanan-it');
     }
 
     public function tambahwaktu(Request $request, $idlap)

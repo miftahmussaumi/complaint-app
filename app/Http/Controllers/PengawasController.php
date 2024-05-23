@@ -81,6 +81,7 @@ class PengawasController extends Controller
         ->where('status', '=', 1)
         ->groupBy('p.id', 'p.nama', 'p.nipp', 'p.email', 'p.password', 
         'p.jabatan', 'p.divisi', 'p.telepon', 'p.status',)
+        // ->orderByDesc('p.created_at')
         ->get();
 
         $acc    = DB::table('pelapor')->where('status','=',0)->get();
@@ -210,7 +211,7 @@ class PengawasController extends Controller
                 'status'       => 1 
             ]);
         }
-        
+
         Session::flash('success'); 
 
         return redirect('list-akun');

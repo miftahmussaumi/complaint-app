@@ -335,8 +335,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/it">
+                        <a href="/layanan-it">
                             <i class="fa fa-download"></i><span class="nav-text">Pengajuan Layanan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/it">
+                            <i class=" fa fa-folder-open"></i><span class="nav-text">Proses Layanan</span>
                         </a>
                     </li>
                     <li>
