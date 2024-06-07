@@ -47,6 +47,8 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::match(['get', 'post'], '/history-user',[PelaporController::class, 'history'])->name('history-user');
     Route::post('/delete-laporan/{idlap}', [LaporanController::class, 'delete'])->name('delete-laporan');
     Route::get('/getNoInventarisOptions', [LaporanController::class, 'getNoInventarisOptions']);
+    Route::get('/password', [PelaporController::class, 'password']);
+    Route::post('/ubah-password', [PelaporController::class, 'ubahpassword'])->name('ubah-password');
 
 
     // ==============ROUTE UNTUK BAGIAN ADMIN============== //
@@ -57,6 +59,10 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/dashboard-admin', [AdminController::class, 'dashboard']);
     Route::get('/send-manager', [AdminController::class, 'manager']);
     Route::match(['get', 'post'],'/history-admin', [AdminController::class, 'history'])->name('history-admin');
+    Route::get('/list-akun-admin', [AdminController::class, 'akun']);
+    // Route::get('/edit-pelapor/{id}', [AdminController::class, 'pelapor']);
+    Route::post('/edit-pelapor-save/{id}', [AdminController::class, 'editpelapor'])->name('edit-pelapor-save');
+    Route::post('/edit-teknisi-save/{id}', [AdminController::class, 'editteknisi'])->name('edit-teknisi-save');
 
 
     // ==============ROUTE UNTUK BAGIAN TEKNISI IT============== //

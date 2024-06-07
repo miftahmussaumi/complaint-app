@@ -24,6 +24,7 @@
                         <table style="color: #2D3134;" class="table table-striped table-bordered zero-configuration">
                             <thead>
                                 <tr>
+                                    <th>No</th>
                                     <th>Tanggal Permintaan</th>
                                     <th>No Inventaris</th>
                                     <th>Batas Akhir Pengerjaan</th>
@@ -33,8 +34,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $no = 0; ?>
                                 @foreach ($dtLap as $data)
+                                <?php $no++ ?>
                                 <tr>
+                                    <td>{{$no}}</td>
                                     <td>{{ $data->tgl_masuk }}</td>
                                     <td>{{ $data->no_inv_aset }}</td>
                                     <td>
@@ -99,7 +103,7 @@
                                             <button type="submit" name="action" value="reject" class="btn btn-primary">Kirim</button>
                                         </div>
                                     </div>
-                                </form> 
+                                </form>
                             </div>
                         </div>
                         <!-- ========= END MODAL ALASAN PENOLAKAN ========= -->

@@ -10,6 +10,9 @@ use Carbon\Carbon;
 use App\Models\Laporanakhir;
 use App\Models\Laporanhist;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+
 
 class AdminController extends Controller
 {
@@ -49,8 +52,8 @@ class AdminController extends Controller
             DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk_f"),
             DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
         )
-        ->orderBy('laporan.tgl_masuk','asc')
-        ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan', 'Manager'])
+        ->orderBy('laporan.tgl_masuk','desc')
+        ->whereNotIn('status_terakhir', ['Dibatalkan', 'Manager'])
         ->get();
 
         $teknisi = DB::table('teknisi')->get();
@@ -435,9 +438,61 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function akun()
     {
-        //
+        $pelapor = DB::table('pelapor as p')
+        ->leftJoin('laporan as l', 'p.id', '=', 'l.id_pelapor')
+        ->select(
+            'p.id',
+            'p.nama',
+            'p.nipp',
+            'p.email',
+            'p.password',
+            'p.jabatan',
+            'p.divisi',
+            'p.telepon',
+            'p.status',
+            DB::raw('COUNT(l.id) AS jumlah_laporan')
+        )
+            ->where('status', '=', 1)
+            ->groupBy(
+                'p.id',
+                'p.nama',
+                'p.nipp',
+                'p.email',
+                'p.password',
+                'p.jabatan',
+                'p.divisi',
+                'p.telepon',
+                'p.status',
+            )
+            // ->orderByDesc('p.created_at')
+            ->get();
+
+        $acc    = DB::table('pelapor')->where('status', '=', 0)->get();
+        $cacc   = count($acc);
+
+        $it = DB::table('teknisi as t')
+        ->select(
+            't.id',
+            't.nama',
+            't.nipp',
+            't.email',
+            't.jabatan',
+            DB::raw('COUNT(l.id) AS jumlah_laporan')
+        )
+            ->leftJoin('laporan as l', 't.id', '=', 'l.id_teknisi')
+            ->groupBy(
+                't.id',
+                't.nama',
+                't.nipp',
+                't.email',
+                't.jabatan',
+            )->get();
+
+        // dd($acc);
+
+        return view('admin.akun-user', compact('pelapor', 'it', 'cacc', 'acc'));
     }
 
     /**
@@ -447,9 +502,62 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    public function pelapor($id)
     {
-        //
+        $pelapor = DB::table('pelapor as p')
+        ->select(
+            'p.id',
+            'p.nama',
+            'p.nipp',
+            'p.email',
+            'p.password',
+            'p.jabatan',
+            'p.divisi',
+            'p.telepon',
+            'p.status',
+        )
+        ->where('p.id', '=', $id)
+        ->get();
+
+        // dd($pelapor);
+        return view('admin.edit-pelapor', compact('pelapor'));
+    }
+    
+    public function editpelapor(Request $request, $id)
+    {
+        $update = DB::table('pelapor')
+        ->where('id', '=', $id)
+        ->update([
+            'nama'      => $request->nama,
+            'nipp'      => $request->nipp,
+            'email'     => $request->email,
+            'jabatan'   => $request->jabatan,
+            'divisi'    => $request->divisi,
+            'telepon'   => $request->telepon,
+            'password'  => Hash::make($request->new_password)
+        ]);
+
+        Session::flash('success'); 
+
+        // dd($request->all());
+        return back();
+    }
+
+    public function editteknisi(Request $request, $id)
+    {
+        $update = DB::table('teknisi')
+        ->where('id', '=', $id)
+            ->update([
+                'nama'      => $request->nama,
+                'nipp'      => $request->nipp,
+                'email'     => $request->email,
+                'jabatan'   => $request->jabatan,
+            ]);
+        Session::flash('success');
+
+        // dd($request->all());
+        return back();
     }
 
     /**

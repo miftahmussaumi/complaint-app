@@ -115,6 +115,7 @@ class PengawasController extends Controller
         $lap = DB::table('laporan')
         ->leftJoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
         ->leftJoin('pelapor','pelapor.id','=','laporan.id_pelapor')
+        ->leftJoin('pengawas','pengawas.id','=','laporan.id_pengawas')
         ->select(
             DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
             DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
@@ -130,6 +131,7 @@ class PengawasController extends Controller
             'pelapor.email',
             'pelapor.telepon',
             'pelapor.nipp as nipp_pelapor',
+            'pengawas.ttd'
         )
         ->where('laporan.status_terakhir','=','Manager')
         ->orderBy('tgl_masuk')
@@ -183,6 +185,7 @@ class PengawasController extends Controller
             ->first();
 
         $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap'))->setPaper('legal', 'portrait')->output();
+
         return response()->streamDownload(
             fn () => print($pdf),
             "laporan.pdf"

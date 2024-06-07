@@ -35,6 +35,12 @@ class LoginController extends Controller
         } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect('/dashboard-admin');
         }
+
+        $msg = 'Email dan Password Salah';
+        Session::flash('error', $msg);
+        
+        return redirect('/');
+
         // $credentials = $request->only('email', 'password');
 
         // if (Auth::guard('pelapor')->attempt($credentials)) {
@@ -46,7 +52,8 @@ class LoginController extends Controller
         // } elseif (Auth::guard('admin')->attempt($credentials)) {
         //     return redirect('/dashboard-admin');
         // }
-        return redirect('/');
+
+    
     }
 
     public function logout(Request $request)

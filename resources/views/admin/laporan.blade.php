@@ -10,6 +10,7 @@
                         <table style="color: #2D3134;" class="table table-striped table-bordered zero-configuration">
                             <thead>
                                 <tr>
+                                    <th>No</th>
                                     <th>Tanggal Permintaan</th>
                                     <th>Nama Pelapor</th>
                                     <th>No Inventaris</th>
@@ -20,8 +21,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $no = 0; ?>
                                 @foreach ($dtLap as $data)
+                                <?php $no++ ?>
                                 <tr>
+                                    <td>{{$no}}</td>
                                     <td>{{ $data->tgl_masuk_f }}</td>
                                     <td>{{ $data->nama_pelapor }}</td>
                                     <td>{{ $data->no_inv_aset }}</td>
@@ -44,7 +48,7 @@
                                         @if($data->id_teknisi != null)
                                         {{$data->nama_teknisi}}
                                         @else
-                                        <i>Teknisi belum dipilih</i>
+                                        <i>Belum di proses</i>
                                         @endif
                                     </td>
 
@@ -70,11 +74,11 @@
 
                                     <td>
                                         <a href="{{url('detail-laporan-admin',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        @if($data->id_teknisi == null)
+                                        <!-- @if($data->id_teknisi == null)
                                         <a data-toggle="modal" data-target="#exampleModalDetail{{$data->id}}" data-whatever="@getbootstrap"><button class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button></a>
                                         @else
                                         <a data-toggle="modal" data-target="#exampleModalDetail{{$data->id}}" data-whatever="@getbootstrap"><button disabled class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button></a>
-                                        @endif
+                                        @endif -->
                                     </td>
                                 </tr>
                                 @endforeach

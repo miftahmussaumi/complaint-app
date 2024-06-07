@@ -59,6 +59,12 @@
                                 <td style="width: 15px;">:</td>
                                 <td><a href="" style="color: blue;" data-toggle="modal" data-target="#basicModal"><i>pratinjau gambar</i></a></td>
                             </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <a href="{{url('password')}}"><button class="btn btn-primary m-t-20">Ubah Password</button></a>
+                                    <!-- <button type="submit" class="btn btn-primary m-t-20">Ubah Password</button> -->
+                                </td>
+                            </tr>
                         </table>
                         <div class="modal fade" id="basicModal">
                             <div class="modal-dialog" role="document">

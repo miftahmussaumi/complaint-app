@@ -314,6 +314,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="/list-akun-admin">
+                            <i class="fa fa-users"></i><span class="nav-text">Pengguna</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/laporan-admin">
                             <i class="fa fa-desktop"></i><span class="nav-text">Laporan Masuk</span>
                         </a>

@@ -11,6 +11,7 @@ use App\Models\Laporan;
 use App\Models\Laporanakhir;
 use App\Models\Laporanhist;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session; 
 
 class PelaporController extends Controller
@@ -22,19 +23,50 @@ class PelaporController extends Controller
      */
     public function index()
     {
+        // $dtLap = DB::table('laporan')
+        // ->select(
+        //     'no_inv_aset',
+        //     'waktu_tambahan',
+        //     'status_terakhir',
+        //     'id',
+        //     'laporan.tgl_akhir_pengerjaan AS deadline',
+        //     DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+        //     DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
+        // )
+        //     ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan', 'Manager'])
+        //     ->where('id_pelapor', '=', Auth::guard('pelapor')->user()->id)
+        //     ->orderBy('tgl_masuk')
+        //     ->get();
+
         $dtLap = DB::table('laporan')
-        ->select(
-            'no_inv_aset',
-            'waktu_tambahan',
-            'status_terakhir',
-            'id',
-            'laporan.tgl_akhir_pengerjaan AS deadline',
-            DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
-            DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
-        )
-            ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan', 'Manager'])
-            ->where('id_pelapor', '=', Auth::guard('pelapor')->user()->id)
-            ->orderBy('tgl_masuk')
+            ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+                $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+            })
+            ->leftJoin('laporanhist', function ($join) {
+                $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+            })
+            ->leftJoin('pelapor', 'laporan.id_pelapor', '=', 'pelapor.id')
+            ->select(
+                'pelapor.nama',
+                'pelapor.divisi',
+                'pelapor.telepon',
+                'pelapor.email',
+                'laporan.id AS idlap',
+                'laporan.waktu_tambahan',
+                DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+                'laporan.no_inv_aset',
+                DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
+                'laporan.tgl_akhir_pengerjaan AS deadline',
+                'laporanhist.tanggal AS tanggal_status_terbaru',
+                'laporanhist.keterangan',
+                'laporanhist.status_laporan AS status_terakhir',
+                'laporanhist.id AS idhist',
+                'laporan.id as id'
+            )
+            ->whereNotIn('laporanhist.status_laporan', ['Selesai', 'Dibatalkan','Manager'])
+            ->where('laporan.id_pelapor', '=', Auth::guard('pelapor')->user()->id)
+            ->orderBy('laporanhist.tanggal', 'desc')
             ->get();
 
         // FORMAT TANGGAL '%d/%m/%Y %H:%i'
@@ -260,9 +292,31 @@ class PelaporController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function password()
     {
-        //
+        return view('pelapor.password');
+    }
+
+    public function ubahpassword(Request $request)
+    {
+        if(!Hash::check($request->old_password, Auth::guard('pelapor')->user()->password)) {
+            return back()->with('error', 'Password Lama Tidak Sesuai');
+        }
+
+        if($request->new_password != $request->re_password){
+            return back()->with('error', 'Password Baru dan Pengulangan Password Tidak Sama');
+        }
+
+        Pelapor::whereId(auth()->user()->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return back()->with('success', 'Password Baru Berhasil Dibuat');
+
+
+        // dd(Pelapor::whereId(auth()->user()->id));
+        
+        // return view('pelapor.password');
     }
 
     /**

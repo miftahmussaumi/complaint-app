@@ -5,14 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Quixlab - Bootstrap Admin Dashboard Template by Themefisher.com</title>
+    <title>IT KAI DAOP 4 SEMARANG</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="5x5" width href="{{asset('storage/img/logo kai atas.png')}}">
     <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"> -->
     <link href="{{asset('quixlab/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('quixlab/plugins/toastr/css/toastr.min.css')}}" rel="stylesheet">
-
-
 </head>
 
 <body class="h-100">
@@ -43,13 +41,15 @@
                                     <h3>DAOP 4 Kota Semarang <br> PT. Kereta Api Indonesia</h3>
                                     <h6>Sistem Informasi Pelayanan</h6>
                                     </a>
+                                    
                                     @if(Session::has('success'))
                                     <div class="toastr-trigger" data-type="success" data-message="Silahkan Login" data-position-class="{{ Session::get('success') }}"></div>
-                                    @endif
-
-                                    @if(Session::has('warning'))
+                                    @elseif(Session::has('error'))
+                                    <div class="toastr-trigger" data-type="error" data-message="Error" data-position-class="{{ Session::get('error') }}"></div>
+                                    @elseif(Session::has('warning'))
                                     <div class="toastr-trigger" data-type="warning" data-message="Silahkan hubungi Manajer" data-position-class="{{ Session::get('warning') }}"></div>
                                     @endif
+
                                     <form action="{{route('postlogin')}}" method="post" class="mt-5 mb-5 login-input">
                                         {{csrf_field()}}
                                         <div class="form-group">
