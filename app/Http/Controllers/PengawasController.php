@@ -184,13 +184,17 @@ class PengawasController extends Controller
             ->where('laporan.id', '=', $idlap)
             ->first();
 
+        $nama_pelapor   = $lap->nama_pelapor;
+        $tgl            = $lap->tanggal;
+        $laporan        = $tgl." ".$nama_pelapor.".pdf";
+
         $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap'))->setPaper('legal', 'portrait')->output();
 
         return response()->streamDownload(
             fn () => print($pdf),
-            "laporan.pdf"
+            $laporan
         );
-        // dd($jml_ins, $jml_trou);
+        // dd($no_ref, $tgl, $laporan);
         // dd($detlap);
 
         // return view('test', compact('lap','detlap'));
@@ -243,7 +247,8 @@ class PengawasController extends Controller
                 'id_teknisi',
                 'teknisi.nama',
                 'status_terakhir',
-                'laporan.id as id'
+                'laporan.id as id',
+                'lap_no_ref','lap_tanggal','lap_bisnis_area','lap_versi','lap_halaman','lap_nomor'
             )
             ->first();
 

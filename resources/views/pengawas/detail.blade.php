@@ -32,6 +32,16 @@
                             <td>{{$laporan->tgl_masuk}}</td>
                         </tr>
                         <tr>
+                            <td style="width: 150px; height: 25px;">Nomor Referensi</td>
+                            <td>:</td>
+                            <td>{{$laporan->lap_no_ref}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px; height: 25px;">Bisnis Area</td>
+                            <td>:</td>
+                            <td>{{$laporan->lap_bisnis_area}}</td>
+                        </tr>
+                        <tr>
                             <td style="width: 150px; height: 25px;">Teknisi IT</td>
                             <td style="width: 15px;">:</td>
                             @if($laporan->id_teknisi != null)
@@ -62,7 +72,7 @@
                             <td><i>Tidak ada waktu tambahan</i></td>
                             @endif
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td style="width: 150px; height: 25px;">Status</td>
                             <td style="width: 15px;">:</td>
                             <td>
@@ -82,7 +92,10 @@
                                 <span class="badge badge-success">Manager</span>
                                 @endif
                             </td>
-                        </tr>
+                        </tr> -->
+                        <!-- <tr>
+                            <td colspan="3" style="width: 150px; height: 25px;"><b>Detail Laporan</b></td>
+                        </tr> -->
                     </table>
                 </div>
             </div>

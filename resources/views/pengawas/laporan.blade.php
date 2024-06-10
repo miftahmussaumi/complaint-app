@@ -15,6 +15,7 @@
                         <table style="color: #2D3134;" class="table table-striped table-bordered zero-configuration">
                             <thead>
                                 <tr>
+                                    <th>No</th>
                                     <th>Tanggal Permintaan</th>
                                     <th>Pelapor</th>
                                     <th>No Referensi</th>
@@ -25,8 +26,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $no = 0; ?>
                                 @foreach ($lap as $data)
+                                <?php $no++ ?>
                                 <tr>
+                                    <td>{{ $no }}</td>
                                     <td>{{ $data->tgl_masuk }}</td>
                                     <td>{{ $data->nama_pelapor }}</td>
                                     <td>{{ $data->lap_no_ref }}</td>
