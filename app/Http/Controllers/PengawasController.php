@@ -234,23 +234,6 @@ class PengawasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function accakun(Request $request, $id)
-    {
-        $action         = $request->action;
-        // $id_admin_tj    = $request->id_admin_tj;
-
-        if ($action == 'accept') {
-            DB::table('pelapor')
-            ->where('id', $id)
-            ->update([
-                'status'       => 1 
-            ]);
-        }
-
-        Session::flash('success'); 
-
-        return redirect('list-akun');
-    }
 
     /**
      * Display the specified resource.

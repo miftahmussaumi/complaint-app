@@ -37,7 +37,7 @@
                             <div class="card-body pt-5">
                                 <div class="text-center" href="index.html">
                                     <!-- <img class="text-center" src="{{asset('storage/img/kai.png')}}" width="140" height="60" /> -->
-                                    <h3>REGISTER</h3>
+                                    <h3>PENDAFTARAN</h3>
                                 </div>
                                 @if ($errors->any())
                                 @foreach ($errors->all() as $error)
@@ -57,7 +57,7 @@
                                         <tr>
                                             <td>
                                                 <div class="form-group">
-                                                    <input type="text" required class="form-control" value="{{ old('divisi') }}" name="divisi" placeholder="Divisi" required>
+                                                    <input type="text" required class="form-control" value="{{ old('divisi') }}" name="divisi" placeholder="Unit" required>
                                                 </div>
                                             </td>
                                             <td>
@@ -92,9 +92,9 @@
                                     <!-- <div class="form-group">
                                         <input type="file" required class="form-control" value="{{ old('ttd') }}" name="ttd" placeholder="Upload TTD" required>
                                     </div> -->
-                                    <button class="btn login-form__btn submit w-100">Register</button>
+                                    <button class="btn login-form__btn submit w-100">Daftar</button>
                                 </form>
-                                <p class="mt-5 login-form__footer">Have account <a href="/" class="text-primary">Login </a> now</p>
+                                <p class="mt-5 login-form__footer">Sudah punya akun? <a href="/" class="text-primary">Masuk </a> sekarang</p>
                                 </p>
                             </div>
                         </div>

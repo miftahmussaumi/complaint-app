@@ -62,6 +62,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/send-manager', [AdminController::class, 'manager']);
     Route::match(['get', 'post'],'/history-admin', [AdminController::class, 'history'])->name('history-admin');
     Route::get('/list-akun-admin', [AdminController::class, 'akun']);
+    Route::post('/acc-akun/{id}', [AdminController::class, 'accakun'])->name('acc-akun');
     // Route::get('/edit-pelapor/{id}', [AdminController::class, 'pelapor']);
     Route::post('/edit-pelapor-save/{id}', [AdminController::class, 'editpelapor'])->name('edit-pelapor-save');
     Route::post('/edit-teknisi-save/{id}', [AdminController::class, 'editteknisi'])->name('edit-teknisi-save');
@@ -89,7 +90,6 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::post('/save-ttd-pengawas/{id}', [PengawasController::class, 'ttd'])->name('save-ttd-pengawas');;
     Route::get('/list-akun', [PengawasController::class, 'akun']);
     Route::get('/list-laporan', [PengawasController::class, 'laporan']);
-    Route::post('/acc-akun/{id}', [PengawasController::class, 'accakun'])->name('acc-akun');
     Route::get('/cetak-laporan/{idlap}', [PengawasController::class, 'cetak'])->name('cetak-laporan');
     Route::get('/detail-laporan/{id}', [PengawasController::class, 'detail'])->name('detail-laporan');
     Route::post('/laporan-akhir/{idlap}', [LaporanakhirController::class, 'store'])->name('laporan-akhir');

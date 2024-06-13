@@ -58,9 +58,9 @@
                                         <div class="form-group">
                                             <input type="password" name="password" required class="form-control" placeholder="Password">
                                         </div>
-                                        <button type="submit" class="btn login-form__btn submit w-100">Log In</button>
+                                        <button type="submit" class="btn login-form__btn submit w-100">Masuk</button>
                                     </form>
-                                    <p class="mt-5 login-form__footer">Dont have account? <a href="/register" class="text-primary">Register</a> now</p>
+                                    <p class="mt-5 login-form__footer">Belum punya akun? <a href="/register" class="text-primary">Daftar</a> sekarang</p>
                                 </div>
                             </div>
                         </div>

@@ -32,7 +32,6 @@
                 @if(Session::has('success'))
                 <div class="toastr-trigger" data-type="success" data-message="Waktu Tambahan di Reset" data-position-class="Berhasil"></div>
                 @endif
-
                 <div class="card-body">
                     <table style="color: #2D3134;">
                         <tr>
@@ -138,16 +137,67 @@
                                 <button type="submit" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal1{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i> Waktu</button>
                             </td>
                             <td>
-                                @if($count > 0)
-                                <button class="btn btn-success" disabled type="submit" data-toggle="tooltip" data-placement="bottom" title="Isikan Detail dan Keterangan Pekerjaan dahulu"><i class="fa fa-check" aria-hidden="true"></i> Laporan</button>
-                                @else
-                                <button class="btn btn-success" type="submit" data-toggle="modal" data-target="#exampleModalSelesai{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-check" aria-hidden="true"></i>Laporan</button>
-                                @endif
+                                @if($count < 0) <!-- <button class="btn btn-success" disabled type="submit" data-toggle="tooltip" data-placement="bottom" title="Isikan Detail dan Keterangan Pekerjaan dahulu"><i class="fa fa-check" aria-hidden="true"></i> Laporan</button> -->
+                                    <button class="btn btn-success" type="submit" data-toggle="modal" data-target="#exampleModalSelesai{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-check" aria-hidden="true"></i>Laporan</button>
+                                    @endif
+                            </td>
+                            <td>
+                                <button class="btn btn-secondary" type="submit" data-toggle="modal" data-target="#exampleModalLaporan{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i> Laporan</button>
                             </td>
                             @endif
                             @endif
                         </tr>
                     </table>
+                    <!-- ========= MODAL TAMBAH LAPORAN ========= -->
+                    <div class="modal fade" id="exampleModalLaporan{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <form action="" method="POST">
+                                {{csrf_field()}}
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Tambah Permasalahan Laporan</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label>Kategori Laporan</label>
+                                            <select required name="kat_layanan[]" class="form-control kat-layanan">
+                                                <option value="">Pilih satu</option>
+                                                <option value="Throubleshooting">Throubleshooting</option>
+                                                <option value="Instalasi">Instalasi</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Jenis Laporan</label>
+                                            <select required name="kat_layanan[]" class="form-control kat-layanan">
+                                                <option value="">Pilih satu</option>
+                                                <option value="Throubleshooting">Throubleshooting</option>
+                                                <option value="Instalasi">Instalasi</option>
+                                            </select>
+                                            <input type="text" class="form-control" placeholder="1234 Main St">
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                <div class="col">
+                                                    <select required name="jenis_layanan[]" class="form-control jenis-layanan">
+                                                    </select>
+                                                </div>
+                                                <div class="col lainnya-input" style="display: none;">
+                                                    <input type="text" name="layanan_lain[]" class="form-control" placeholder="Jenis Layanan Lainnya">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Kirim</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ========= END MODAL TAMBAH LAPORAN ========= -->
                     <!-- ========= MODAL SELESAI ========= -->
                     <div class="modal fade" id="exampleModalSelesai{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">

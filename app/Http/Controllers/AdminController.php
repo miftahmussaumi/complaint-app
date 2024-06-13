@@ -521,6 +521,24 @@ class AdminController extends Controller
         return view('admin.akun-user', compact('pelapor', 'it', 'cacc', 'acc'));
     }
 
+    public function accakun(Request $request, $id)
+    {
+        $action         = $request->action;
+        // $id_admin_tj    = $request->id_admin_tj;
+
+        if ($action == 'accept') {
+            DB::table('pelapor')
+            ->where('id', $id)
+                ->update([
+                    'status'       => 1
+                ]);
+        }
+
+        Session::flash('success');
+
+        return redirect('list-akun');
+    }
+
     /**
      * Update the specified resource in storage.
      *
