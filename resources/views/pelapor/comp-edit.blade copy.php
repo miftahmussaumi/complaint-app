@@ -1,11 +1,11 @@
 @extends('template')
 
 @section('content')
-<div class="row page-titles mx-0"> 
+<div class="row page-titles mx-0">
     <div class="col p-md-0">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/comp">Layanan</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)"><i>Permintaan Layanan</i></a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)"><i>Edit Permintaan Layanan</i></a></li>
         </ol>
     </div>
 </div>
@@ -29,7 +29,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">No Inventaris Aset</label>
                                 <div class="col-sm-10">
-                                    <input required type="text" value="{{ old('no_inv_aset') }}" name="no_inv_aset" class="form-control" placeholder="Nomor Inventaris Aset">
+                                    <input required type="text" value="{{ $lap->no_inv_aset }}" name="no_inv_aset" class="form-control" placeholder="Nomor Inventaris Aset">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -42,10 +42,9 @@
                                         <div class="form-row">
                                             <div class="col">
                                                 <div class="input-group">
-                                                    <input required type="text" value="{{ old('tgl_awal') }}" id="tgl_awal" name="tgl_awal" class="form-control datepicker" placeholder="dd MM yyyy">
-                                                    <span class="input-group-append">
-                                                        <span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span>
-                                                    </span>
+                                                    <div class="input-group">
+                                                        <input required type="text" value="{{ $lap->tgl_awal_pengerjaan }}" id="tgl_awal" name="tgl_awal" class="form-control datepicker" placeholder="mm/dd/yyyy"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col">
@@ -88,7 +87,9 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label"><b>Isi Pelaporan</b></label>
                             </div>
+
                             <!-- FORM MULTIINPUT -->
+                            @foreach($detlap as $dt)
                             <div id="laporanInputs">
                                 <table style="width: 100%;">
                                     <tr>
@@ -99,10 +100,10 @@
                                             <div class="form-row">
                                                 <div class="col">
                                                     <div class="input-group">
-                                                        <select required name="kat_layanan[]" class="form-control kat-layanan">
+                                                        <select required name="kat_layanan[]" class="form-control kat-layanan" data-jenis-layanan="{{ $dt->jenis_layanan }}" data-lainnya="{{ $dt->jenis_layanan }}" onchange="showJenisLayanan(this)">
                                                             <option value="">Pilih satu</option>
-                                                            <option value="Throubleshooting">Throubleshooting</option>
-                                                            <option value="Instalasi">Instalasi</option>
+                                                            <option value="Throubleshooting" {{ $dt->kat_layanan == 'Throubleshooting' ? 'selected' : '' }}>Throubleshooting</option>
+                                                            <option value="Instalasi" {{ $dt->kat_layanan == 'Instalasi' ? 'selected' : '' }}>Instalasi</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -113,7 +114,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="col lainnya-input" style="display: none;">
-                                                            <input type="text" name="layanan_lain[]" class="form-control" placeholder="Jenis Layanan Lainnya">
+                                                            <input type="text" name="layanan_lain[]" class="form-control" placeholder="Jenis Layanan Lainnya" value="{{ $dt->jenis_layanan }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -125,7 +126,7 @@
                                             <label>Permasalahan</label>
                                         </td>
                                         <td>
-                                            <textarea required style="height: 120px;" name="det_layanan[]" class="form-control det-layanan" placeholder="Masukkan detail permasalahan"></textarea>
+                                            <textarea required style="height: 120px;" name="det_layanan[]" class="form-control det-layanan" placeholder="Masukkan detail permasalahan">{{ $dt->det_layanan }}</textarea>
                                         </td>
                                         <td align="center">
                                             <!-- Tombol hapus disini dihapus -->
@@ -133,9 +134,11 @@
                                     </tr>
                                 </table>
                             </div>
+                            @endforeach
                             <!-- END FORM MULTIINPUT -->
                             <button type="submit" class="btn btn-success">SUBMIT</button>
                             <button type="button" id="addLaporan" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Tambah Laporan"><i class="fa fa-plus" aria-hidden="true"></i></button>
+
                         </form>
                     </div>
                 </div>
@@ -156,88 +159,88 @@
             return day + '/' + month + '/' + year;
         }
 
-        var today = new Date();
-        var formattedToday = formatDate(today);
+        function parseDate(dateString) {
+            var parts = dateString.split('/');
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
 
-        // Set initial date for tgl_awal
-        $("#tgl_awal").val(formattedToday);
+        var tglAwalFromDatabase = "{{ $lap->tgl_awal_pengerjaan }}";
+        var tglAkhirFromDatabase = "{{ $lap->tgl_akhir_pengerjaan }}";
 
-        // Calculate the date 2 days after today
-        var twoDaysLater = new Date();
-        twoDaysLater.setDate(today.getDate() + 2);
-        var formattedTwoDaysLater = formatDate(twoDaysLater);
+        // Format dates to dd/mm/yyyy
+        var formattedTglAwal = formatDate(new Date(tglAwalFromDatabase));
+        var formattedTglAkhir = formatDate(new Date(tglAkhirFromDatabase));
 
-        // Set initial date for tgl_akhir
-        $("#tgl_akhir").val(formattedTwoDaysLater);
+        // Set the initial value for the date inputs
+        $("#tgl_awal").val(formattedTglAwal);
+        $("#tgl_akhir").val(formattedTglAkhir);
 
         $(".datepicker").datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true,
-            todayHighlight: true
-        }).on('changeDate', function() {
-            var date = $(this).datepicker('getDate');
-            $(this).val(formatDate(date));
+            todayHighlight: true,
         });
 
-        // Set datepicker options for tgl_awal
-        $("#tgl_awal").datepicker('setStartDate', today);
+        $("#tgl_awal").datepicker('setEndDate', formattedTglAkhir);
+        $("#tgl_akhir").datepicker('setStartDate', formattedTglAwal);
 
-        // Update tgl_akhir when tgl_awal changes
         $("#tgl_awal").on('changeDate', function(selected) {
-            var startDate = new Date(selected.date.valueOf());
-            var formattedStartDate = formatDate(startDate);
-
-            // Set the formatted date to the input
-            $("#tgl_awal").val(formattedStartDate);
-
-            // Calculate the date 2 days after the selected start date
-            var endDate = new Date(startDate);
-            endDate.setDate(startDate.getDate() + 2);
-            var formattedEndDate = formatDate(endDate);
-
-            // Update tgl_akhir and set the new start date
+            var startDate = selected.date;
             $("#tgl_akhir").datepicker('setStartDate', startDate);
-            $("#tgl_akhir").val(formattedEndDate);
+
+            var tglAkhirValue = parseDate($("#tgl_akhir").val());
+            if (tglAkhirValue < startDate) {
+                var newTglAkhir = new Date(startDate);
+                newTglAkhir.setDate(newTglAkhir.getDate() + 2); // set to 2 days after tgl_awal
+                $("#tgl_akhir").datepicker('update', formatDate(newTglAkhir));
+                $("#tgl_akhir").val(formatDate(newTglAkhir));
+            }
+        });
+
+        $("#tgl_akhir").on('changeDate', function(selected) {
+            var endDate = selected.date;
+            var startDate = parseDate($("#tgl_awal").val());
+            if (endDate < startDate) {
+                var newEndDate = new Date(startDate);
+                newEndDate.setDate(startDate.getDate() + 2);
+                $("#tgl_akhir").datepicker('update', formatDate(newEndDate));
+                $("#tgl_akhir").val(formatDate(newEndDate));
+            }
         });
 
         // Initialize the datepicker again to ensure the correct format
-        $("#tgl_awal").datepicker('update', today);
-        $("#tgl_akhir").datepicker('update', twoDaysLater);
+        $("#tgl_awal").datepicker('update', formattedTglAwal);
+        $("#tgl_akhir").datepicker('update', formattedTglAkhir);
     });
 
     $(function() {
-        function formatTime(date) {
-            var hours = ('0' + date.getHours()).slice(-2);
-            var minutes = ('0' + date.getMinutes()).slice(-2);
-            return hours + ':' + minutes;
+        function parseTime(dateTimeString) {
+            // Parse time part from dateTimeString (format: YYYY-MM-DD HH:MM:SS)
+            var timePart = dateTimeString.split(' ')[1];
+            var timeParts = timePart.split(':');
+            return ('0' + timeParts[0]).slice(-2) + ':' + ('0' + timeParts[1]).slice(-2);
         }
 
-        var now = new Date();
-        var formattedTime = formatTime(now);
+        var waktuAwalFromDatabase = "{{ $lap->tgl_awal_pengerjaan }}";
+        var waktuAkhirFromDatabase = "{{ $lap->tgl_akhir_pengerjaan }}";
 
-        // Set initial time for waktu_awal and waktu_akhir
-        $("#waktu_awal").val(formattedTime);
-        $("#waktu_akhir").val(formattedTime);
+        var formattedWaktuAwal = parseTime(waktuAwalFromDatabase);
+        var formattedWaktuAkhir = parseTime(waktuAkhirFromDatabase);
 
+        // Set the initial value for the time inputs
+        $("#waktu_awal").val(formattedWaktuAwal);
+        $("#waktu_akhir").val(formattedWaktuAkhir);
+
+        // Initialize clockpicker
         $('.clockpicker').clockpicker({
-            autoclose: true,
-            'default': formattedTime
+            autoclose: true
         });
     });
-
 
     function showJenisLayanan(selectElement) {
         var selectedOption = selectElement.value;
         var jenisDropdown = selectElement.closest('.form-row').querySelector('.jenis-layanan');
         var lainnyaInput = selectElement.closest('.form-row').querySelector('.lainnya-input');
-
-        // Mengambil semua kategori yang telah dipilih
-        var selectedKategori = [];
-        document.querySelectorAll('.kat-layanan').forEach(function(selectElement) {
-            if (selectElement.value !== "") {
-                selectedKategori.push(selectElement.value);
-            }
-        });
 
         // Hapus opsi sebelumnya
         jenisDropdown.innerHTML = "";
@@ -251,17 +254,30 @@
         }
 
         options.forEach(function(option) {
-            // Periksa apakah opsi sudah dipilih sebelumnya, jika sudah, lewati
-            if (!selectedKategori.includes(option)) {
-                var opt = document.createElement('option');
-                opt.value = option;
-                opt.innerHTML = option;
-                jenisDropdown.appendChild(opt);
-            }
+            var opt = document.createElement('option');
+            opt.value = option;
+            opt.innerHTML = option;
+            jenisDropdown.appendChild(opt);
         });
 
+        // Set the selected value from data attribute
+        var jenisLayananValue = selectElement.getAttribute('data-jenis-layanan');
+        var layananLainValue = selectElement.getAttribute('data-lainnya');
+
+        if (jenisLayananValue && options.includes(jenisLayananValue)) {
+            jenisDropdown.value = jenisLayananValue;
+            lainnyaInput.style.display = 'none';
+        } else {
+            jenisDropdown.value = 'Lainnya';
+            if (jenisLayananValue === 'Lainnya' || layananLainValue) {
+                lainnyaInput.querySelector('input').value = layananLainValue || jenisLayananValue;
+                lainnyaInput.style.display = 'block';
+            }
+        }
+
+        // lainnyaInput.style.display = 'none';
         jenisDropdown.style.display = 'block';
-        lainnyaInput.style.display = 'none';
+        showLainnya(jenisDropdown);
     }
 
     function showLainnya(selectElement) {
@@ -317,6 +333,7 @@
         selectElement.addEventListener('change', function() {
             showJenisLayanan(this);
         });
+        showJenisLayanan(selectElement);
     });
 
     document.querySelectorAll('.jenis-layanan').forEach(function(selectElement) {

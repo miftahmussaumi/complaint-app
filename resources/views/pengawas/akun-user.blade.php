@@ -29,7 +29,7 @@
                                                 <th>Nama</th>
                                                 <th>NIPP</th>
                                                 <th>Jabatan</th>
-                                                <th>Divisi</th>
+                                                <th>Unit</th>
                                                 <th>Email</th>
                                                 <th>Telepon</th>
                                                 <!-- <th>Total Pengaduan</th> -->
@@ -105,7 +105,7 @@
                                                 <th>Nama</th>
                                                 <th>NIPP</th>
                                                 <th>Jabatan</th>
-                                                <th>Divisi</th>
+                                                <th>Unit</th>
                                                 <th>#</th>
                                             </tr>
                                         </thead>
@@ -158,7 +158,7 @@
                                                                 <td>{{ $dtp2->jabatan }}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Divisi</td>
+                                                                <td>Unit</td>
                                                                 <td>:</td>
                                                                 <td>{{ $dtp2->divisi }}</td>
                                                             </tr>

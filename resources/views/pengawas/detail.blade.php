@@ -69,7 +69,7 @@
                             @if($laporan->waktu_tambahan != null)
                             <td>{{$laporan->waktu_tambahan}}</td>
                             @else
-                            <td><i>Tidak ada waktu tambahan</i></td>
+                            <td><i>-</i></td>
                             @endif
                         </tr>
                         <!-- <tr>

@@ -7,6 +7,11 @@
         width: 0px;
         margin-left: 70px;
     }
+
+    .error {
+        color: red;
+        font-size: 0.875em;
+    }
 </style>
 @endsection
 @section('content')
@@ -24,6 +29,10 @@
     <div class="row">
         <div class="col-lg-6 col-xl-5">
             <div class="card">
+                @if(Session::has('success'))
+                <div class="toastr-trigger" data-type="success" data-message="Waktu Tambahan di Reset" data-position-class="Berhasil"></div>
+                @endif
+
                 <div class="card-body">
                     <table style="color: #2D3134;">
                         <tr>
@@ -116,23 +125,57 @@
                             @endif
 
                             @if($laporan->waktu_tambahan_peng == null && $laporan->status_terakhir != 'Pengajuan' && $laporan->status_terakhir != 'CheckedU' && $laporan->status_terakhir != 'reqAddTime')
+
+                            @if(strtotime($laporan->deadline) > strtotime(now()) && $laporan->waktu_tambahan != null)
+                            <form action="{{route('reset-waktu',$laporan->id)}}" method="post">
+                                {{csrf_field()}}
+                                <td style="width: 100px;">
+                                    <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title="Batalkan Waktu Tambahan" onclick="confirm('Apakah yakin mereset tambahan waktu?')"><i class="fa fa-clock-o" aria-hidden="true" onclick="confirm('Apakah anda yakin akan reset waktu?')"></i> Reset</button>
+                                </td>
+                            </form>
+                            @endif
                             <td style="width: 100px;">
-                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal1{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i> Waktu</button>
+                                <button type="submit" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal1{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i> Waktu</button>
                             </td>
                             <td>
-                                <form action="{{route('laporan-selesai-it',$laporan->id)}}" method="POST">
-                                    {{csrf_field()}}
-                                    @if($count > 0)
-                                    <button class="btn btn-success" disabled type="submit" data-toggle="tooltip" data-placement="bottom" title="Isikan Detail dan Keterangan Pekerjaan dahulu"><i class="fa fa-check" aria-hidden="true"></i> Laporan</button>
-                                    @else
-                                    <button class="btn btn-success" type="submit" data-toggle="tooltip" data-placement="bottom" title="Pekerjaan Laporan Selesai"><i class="fa fa-check" aria-hidden="true"></i> Laporan</button>
-                                    @endif
-                                </form>
+                                @if($count > 0)
+                                <button class="btn btn-success" disabled type="submit" data-toggle="tooltip" data-placement="bottom" title="Isikan Detail dan Keterangan Pekerjaan dahulu"><i class="fa fa-check" aria-hidden="true"></i> Laporan</button>
+                                @else
+                                <button class="btn btn-success" type="submit" data-toggle="modal" data-target="#exampleModalSelesai{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-check" aria-hidden="true"></i>Laporan</button>
+                                @endif
                             </td>
                             @endif
                             @endif
                         </tr>
                     </table>
+                    <!-- ========= MODAL SELESAI ========= -->
+                    <div class="modal fade" id="exampleModalSelesai{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <form action="{{route('laporan-selesai-it',$laporan->id)}}" method="POST">
+                                {{csrf_field()}}
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Selesaikan Laporan</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Bisnis Area:</label>
+                                            <input type="text" id="lap_bisnis_area" name="lap_bisnis_area" class="form-control" oninput="validateInput(this)" required>
+                                            <div id="error-message" class="error"></div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Kirim</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ========= END MODAL SELESAI ========= -->
+
                     <!-- ========= MODAL ALASAN PENOLAKAN ========= -->
                     <div class="modal fade" id="exampleModal{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -203,7 +246,7 @@
                         <div class="mr-auto p-2 bd-highlight">
                             <b>Laporan {{$no}}</b>
                         </div>
-                        @if($dtl->status_terakhir != 'Selesai' && $dtl->status_terakhir != 'Manager')
+                        @if($dtl->status_terakhir != 'Selesai' && $dtl->status_terakhir != 'Manager' && $dtl->status_terakhir != 'Pengajuan')
                         <div class="p-2 bd-highlight">
                             <i style="color: #3167D5" type="button" data-toggle="modal" data-target="#exampleModalP{{$dtl->id_det}}" data-whatever="@getbootstrap" class="fa fa-pencil-square-o"></i>
                         </div>
@@ -263,19 +306,19 @@
                         <div class="modal-body">
                             <table style="color: #2D3134;">
                                 <tr>
-                                    <td style="width: 150px; height: 25px;">Kategori Laporan</td>
+                                    <td style="width: 200px; height: 25px;">Kategori Laporan</td>
                                     <td style="width: 15px;">:</td>
                                     <td>{{$dtl2->kat_layanan}}</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 150px; height: 25px;">Jenis Laporan</td>
+                                    <td style="width: 200px; height: 25px;">Jenis Laporan</td>
                                     <td style="width: 15px;">:</td>
                                     <td>{{$dtl2->jenis_layanan}}</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 150px; height: 25px;">Laporan Permasalahan</td>
-                                    <td style="width: 15px;">:</td>
-                                    <td>{{$dtl2->det_layanan}}</td>
+                                    <td style="width: 200px; height: 25px;" valign="top">Laporan Permasalahan</td>
+                                    <td style="width: 15px;" valign="top">:</td>
+                                    <td valign="top">{{$dtl2->det_layanan}}</td>
                                 </tr>
                             </table>
                             <form>
@@ -301,4 +344,32 @@
         <!-- ========= END MODAL DETAIL DAN KETERANGAN PEKERJAAN ========= -->
     </div>
 </div>
+@endsection
+@section('script')
+<script>
+    function validateInput(input) {
+        const invalidChars = /[.\\/:*?"<>|]/g;
+        const errorMessage = document.getElementById('error-message');
+
+        if (invalidChars.test(input.value)) {
+            errorMessage.textContent = 'Input tidak boleh mengandung karakter berikut: \\ / : * ? " < > |';
+            input.value = input.value.replace(invalidChars, '');
+        } else {
+            errorMessage.textContent = '';
+        }
+    }
+
+    function validateForm() {
+        const input = document.getElementById('lap_bisnis_area').value;
+        const invalidChars = /[\\/:*?"<>|]/;
+        const errorMessage = document.getElementById('error-message');
+
+        if (invalidChars.test(input)) {
+            errorMessage.textContent = 'Input tidak boleh mengandung karakter berikut: \\ / : * ? " < > |';
+            return false;
+        }
+
+        return true;
+    }
+</script>
 @endsection

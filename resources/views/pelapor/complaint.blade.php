@@ -79,6 +79,11 @@
 
                                     <td>
                                         <a href="{{url('detail-comp',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
+                                        @if($data->status_terakhir == 'Pengajuan')
+                                        <a href="{{url('edit-comp',$data->id)}}"><button class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></button></a>
+                                        @else
+                                        <a href="{{url('edit-comp',$data->id)}}"><button disabled class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></button></a>
+                                        @endif
                                         <!-- <a href="{{url('delete-laporan',$data->id)}}" onclick="return confirm('Apakah Yakin Hapus Data Ini?')" style="color: #C63F56;"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a> -->
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal{{$data->id}}" data-whatever="@getbootstrap"><i class="fa fa-trash"></i></button>
                                     </td>

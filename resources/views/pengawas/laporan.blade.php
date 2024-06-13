@@ -45,11 +45,13 @@
                                     </td>
                                     <td>
                                         <a href="{{url('detail-laporan',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        @if($data->ttd != null)
+                                        <a href="{{url('cetak-laporan',$data->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
+
+                                        <!-- @if($data->ttd != null)
                                         <a href="{{url('cetak-laporan',$data->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
                                         @else
                                         <a href="{{url('profile-pengawas')}}"><button class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Masukkan TTD dahulu"><i class="fa fa-file-pdf-o"></i></button></a>
-                                        @endif
+                                        @endif -->
                                     </td>
                                 </tr>
                                 @endforeach

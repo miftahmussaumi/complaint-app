@@ -35,6 +35,7 @@
     <!-- Custom Stylesheet -->
     <link href="{{asset('quixlab/css/style.css')}}" rel="stylesheet">
     @yield('style')
+    @yield('script_atas')
 </head>
 
 <body>
@@ -323,11 +324,11 @@
                             <i class="fa fa-desktop"></i><span class="nav-text">Laporan Masuk</span>
                         </a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="/send-manager">
                             <i class="fa fa-file-text""></i><span class=" nav-text">Laporan Manager</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="/history-admin">
                             <i class="fa fa-history"></i><span class=" nav-text">History</span>

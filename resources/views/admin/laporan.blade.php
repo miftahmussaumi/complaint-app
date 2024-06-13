@@ -48,7 +48,7 @@
                                         @if($data->id_teknisi != null)
                                         {{$data->nama_teknisi}}
                                         @else
-                                        <i>Belum di proses</i>
+                                        <i><b>Belum di proses</b></i>
                                         @endif
                                     </td>
 
@@ -62,7 +62,8 @@
                                         @elseif($data->status_terakhir == 'ReqHapus')
                                         <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
                                         @elseif($data->status_terakhir == 'reqAddTime')
-                                        <span class="badge badge-warning">Request <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                        <!-- <span class="badge badge-warning">Request <i class="fa fa-clock-o" aria-hidden="true"></i></span> -->
+                                        <span class="badge badge-warning">User Check</span>
                                         @elseif($data->status_terakhir == 'Selesai')
                                         <span class="badge badge-success">Closed</span>
                                         @elseif($data->status_terakhir == 'Manager')

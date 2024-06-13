@@ -20,15 +20,22 @@ class LaporanController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function dashU()
+    public function dashU() 
     {
         $dtLap = DB::table('laporan')
-        ->select('status_terakhir')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
+        ->select('laporanhist.status_laporan as status_terakhir')
         ->where('laporan.id_pelapor', '=', Auth::guard('pelapor')->user()->id)
         ->get();
 
-        $open      = $dtLap->where('status_terakhir', 'Pengajuan')->count();
-        $proses     = $dtLap->where('status_terakhir', 'Diproses')->count();
+        $open       = $dtLap->where('status_terakhir', 'Pengajuan')->count();
+        $proses     = $dtLap->whereIn('status_terakhir', ['Diproses', 'reqAddTime','CheckedU'])->count();
         $selesai    = $dtLap->where('status_terakhir', 'Selesai')->count();
         $all        = $dtLap->count();
         
@@ -44,19 +51,15 @@ class LaporanController extends Controller
     public function store(Request $request)
     {
         $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');
-        
+
         // KONVERSI TANGGAL AWAL DAN AKHIR PENGERJAAN
         $tgl_awal = $request->tgl_awal;
         $waktu_awal = $request->waktu_awal;
-        $waktu_konversi_awal = date("H:i:s", strtotime($waktu_awal));
-        $awal_pengerjaan = $tgl_awal . ' ' . $waktu_konversi_awal;
-        $tgl_awal_pengerjaan = date('Y-m-d H:i:s', strtotime($awal_pengerjaan));
-
         $tgl_akhir = $request->tgl_akhir;
         $waktu_akhir = $request->waktu_akhir;
-        $waktu_konversi_akhir = date("H:i:s", strtotime($waktu_akhir));
-        $akhir_pengerjaan = $tgl_akhir . ' ' . $waktu_konversi_akhir;
-        $tgl_akhir_pengerjaan = date('Y-m-d H:i:s', strtotime($akhir_pengerjaan));
+
+        $tgl_awal_pengerjaan = Carbon::createFromFormat('d/m/Y H:i', $tgl_awal . ' ' . $waktu_awal)->format('Y-m-d H:i:s');
+        $tgl_akhir_pengerjaan = Carbon::createFromFormat('d/m/Y H:i', $tgl_akhir . ' ' . $waktu_akhir)->format('Y-m-d H:i:s');
         // END KONVERSI TANGGAL AWAL DAN AKHIR PENGERJAAN
 
 
@@ -79,7 +82,6 @@ class LaporanController extends Controller
             'tgl_masuk'             => $tgl_masuk,
             'tgl_awal_pengerjaan'   => $tgl_awal_pengerjaan,
             'tgl_akhir_pengerjaan'  => $tgl_akhir_pengerjaan,
-            'status_terakhir'       => 'Pengajuan'
         ]);
         $id_laporan = $laporan->id; 
 
@@ -117,8 +119,7 @@ class LaporanController extends Controller
         ]);
 
 
-        
-        // dd($data);
+        // dd($tgl_awal, $tgl_akhir, $tgl_awal_pengerjaan, $tgl_akhir_pengerjaan, $tgl_masuk);
         return redirect('comp');
     }
 
@@ -378,12 +379,6 @@ class LaporanController extends Controller
             'status_laporan'    => 'Dibatalkan',
             'tanggal'           => $tgl_masuk,
             'keterangan'        => $request->keterangan
-        ]);
-
-        DB::table('laporan')
-        ->where('id', $idlap)
-        ->update([
-            'status_terakhir'  => 'Dibatalkan',
         ]);
 
         $batal = 'Laporan Berhasil Dibatalkan';

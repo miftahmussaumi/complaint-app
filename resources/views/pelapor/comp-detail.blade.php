@@ -99,19 +99,24 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 150px; height: 25px;">Waktu Tambahan</td>
-                            <td style="width: 15px;">:</td>
+                            <td style="width: 150px; height: 50px;" valign="top">Waktu Tambahan</td>
+                            <td style="width: 15px;" valign="top">:</td>
                             @if($laporan->waktu_tambahan != null)
-                            <td>{{$laporan->waktu_tambahan}} hari</td>
+                            <td valign="top">{{$laporan->waktu_tambahan}} hari</td>
                             @else
-                            <td>-</td>
+                            <td valign="top">-</td>
                             @endif
                         </tr>
                         @if($laporan->waktu_tambahan_peng != null)
-                        <tr style="color: #F54D4D;">
-                            <td style="width: 150px; height: 25px;">Pengajuan Waktu</td>
-                            <td style="width: 15px;">:</td>
-                            <td>{{$laporan->waktu_tambahan_peng}} hari</td>
+                        <tr>
+                            <td style="width: 150px; height: 25px;"><b>Pengajuan Waktu</b></td>
+                            <td style="width: 15px;"><b>:</b></td>
+                            <td><b>{{$laporan->waktu_tambahan_peng}} hari</b></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px; height: 25px;" valign="top"><b>Keterangan</b></td>
+                            <td style="width: 15px;" valign="top"><b>:</b></td>
+                            <td valign="top"><b>{{$laporan->keterangan}}</b></td>
                         </tr>
                         @endif
                     </table><br>

@@ -27,7 +27,37 @@
             border: 1px solid black;
             padding: 2px;
         }
+
+        /* .page-break {
+            page-break-after: always;
+        } */
+
+        /* @page {
+            margin: 1in;
+
+            @bottom-center {
+                content: "Halaman " counter(page) " dari " counter(pages);
+            }
+        } */
+
+        /* #footer {
+            position: fixed;
+            right: 0px;
+            bottom: 10px;
+            text-align: center;
+            border-top: 1px solid black;
+        }
+
+        #footer .page:after {
+            content: counter(page, decimal);
+        }
+
+        @page {
+            margin: 20px 30px 40px 50px;
+        } */
     </style>
+
+
 </head>
 
 <body>
@@ -46,7 +76,7 @@
                 </tr>
                 <tr>
                     <td>Tanggal</td>
-                    <td>{{$lap->tanggal}}</td>
+                    <td>{{$today}}</td>
                 </tr>
                 <tr>
                     <td rowspan="2">
@@ -55,13 +85,24 @@
                     <td>Versi</td>
                     <td>{{$lap->versi}}</td>
                 </tr>
+                <script type="text/php">
+                    if (isset($pdf)) {
+                        $text = "Halaman {PAGE_NUM} dari {PAGE_COUNT}";
+                        $size = 10;
+                        $font = $fontMetrics->getFont("Arial, Helvetica, sans-serif");
+                        $width = $fontMetrics->get_text_width($text, $font, $size) / 2;
+                        $x = ($pdf->get_width() - $width) / 2;
+                        $y = $pdf->get_height() - 35;
+                        $pdf->page_text($x, $y, $text, $font, $size);
+                    }
+                </script>
                 <tr>
                     <td>Halaman</td>
-                    <td>{{$lap->halaman}}</td>
+                    <td><?php echo $text; ?></td>
                 </tr>
             </table>
             <br>
-            <table style="width: 100%;"> 
+            <table style="width: 100%;">
                 <tr>
                     <td style="padding: 2px; width: 15%;">No. Ref</td>
                     <td style="padding: 2px; width: 2%;">:</td>
@@ -70,7 +111,7 @@
                 <tr>
                     <td>Tanggal</td>
                     <td>:</td>
-                    <td>{{$lap->tanggal}}</td>
+                    <td>{{$lap->tgl_awal_pengerjaan}}</td>
                 </tr>
                 <tr>
                     <td>Business Area</td>
@@ -104,7 +145,7 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td style="width: 100%;" colspan="3">Tanggal : {{$lap->tgl_awal_pengerjaan}}. Pukul : {{$lap->waktu_awal_pengerjaan}} s.d Tanggal : {{$lap->tgl_akhir_pengerjaan}} Pukul : {{$lap->waktu_akhir_pengerjaan}}</td>
+                    <td style="width: 100%;" colspan="3">Tanggal : {{$tgl_awal_pengerjaan}}. Pukul : {{$lap->waktu_awal_pengerjaan}} s.d Tanggal : {{$tgl_akhir_pengerjaan}} Pukul : {{$lap->waktu_akhir_pengerjaan}}</td>
                 </tr>
             </table>
             <br>
@@ -407,6 +448,9 @@
             </table>
         </div>
     </div>
+    <!-- <div id="footer">
+        <p class="page">Page </p>
+    </div> -->
 </body>
 
 </html>

@@ -66,20 +66,27 @@ class TeknisiController extends Controller
     public function index()
     {
         $dtLap = DB::table('laporan as l')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('l.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('l.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
         ->join('pelapor as p', 'p.id', '=', 'l.id_pelapor')
         ->select(
             DB::raw("DATE_FORMAT(l.tgl_masuk, '%d %M %Y') AS tgl_masuk"),
             DB::raw("DATE_FORMAT(l.tgl_akhir_pengerjaan, '%d %M %Y, %H:%i WIB') AS tgl_akhir_pengerjaan"),
             'l.no_inv_aset',
             'l.waktu_tambahan',
-            'l.status_terakhir',
+            'laporanhist.status_laporan AS status_terakhir',
             'l.id',
             'l.id_teknisi',
             'l.tgl_akhir_pengerjaan AS deadline',
             'p.nama as nama_pelapor'
         )
-        ->where('l.status_terakhir', 'Pengajuan')
-        ->orderByDesc('l.created_at')
+        ->where('laporanhist.status_laporan', 'Pengajuan')
+        ->orderBy('l.tgl_masuk','asc')
         ->get();
 
         return view('teknisi.comp', compact('dtLap'));
@@ -88,25 +95,33 @@ class TeknisiController extends Controller
     public function index2()
     {
         $dtLap = DB::table('laporan')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
         ->join('pelapor', 'pelapor.id', '=', 'laporan.id_pelapor')
         ->select(
             DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
             DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
             'no_inv_aset',
             'waktu_tambahan',
-            'status_terakhir',
+            'laporanhist.status_laporan as status_terakhir',
             'laporan.id',
             'id_teknisi',
             'laporan.tgl_akhir_pengerjaan AS deadline',
             'pelapor.nama as nama_pelapor'
         )
-        ->whereNotIn('status_terakhir', ['Selesai', 'Dibatalkan', 'Manager'])
+        ->whereNotIn('laporanhist.status_laporan', ['Selesai', 'Dibatalkan'])
         ->where('id_teknisi', '=', Auth::guard('teknisi')->user()->id)
         ->orderByDesc('laporan.created_at')
         ->get();
 
         // FORMAT TANGGAL '%d/%m/%Y %H:%i'
 
+        // dd($dtLap);
         return view('teknisi.comp2', compact('dtLap'));
     }
 
@@ -121,12 +136,13 @@ class TeknisiController extends Controller
                 'status_laporan'    => 'Diproses',
                 'tanggal'           => $tgl_masuk,
             ]);
+
             DB::table('laporan')
-                ->where('id', $id)
-                ->update([
-                    'status_terakhir' => 'Diproses',
-                    'id_teknisi'  => Auth::guard('teknisi')->user()->id,
+            ->where('id', $id)
+            ->update([
+                'id_teknisi'        => Auth::guard('teknisi')->user()->id,
             ]);
+
         } 
         // else if ($action == 'reject') {
         //     Laporanhist::create([
@@ -160,10 +176,23 @@ class TeknisiController extends Controller
 
         DB::table('laporan')
         ->where('id', $idlap)
-            ->update([
-                'waktu_tambahan_peng'   => $waktu_tambahan,
-                'status_terakhir'       => 'reqAddTime'
-            ]);
+        ->update([
+            'waktu_tambahan_peng' => $waktu_tambahan
+        ]);
+
+        // dd($waktu_tambahan, $keterangan);
+        return redirect()->back();
+    }
+
+    public function resetwaktu(Request $request, $id)
+    {
+        DB::table('laporan')
+        ->where('id', $id)
+        ->update([
+            'waktu_tambahan' => DB::raw('NULL')
+        ]);
+
+        Session::flash('success'); 
 
         // dd($waktu_tambahan, $keterangan);
         return redirect()->back();
@@ -172,6 +201,13 @@ class TeknisiController extends Controller
     public function detail($id)
     {
         $laporan = DB::table('laporan')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
         ->leftjoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
         ->leftJoin('pelapor','pelapor.id','=','laporan.id_pelapor')
         ->where('laporan.id', '=', $id)
@@ -179,7 +215,7 @@ class TeknisiController extends Controller
                 'no_inv_aset',
                 'waktu_tambahan','waktu_tambahan_peng',
                 'id_teknisi','laporan.id AS id',
-                'teknisi.nama','status_terakhir',
+                'teknisi.nama','laporanhist.status_laporan AS status_terakhir',
                 'laporan.tgl_akhir_pengerjaan AS deadline',
                 DB::raw("DATE_FORMAT(laporan.tgl_masuk, '%d %M %Y') AS tgl_masuk"),
                 DB::raw("DATE_FORMAT(laporan.tgl_selesai, '%d %M %Y') AS tgl_selesai"),
@@ -191,14 +227,22 @@ class TeknisiController extends Controller
 
         $detlaporan = DB::table('detlaporan')
         ->leftJoin('laporan','laporan.id','=','detlaporan.id_laporan')
+        ->leftJoin(DB::raw('(SELECT laporanhist.id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
         ->select(
             'detlaporan.id as id_det','laporan.id as id_lap','detlaporan.kat_layanan',
             'detlaporan.jenis_layanan',
             'detlaporan.det_layanan',
             'detlaporan.det_pekerjaan',
-            'detlaporan.ket_pekerjaan', 'laporan.status_terakhir'
+            'detlaporan.ket_pekerjaan',
+            'laporanhist.status_laporan AS status_terakhir',
         )
-        ->where('id_laporan', '=', $id)->get();
+        ->where('detlaporan.id_laporan', '=', $id)->get();
 
         $count = DetLaporan::where('id_laporan', $id)
         ->whereNull('det_pekerjaan')
@@ -228,9 +272,9 @@ class TeknisiController extends Controller
         return redirect()->back();
     }
 
-    public function selesai($id)
+    public function selesai(Request $request, $id) 
     {
-        $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');
+        $tgl_masuk  = Carbon::now()->format('Y-m-d H:i:s');
 
         Laporanhist::create([
             'id_laporan'        => $id,
@@ -240,14 +284,16 @@ class TeknisiController extends Controller
         ]);
 
         DB::table('laporan')
-            ->where('id', $id)
-            ->update([
-                'status_terakhir' => 'CheckedU'
-            ]);
+        ->where('id', $id)
+        ->update([
+            'tgl_selesai'       => $tgl_masuk,
+            'lap_bisnis_area'   => $request->lap_bisnis_area
+        ]);
 
         $selesai = 'Menunggu Persetujuan Pelapor';
         Session::flash('success', $selesai); 
 
+        // dd($request->all());
         return redirect('it');
     }
 

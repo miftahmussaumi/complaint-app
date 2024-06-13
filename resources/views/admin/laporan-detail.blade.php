@@ -27,6 +27,42 @@
                 <div class="card-body">
                     <table style="color: #2D3134;">
                         <tr>
+                            <td style="width: 150px; height: 25px;">Status</td>
+                            <td style="width: 15px;">:</td>
+                            <td>
+                                @if($laporan->status_terakhir == 'Pengajuan')
+                                <span class="badge badge-primary">Open</span>
+                                @elseif($laporan->status_terakhir == 'Diproses')
+                                <span class="badge badge-info">Diproses</span>
+                                @elseif($laporan->status_terakhir == 'CheckedU')
+                                <span class="badge badge-warning">User Check</span>
+                                @elseif($laporan->status_terakhir == 'ReqHapus')
+                                <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                                @elseif($laporan->status_terakhir == 'reqAddTime')
+                                <span class="badge badge-warning">User Check</span>
+                                @elseif($laporan->status_terakhir == 'Selesai')
+                                <span class="badge badge-success">Closed</span>
+                                @elseif($laporan->status_terakhir == 'Manager')
+                                <span class="badge badge-success">Manager</span>
+                                @elseif($laporan->status_terakhir == 'Dibatalkan')
+                                <span class="badge badge-danger">Cancel</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @if($laporan->status_terakhir == 'reqAddTime')
+                        <tr>
+                            <td style="width: 150px; height: 50px;" valign="top">Detail Status</td>
+                            <td style="width: 15px;" valign="top">:</td>
+                            <td style="height: 80px;" valign="top">Menunggu persetujuan penambahan waktu oleh Pelapor</td>
+                        </tr>
+                        @elseif($laporan->status_terakhir == 'CheckedU')
+                        <tr>
+                            <td style="width: 150px; height: 50px;" valign="top">Detail Status</td>
+                            <td style="width: 15px;" valign="top">:</td>
+                            <td style="height: 80px;" valign="top">Menunggu persetujuan penyelesaian laporan dari Teknisi ke Pelapor</td>
+                        </tr>
+                        @endif
+                        <tr>
                             <td style="width: 150px; height: 25px;">Tanggal Pelaporan</td>
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->tgl_masuk}}</td>
@@ -69,31 +105,8 @@
                             @if($laporan->waktu_tambahan != null)
                             <td>{{$laporan->waktu_tambahan}}</td>
                             @else
-                            <td><i>Tidak ada waktu tambahan</i></td>
+                            <td><i>-</i></td>
                             @endif
-                        </tr>
-                        <tr>
-                            <td style="width: 150px; height: 25px;">Status</td>
-                            <td style="width: 15px;">:</td>
-                            <td>
-                                @if($laporan->status_terakhir == 'Pengajuan')
-                                <span class="badge badge-primary">Open</span>
-                                @elseif($laporan->status_terakhir == 'Diproses')
-                                <span class="badge badge-info">Diproses</span>
-                                @elseif($laporan->status_terakhir == 'CheckedU')
-                                <span class="badge badge-warning">User Check</span>
-                                @elseif($laporan->status_terakhir == 'ReqHapus')
-                                <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
-                                @elseif($laporan->status_terakhir == 'reqAddTime')
-                                <span class="badge badge-warning">User Check</span>
-                                @elseif($laporan->status_terakhir == 'Selesai')
-                                <span class="badge badge-success">Closed</span>
-                                @elseif($laporan->status_terakhir == 'Manager')
-                                <span class="badge badge-success">Manager</span>
-                                @elseif($laporan->status_terakhir == 'Dibatalkan')
-                                <span class="badge badge-danger">Cancel</span>
-                                @endif
-                            </td>
                         </tr>
                     </table> <br>
                     @if($laporan->status_terakhir == 'Selesai')
@@ -174,6 +187,7 @@
                             <td style="width: 15px;">:</td>
                             <td>{{$dtl->det_layanan}}</td>
                         </tr>
+                        @if($dtl->det_pekerjaan != null && $dtl->ket_pekerjaan != null)
                         <tr>
                             <td>
                                 <b>Teknisi IT</b>
@@ -193,6 +207,7 @@
                             <td><i>Tidak ada keterangan</i></td>
                             @endif
                         </tr>
+                        @endif
                     </table>
                 </div>
             </div>

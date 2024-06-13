@@ -113,6 +113,13 @@ class PengawasController extends Controller
     public function laporan()
     {
         $lap = DB::table('laporan')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
         ->leftJoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
         ->leftJoin('pelapor','pelapor.id','=','laporan.id_pelapor')
         ->leftJoin('pengawas','pengawas.id','=','laporan.id_pengawas')
@@ -121,7 +128,7 @@ class PengawasController extends Controller
             DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
             'laporan.no_inv_aset',
             'laporan.waktu_tambahan',
-            'laporan.status_terakhir',
+            'laporanhist.status_laporan as status_terakhir',
             'laporan.id AS id',
             'id_teknisi','lap_no_ref as no_ref','lap_bisnis_area as bisnis_area',
             'teknisi.nama as nama_teknisi',
@@ -133,7 +140,7 @@ class PengawasController extends Controller
             'pelapor.nipp as nipp_pelapor',
             'pengawas.ttd'
         )
-        ->where('laporan.status_terakhir','=','Manager')
+        ->where('laporanhist.status_laporan','=','Selesai')
         ->orderBy('tgl_masuk')
         ->get();
         
@@ -143,14 +150,22 @@ class PengawasController extends Controller
 
     public function cetak($idlap)
     {
+        Carbon::setLocale('id');
+
+        DB::table('laporan')
+        ->where('id', $idlap)
+            ->update([
+                'id_pengawas' => Auth::guard('pengawas')->user()->id
+            ]);
+
         $detlap = DB::table('detlaporan')
-        ->where('id_laporan','=',$idlap)
-        ->get();
+        ->where('id_laporan', '=', $idlap)
+            ->get();
 
         $lap = DB::table('laporan')
+        ->leftJoin('pengawas', 'pengawas.id', '=', 'laporan.id_pengawas')
         ->leftJoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
         ->leftJoin('pelapor', 'pelapor.id', '=', 'laporan.id_pelapor')
-        ->leftJoin('pengawas', 'pengawas.id', '=', 'laporan.id_pengawas')
         ->select(
             'pelapor.nama AS nama_pelapor',
             'pelapor.divisi',
@@ -179,26 +194,39 @@ class PengawasController extends Controller
             DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d-%m-%Y') AS tgl_awal_pengerjaan"),
             DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%H:%i WIB') AS waktu_awal_pengerjaan"),
             DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d-%m-%Y') AS tgl_akhir_pengerjaan"),
-            DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%H:%i WIB') AS waktu_akhir_pengerjaan"),
+            DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%H:%i WIB') AS waktu_akhir_pengerjaan")
         )
             ->where('laporan.id', '=', $idlap)
             ->first();
 
-        $nama_pelapor   = $lap->nama_pelapor;
-        $tgl            = $lap->tanggal;
-        $laporan        = $tgl." ".$nama_pelapor.".pdf";
+        if ($lap) {
+            $tgl_awal_pengerjaan = Carbon::parse($lap->tgl_awal_pengerjaan)->translatedFormat('d F Y');
+            $tgl_akhir_pengerjaan = Carbon::parse($lap->tgl_akhir_pengerjaan)->translatedFormat('d F Y');
+        } else {
+            $tgl_awal_pengerjaan = null;
+            $tgl_akhir_pengerjaan = null;
+        }
+        $today = Carbon::now()->locale('id')->translatedFormat('d F Y');
 
-        $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap'))->setPaper('legal', 'portrait')->output();
+        $no_ref = $lap->no_ref;
+        $bisnis_area = $lap->bisnis_area;
+        $tgl = date('dmY');
+        $lap_no_ref = str_replace('/', '', $no_ref);
+
+        $laporan = $lap_no_ref . "_" . $tgl . "_" . $bisnis_area . ".pdf";
+
+        $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap', 'tgl_awal_pengerjaan', 'tgl_akhir_pengerjaan', 'today'))
+        ->setPaper('legal', 'portrait')
+        ->set_option('isPhpEnabled', true)
+        ->output();
 
         return response()->streamDownload(
             fn () => print($pdf),
             $laporan
         );
-        // dd($no_ref, $tgl, $laporan);
-        // dd($detlap);
-
-        // return view('test', compact('lap','detlap'));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -236,6 +264,13 @@ class PengawasController extends Controller
         ->where('id_laporan', '=', $id)->get();
 
         $laporan = DB::table('laporan')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
         ->leftjoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
         ->where('laporan.id', '=', $id)
             ->select(
@@ -246,7 +281,7 @@ class PengawasController extends Controller
                 'waktu_tambahan',
                 'id_teknisi',
                 'teknisi.nama',
-                'status_terakhir',
+                'laporanhist.status_laporan as status_terakhir',
                 'laporan.id as id',
                 'lap_no_ref','lap_tanggal','lap_bisnis_area','lap_versi','lap_halaman','lap_nomor'
             )

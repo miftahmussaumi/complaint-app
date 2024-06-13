@@ -64,7 +64,7 @@ class PelaporController extends Controller
                 'laporanhist.id AS idhist',
                 'laporan.id as id'
             )
-            ->whereNotIn('laporanhist.status_laporan', ['Selesai', 'Dibatalkan','Manager'])
+            ->whereNotIn('laporanhist.status_laporan', ['Selesai', 'Dibatalkan'])
             ->where('laporan.id_pelapor', '=', Auth::guard('pelapor')->user()->id)
             ->orderBy('laporanhist.tanggal', 'desc')
             ->get();
@@ -82,6 +82,13 @@ class PelaporController extends Controller
     public function detail($id)
     {
         $laporan = DB::table('laporan')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
         ->leftjoin('teknisi','teknisi.id','=','laporan.id_teknisi')
         ->where('laporan.id','=',$id)
         ->select(
@@ -90,8 +97,10 @@ class PelaporController extends Controller
             DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d %M %Y, %H:%i WIB') AS tgl_awal_pengerjaan"),
             DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
             'no_inv_aset','waktu_tambahan','id_teknisi','teknisi.nama',
-            'waktu_tambahan_peng','status_terakhir','laporan.id as idlap',
-            'laporan.tgl_akhir_pengerjaan AS deadline','laporan.id AS idlap'
+            'waktu_tambahan_peng',
+            'laporanhist.status_laporan as status_terakhir','laporan.id as idlap',
+            'laporan.tgl_akhir_pengerjaan AS deadline','laporan.id AS idlap',
+            'laporanhist.keterangan as keterangan'
         )
         ->first();
 
@@ -253,28 +262,51 @@ class PelaporController extends Controller
         $action = $request->action;
         $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');
 
-        if($action == 'accept') {
-            DB::table('laporan')
-            ->where('id', $idlap)
-            ->update([
-                'status_terakhir'   => 'Selesai',
-                'tgl_selesai'       => $tgl_masuk
-            ]);
+        // == PEMBUATAN NOMOR REFERENSI ==
+        // Dapatkan nomor referensi terakhir dari database
+        $lastReferenceNumber = DB::table('laporan')
+        ->whereNotNull('lap_no_ref')
+        ->orderBy('id', 'desc')
+        ->value('lap_no_ref');
+        $tanggal = Carbon::now()->format('m/Y');
+        $bulan = Carbon::now()->format('m');
+        // Code Auto Increament
+        $autoIncrement = 1;
+        if ($lastReferenceNumber) {
+            $lastReferenceNumberParts = explode('/', $lastReferenceNumber);
+            // Periksa jika masih dibulan yang sama
+            if ($lastReferenceNumberParts[1] === $bulan) {
+                $autoIncrement = intval($lastReferenceNumberParts[0]) + 1;
+            }
+        }
+        $lap_no_ref = sprintf('%03d', $autoIncrement) . '/' . $tanggal;
+        // == END PEMBUATAN NOMOR REFERENSI ==
 
+        // == PEMBUATAN NOMOR LAPORAN ==
+        $bulan = date('m'); // Format bulan dua digit
+        $tahun = date('Y'); // Format tahun empat digit
+        $lap_nomor = "FR.SM/IT/011.005/{$bulan}-{$tahun}";
+        // == END PENBUATAN NOMOR LAPORAN ==
+
+        // == PEMBUATAN VERSI ==
+        $lap_versi = "002-{$tahun}";
+        // == END PENBUATAN VERSI ==
+
+        if($action == 'accept') {
             Laporanhist::create([
                 'id_laporan'        => $idlap,
                 'status_laporan'    => 'Selesai',
                 'tanggal'           => $tgl_masuk,
                 'keterangan'        => 'Laporan telah diselesaikan dengan baik'
             ]);
-        } else if ($action == 'reject') {
             DB::table('laporan')
-                ->where('id', $idlap)
-                ->update([
-                    'status_terakhir'   => 'Dibatalkan',
-                    'tgl_selesai'       => $tgl_masuk
-                ]);
-
+            ->where('id', $idlap)
+            ->update([
+                'lap_no_ref'    => $lap_no_ref,
+                'lap_nomor'     => $lap_nomor,
+                'lap_versi'     => $lap_versi
+            ]);
+        } else if ($action == 'reject') {
             Laporanhist::create([
                 'id_laporan'        => $idlap,
                 'status_laporan'    => 'Dibatalkan',
@@ -344,13 +376,12 @@ class PelaporController extends Controller
             ]);
 
             DB::table('laporan')
-                ->where('id', $idlap)
-                ->update([
-                    'waktu_tambahan_peng'   => DB::raw('NULL'),
-                    'waktu_tambahan'        => $waktu_tambahan,
-                    'tgl_selesai'           => $tgl_masuk,
-                    'status_terakhir'       => 'Diproses'
-                ]);
+            ->where('id', $idlap)
+            ->update([
+                'waktu_tambahan'        => $waktu_tambahan,
+                'waktu_tambahan_peng'   => DB::raw('NULL')
+            ]);
+
         } elseif ($action === 'reject') {
             Laporanhist::create([
                 'id_laporan'        => $idlap,
@@ -358,17 +389,72 @@ class PelaporController extends Controller
                 'tanggal'           => $tgl_masuk,
                 'keterangan'        => $request->keterangan
             ]);
-
-            DB::table('laporan')
-            ->where('id', $idlap)
-                ->update([
-                    'waktu_tambahan_peng'  => DB::raw('NULL'),
-                    'tgl_selesai'           => $tgl_masuk,
-                    'status_terakhir'       => 'Dibatalkan'
-                ]);
         } 
 
         // dd($action, $request->waktu_tambahan_peng);
+
+        return redirect('comp');
+    }
+
+    public function edit ($id)
+    {
+        $lap = DB::table('laporan')
+        ->where('id',$id)
+        ->first();
+
+        $detlap = DB::table('detlaporan')
+        ->where('id_laporan',$id)
+        ->get();
+
+        // dd($detlap);
+
+        return view('pelapor.comp-edit', compact('lap','detlap'));
+    }
+
+    public function updateLap (Request $request, $id)
+    {
+        // KONVERSI TANGGAL AWAL DAN AKHIR PENGERJAAN
+        $tgl_awal = $request->tgl_awal;
+        $waktu_awal = $request->waktu_awal;
+        $tgl_akhir = $request->tgl_akhir;
+        $waktu_akhir = $request->waktu_akhir;
+
+        $tgl_awal_pengerjaan = Carbon::createFromFormat('d/m/Y H:i', $tgl_awal . ' ' . $waktu_awal)->format('Y-m-d H:i:s');
+        $tgl_akhir_pengerjaan = Carbon::createFromFormat('d/m/Y H:i', $tgl_akhir . ' ' . $waktu_akhir)->format('Y-m-d H:i:s');
+        // END KONVERSI TANGGAL AWAL DAN AKHIR PENGERJAAN
+
+        $laporan = Laporan::findOrFail($id);
+        $laporan->update([
+            'no_inv_aset' => $request->no_inv_aset,
+            'tgl_awal_pengerjaan' => $tgl_awal_pengerjaan,
+            'tgl_akhir_pengerjaan' => $tgl_akhir_pengerjaan,
+        ]);
+
+        // Update atau Tambah Detil Laporan
+        if (count($request->kat_layanan) > 0) {
+            foreach ($request->kat_layanan as $key => $value) {
+                $jenis_layanan = $request->jenis_layanan[$key];
+                $layanan_lain = isset($request->layanan_lain[$key]) ? $request->layanan_lain[$key] : null;
+
+                $detLaporanData = [
+                    'kat_layanan' => $request->kat_layanan[$key],
+                    'jenis_layanan' => $jenis_layanan == 'Lainnya' ? $layanan_lain : $jenis_layanan,
+                    'det_layanan' => $request->det_layanan[$key],
+                ];
+
+                // Cek apakah ID Detil Laporan ada untuk menentukan update atau insert
+                if (isset($request->det_laporan_id[$key])) {
+                    // Update existing detil laporan
+                    $detLaporan = DetLaporan::findOrFail($request->det_laporan_id[$key]);
+                    $detLaporan->update($detLaporanData);
+                } else {
+                    // Create new detil laporan
+                    $detLaporan = new DetLaporan($detLaporanData);
+                    $detLaporan->id_laporan = $laporan->id;
+                    $detLaporan->save();
+                }
+            }
+        }
 
         return redirect('comp');
     }

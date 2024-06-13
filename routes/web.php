@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::post('/save-laporan', [LaporanController::class, 'store'])->name('save-laporan');
     Route::get('/comp', [PelaporController::class, 'index']);
     Route::get('/detail-comp/{idlap}', [PelaporController::class, 'detail']);
+    Route::get('/edit-comp/{idlap}', [PelaporController::class, 'edit']);
+    Route::post('/update-comp/{idlap}', [PelaporController::class, 'updateLap'])->name('update-comp');
     Route::post('/proses-tambah-waktu/{idlap}', [PelaporController::class, 'tambahwaktu'])->name('proses-tambah-waktu');
     Route::post('/acc-laporan/{idlap}', [PelaporController::class, 'acclap'])->name('acc-laporan');
     Route::match(['get', 'post'], '/history-user',[PelaporController::class, 'history'])->name('history-user');
@@ -72,6 +74,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/it', [TeknisiController::class, 'index2']);
     Route::get('/detail-comp-it/{id}', [TeknisiController::class, 'detail'])->name('detail-comp-it');
     Route::post('/proses-laporan/{id}',[TeknisiController::class, 'proses'])->name('proses-laporan');
+    Route::post('/reset-waktu/{id}', [TeknisiController::class, 'resetwaktu'])->name('reset-waktu');
     Route::post('/tambah-waktu/{id}', [TeknisiController::class, 'tambahwaktu'])->name('tambah-waktu');
     Route::post('/laporan-selesai-it/{id}', [TeknisiController::class, 'selesai'])->name('laporan-selesai-it');
     Route::match(['get', 'post'], '/history-it', [TeknisiController::class, 'history'])->name('history-it');
