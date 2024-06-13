@@ -536,7 +536,7 @@ class AdminController extends Controller
 
         Session::flash('success');
 
-        return redirect('list-akun');
+        return redirect('list-akun-admin');
     }
 
     /**

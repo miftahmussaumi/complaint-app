@@ -168,24 +168,14 @@
                                                 <option value="Instalasi">Instalasi</option>
                                             </select>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Jenis Laporan</label>
-                                            <select required name="kat_layanan[]" class="form-control kat-layanan">
-                                                <option value="">Pilih satu</option>
-                                                <option value="Throubleshooting">Throubleshooting</option>
-                                                <option value="Instalasi">Instalasi</option>
-                                            </select>
-                                            <input type="text" class="form-control" placeholder="1234 Main St">
-                                        </div>
-                                        <div class="col">
-                                            <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
-                                                <div class="col">
-                                                    <select required name="jenis_layanan[]" class="form-control jenis-layanan">
-                                                    </select>
-                                                </div>
-                                                <div class="col lainnya-input" style="display: none;">
-                                                    <input type="text" name="layanan_lain[]" class="form-control" placeholder="Jenis Layanan Lainnya">
-                                                </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Email</label>
+                                                <select required name="jenis_layanan[]" class="form-control jenis-layanan">
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <input type="text" name="layanan_lain[]" class="form-control" placeholder="Jenis Layanan Lainnya">
                                             </div>
                                         </div>
                                     </div>
