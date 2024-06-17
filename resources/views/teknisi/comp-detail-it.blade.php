@@ -151,7 +151,7 @@
                     <!-- ========= MODAL TAMBAH LAPORAN ========= -->
                     <div class="modal fade" id="exampleModalLaporan{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
-                            <form action="" method="POST">
+                            <form action="{{route('tambah-pekerjaan-it',$laporan->id)}}" method="POST">
                                 {{csrf_field()}}
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -162,21 +162,34 @@
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <label>Kategori Laporan</label>
-                                            <select required name="kat_layanan[]" class="form-control kat-layanan">
-                                                <option value="">Pilih satu</option>
+                                            <select required name="kat_layanan" class="form-control" id="kat_layanan">
+                                                <option value="" selected>Pilih satu</option>
                                                 <option value="Throubleshooting">Throubleshooting</option>
                                                 <option value="Instalasi">Instalasi</option>
                                             </select>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label>Email</label>
-                                                <select required name="jenis_layanan[]" class="form-control jenis-layanan">
+                                            <div class="col">
+                                                <label>Jenis Layanan</label>
+                                                <select required name="jenis_layanan" class="form-control" id="jenis_layanan">
                                                 </select>
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <input type="text" name="layanan_lain[]" class="form-control" placeholder="Jenis Layanan Lainnya">
+                                            <div class="col" id="layanan_lain_group" style="display: none;">
+                                                <label>Lainnya</label>
+                                                <input type="text" name="layanan_lain" class="form-control" placeholder="Jenis Layanan Lainnya">
                                             </div>
+                                        </div><br>
+                                        <div class="form-group">
+                                            <label>Permasalahan</label>
+                                            <textarea name="det_layanan" class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Detail Pekerjaan</label>
+                                            <textarea name="det_pekerjaan" class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Keterangan Pekerjaan</label>
+                                            <textarea name="det_pekerjaan" class="form-control"></textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -364,11 +377,11 @@
                             <form>
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">Detail Pekerjaan:</label>
-                                    <textarea name="det_pekerjaan" class="form-control" id="message-text"></textarea>
+                                    <textarea name="det_pekerjaan" class="form-control" id="message-text">{{$dtl2->det_pekerjaan}}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label">Keterangan Pekerjaan:</label>
-                                    <textarea name="ket_pekerjaan" class="form-control" id="message-text"></textarea>
+                                    <textarea name="ket_pekerjaan" class="form-control" id="message-text">{{$dtl2->ket_pekerjaan}}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -411,5 +424,41 @@
 
         return true;
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var katLayanan = document.getElementById('kat_layanan');
+        var jenisLayanan = document.getElementById('jenis_layanan');
+        var layananLainGroup = document.getElementById('layanan_lain_group');
+
+        var optionsThroubleshooting = ["Aplikasi", "Jaringan", "PC/Laptop", "Printer", "Lainnya"];
+        var optionsInstalasi = ["Aplikasi", "Sistem Operasi", "Jaringan", "PC/Laptop", "Printer", "Lainnya"];
+
+        katLayanan.addEventListener('change', function() {
+            var selectedCategory = this.value;
+            jenisLayanan.innerHTML = '';
+
+            var options = [];
+            if (selectedCategory === 'Throubleshooting') {
+                options = optionsThroubleshooting;
+            } else if (selectedCategory === 'Instalasi') {
+                options = optionsInstalasi;
+            }
+
+            options.forEach(function(option) {
+                var opt = document.createElement('option');
+                opt.value = option;
+                opt.textContent = option;
+                jenisLayanan.appendChild(opt);
+            });
+        });
+
+        jenisLayanan.addEventListener('change', function() {
+            if (this.value === 'Lainnya') {
+                layananLainGroup.style.display = 'block';
+            } else {
+                layananLainGroup.style.display = 'none';
+            }
+        });
+    });
 </script>
 @endsection

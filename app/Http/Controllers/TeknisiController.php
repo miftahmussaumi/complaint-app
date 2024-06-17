@@ -272,6 +272,40 @@ class TeknisiController extends Controller
         return redirect()->back();
     }
 
+    public function tambahpekerjaanIT(Request $request, $id)
+    {
+        $jenis_layanan  = $request->jenis_layanan;
+        $kat_layanan    = $request->kat_layanan;
+        $det_layanan    = $request->det_layanan;
+        $det_pekerjaan  = $request->det_pekerjaan;
+        $ket_pekerjaan  = $request->ket_pekerjaan;
+
+        if ($jenis_layanan == "Lainnya") {
+            $layanan_lain = $request->layanan_lain;
+            DetLaporan::create([
+                'id_laporan'        => $id,
+                'kat_layanan'       => $kat_layanan,
+                'jenis_layanan'     => $layanan_lain,
+                'det_layanan'       => $det_layanan,
+                'det_pekerjaan'     => $det_pekerjaan,
+                'ket_pekerjaan'     => $ket_pekerjaan,
+            ]);
+        } else {
+            DetLaporan::create([
+                'id_laporan'        => $id,
+                'kat_layanan'       => $kat_layanan,
+                'jenis_layanan'     => $jenis_layanan,
+                'det_layanan'       => $det_layanan,
+                'det_pekerjaan'     => $det_pekerjaan,
+                'ket_pekerjaan'     => $ket_pekerjaan,
+            ]);
+        }
+
+        dd($request->all());
+
+        return redirect()->back();
+    }
+
     public function selesai(Request $request, $id) 
     {
         $tgl_masuk  = Carbon::now()->format('Y-m-d H:i:s');

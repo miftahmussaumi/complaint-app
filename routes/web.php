@@ -81,7 +81,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::match(['get', 'post'], '/history-it', [TeknisiController::class, 'history'])->name('history-it');
     Route::get('/getNoInventarisOptionsIT', [TeknisiController::class, 'getNoInventarisOptionsIT']);
     Route::post('/detail-pekerjaan-it/{id_det}', [TeknisiController::class, 'pekerjaanIT'])->name('detail-pekerjaan-it');
-
+    Route::post('/tambah-pekerjaan-it/{id}', [TeknisiController::class, 'tambahpekerjaanIT'])->name('tambah-pekerjaan-it');
 
 
     // ==============ROUTE UNTUK BAGIAN PENGAWAS/MANAGER============== //
