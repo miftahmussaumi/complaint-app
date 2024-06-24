@@ -163,9 +163,9 @@ class TeknisiController extends Controller
 
     public function tambahwaktu(Request $request, $idlap)
     {
-        $waktu_tambahan = $request->waktu_tambahan;
-        $keterangan = $request->keterangan;
-        $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');
+        $waktu_tambahan     = $request->waktu_tambahan;
+        $keterangan         = $request->keterangan;
+        $tgl_masuk          = Carbon::now()->format('Y-m-d H:i:s');
 
         Laporanhist::create([
             'id_laporan'        => $idlap,
@@ -221,7 +221,7 @@ class TeknisiController extends Controller
                 DB::raw("DATE_FORMAT(laporan.tgl_selesai, '%d %M %Y') AS tgl_selesai"),
                 DB::raw("DATE_FORMAT(laporan.tgl_awal_pengerjaan, '%d %M %Y, %H:%i WIB') AS tgl_awal_pengerjaan"),
                 DB::raw("DATE_FORMAT(laporan.tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
-                'pelapor.nama as nama_pelapor', 'pelapor.jabatan as jabatan_pelapor'
+                'pelapor.nama as nama_pelapor', 'pelapor.jabatan as jabatan_pelapor','laporanhist.keterangan'
             )
             ->first();
 
@@ -241,8 +241,11 @@ class TeknisiController extends Controller
             'detlaporan.det_pekerjaan',
             'detlaporan.ket_pekerjaan',
             'laporanhist.status_laporan AS status_terakhir',
+            'detlaporan.id_teknisi','detlaporan.acc_status'
         )
-        ->where('detlaporan.id_laporan', '=', $id)->get();
+        ->where('detlaporan.id_laporan', '=', $id)
+        ->whereNull('status')
+        ->get();
 
         $count = DetLaporan::where('id_laporan', $id)
         ->whereNull('det_pekerjaan')
@@ -257,15 +260,40 @@ class TeknisiController extends Controller
 
     public function pekerjaanIT(Request $request, $id_det)
     {
-        $det_pekerjaan = $request->det_pekerjaan;
-        $ket_pekerjaan = $request->ket_pekerjaan;
+        $det_pekerjaan  = $request->det_pekerjaan;
+        $ket_pekerjaan  = $request->ket_pekerjaan;
+        $status         = $request->status;
+        $tgl_masuk  = Carbon::now()->format('Y-m-d H:i:s');
 
-        DB::table('detlaporan')
+        $id_lap = DB::table('detlaporan')
+        ->where('id',$id_det)
+        ->first();
+
+        if($status != null){
+            DB::table('detlaporan')
             ->where('id', $id_det)
             ->update([
-                'det_pekerjaan' => $det_pekerjaan,
+                'det_pekerjaan' => 'Permasalahan Tidak Sesuai',
                 'ket_pekerjaan' => $ket_pekerjaan,
+                'status'        => $status,
+                'acc_status'    => 'waiting'
             ]);
+            Laporanhist::create([
+                'id_laporan'        => $id_lap->id_laporan,
+                'status_laporan'    => 'CheckLapU', //cek pengajuan hapus laporan user
+                'tanggal'           => $tgl_masuk,
+                'keterangan'        => 'Pengecekan hapus pelaporan oleh User / Pelapor'
+            ]);
+        } else {
+            DB::table('detlaporan')
+                ->where('id', $id_det)
+                ->update([
+                    'det_pekerjaan' => $det_pekerjaan,
+                    'ket_pekerjaan' => $ket_pekerjaan,
+                    'acc_status'    => DB::raw('NULL'),
+                    'status'        => DB::raw('NULL')
+                ]);
+        }
 
             // dd($request->all());
 
@@ -280,28 +308,52 @@ class TeknisiController extends Controller
         $det_pekerjaan  = $request->det_pekerjaan;
         $ket_pekerjaan  = $request->ket_pekerjaan;
 
-        if ($jenis_layanan == "Lainnya") {
-            $layanan_lain = $request->layanan_lain;
-            DetLaporan::create([
-                'id_laporan'        => $id,
-                'kat_layanan'       => $kat_layanan,
-                'jenis_layanan'     => $layanan_lain,
-                'det_layanan'       => $det_layanan,
-                'det_pekerjaan'     => $det_pekerjaan,
-                'ket_pekerjaan'     => $ket_pekerjaan,
-            ]);
+        $existingEntry = DB::table('detlaporan')
+        ->where('kat_layanan', $kat_layanan)
+        ->where('jenis_layanan', $jenis_layanan)
+        ->exists();
+
+        if ($existingEntry) {
+            Session::flash('failed'); 
         } else {
-            DetLaporan::create([
-                'id_laporan'        => $id,
-                'kat_layanan'       => $kat_layanan,
-                'jenis_layanan'     => $jenis_layanan,
-                'det_layanan'       => $det_layanan,
-                'det_pekerjaan'     => $det_pekerjaan,
-                'ket_pekerjaan'     => $ket_pekerjaan,
-            ]);
+            if ($jenis_layanan == "Lainnya") {
+                $layanan_lain = $request->layanan_lain;
+                DetLaporan::create([
+                    'id_laporan'        => $id,
+                    'kat_layanan'       => $kat_layanan,
+                    'jenis_layanan'     => $layanan_lain,
+                    'det_layanan'       => $det_layanan,
+                    'det_pekerjaan'     => $det_pekerjaan,
+                    'ket_pekerjaan'     => $ket_pekerjaan,
+                    'id_teknisi'        => Auth::guard('teknisi')->user()->id
+                ]);
+            } else {
+                DetLaporan::create([
+                    'id_laporan'        => $id,
+                    'kat_layanan'       => $kat_layanan,
+                    'jenis_layanan'     => $jenis_layanan,
+                    'det_layanan'       => $det_layanan,
+                    'det_pekerjaan'     => $det_pekerjaan,
+                    'ket_pekerjaan'     => $ket_pekerjaan,
+                    'id_teknisi'        => Auth::guard('teknisi')->user()->id
+                ]);
+            }
         }
 
-        dd($request->all());
+    
+        // dd($result);
+
+        return redirect()->back();
+    }
+
+    public function hapuspekerjaanIT($id)
+    {
+        $hapus = DetLaporan::findorfail($id);
+        $hapus->delete();
+
+        Session::flash('hapus'); 
+
+        // dd($result);
 
         return redirect()->back();
     }

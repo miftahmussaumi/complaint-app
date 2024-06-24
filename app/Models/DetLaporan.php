@@ -12,7 +12,7 @@ class DetLaporan extends Model
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id', 'id_laporan','kat_layanan', 'jenis_layanan', 'det_layanan', 'foto',
-        'det_pekerjaan', 'ket_perkejaan'
+        'id', 'id_laporan','id_teknisi','kat_layanan', 'jenis_layanan', 'det_layanan', 'status','acc_status',
+        'foto', 'det_pekerjaan', 'ket_perkejaan'
     ]; 
 }

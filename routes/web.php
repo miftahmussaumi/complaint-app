@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/getNoInventarisOptions', [LaporanController::class, 'getNoInventarisOptions']);
     Route::get('/password', [PelaporController::class, 'password']);
     Route::post('/ubah-password', [PelaporController::class, 'ubahpassword'])->name('ubah-password');
+    Route::post('/laptidaksesuai/{id}', [PelaporController::class, 'laptidaksesuai'])->name('laptidaksesuai');
 
 
     // ==============ROUTE UNTUK BAGIAN ADMIN============== //
@@ -82,6 +83,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/getNoInventarisOptionsIT', [TeknisiController::class, 'getNoInventarisOptionsIT']);
     Route::post('/detail-pekerjaan-it/{id_det}', [TeknisiController::class, 'pekerjaanIT'])->name('detail-pekerjaan-it');
     Route::post('/tambah-pekerjaan-it/{id}', [TeknisiController::class, 'tambahpekerjaanIT'])->name('tambah-pekerjaan-it');
+    Route::get('/hapus-pekerjaan-it/{id}', [TeknisiController::class, 'hapuspekerjaanIT'])->name('hapus-pekerjaan-it');
 
 
     // ==============ROUTE UNTUK BAGIAN PENGAWAS/MANAGER============== //

@@ -105,14 +105,16 @@ class PelaporController extends Controller
         ->first();
 
         $detlaporan = DB::table('detlaporan')
-        ->where('id_laporan','=',$id)->get();
+        ->where('id_laporan','=',$id)
+        ->whereNull('status')
+        ->get();
 
         $hislap = DB::table('laporanhist')
         ->join('laporan','laporan.id','=','laporanhist.id_laporan')
         ->orderBy('tanggal', 'desc')
         ->first();
 
-        // dd($laporan);
+        // dd($detlaporan);
         return view('pelapor.comp-detail', compact('laporan','detlaporan','hislap'));
     }
 
@@ -362,6 +364,7 @@ class PelaporController extends Controller
     {
         $action     = $request->input('action');
         $tgl_masuk  = Carbon::now()->format('Y-m-d H:i:s');
+    
 
         if ($action === 'accept') {
             $lap = DB::table('laporan')->where('id', $idlap)->first();
@@ -383,15 +386,25 @@ class PelaporController extends Controller
             ]);
 
         } elseif ($action === 'reject') {
+            $lap = DB::table('laporan')->where('id', $idlap)->first();
+            $waktu_tambahan_peng = $lap->waktu_tambahan_peng;
+            $keterangan = 'Pengajuan waktu tambahan ' . $waktu_tambahan_peng . ' hari ditolak dengan keterangan pelapor ( ' . $request->keterangan. ' )';
+
+            DB::table('laporan')
+            ->where('id', $idlap)
+            ->update([
+                'waktu_tambahan_peng'   => 0
+            ]);
+
             Laporanhist::create([
                 'id_laporan'        => $idlap,
-                'status_laporan'    => 'Dibatalkan',
+                'status_laporan'    => 'Diproses',
                 'tanggal'           => $tgl_masuk,
-                'keterangan'        => $request->keterangan
+                'keterangan'        => $keterangan
             ]);
         } 
 
-        // dd($action, $request->waktu_tambahan_peng);
+        // dd($keterangan);
 
         return redirect('comp');
     }
@@ -630,5 +643,46 @@ class PelaporController extends Controller
             $datas = 'ada';
         }
         return view('pelapor.history-u', compact('data', 'datas', 'filter', 'kat_layanan'));
+    }
+
+    public function laptidaksesuai(Request $request, $id)
+    {
+        // detail($id);
+        $action = $request->action;
+        $tgl_masuk  = Carbon::now()->format('Y-m-d H:i:s');
+
+        $id_lap = DB::table('detlaporan')
+            ->where('id', $id)
+            ->first();
+
+        if($action == 'accept'){
+            DB::table('detlaporan')
+                ->where('id', $id)
+                ->update([
+                    'acc_status'    => 'yes'
+                ]);
+
+            Laporanhist::create([
+                'id_laporan'        => $id_lap->id_laporan,
+                'status_laporan'    => 'Diproses', //cek pengajuan hapus laporan user
+                'tanggal'           => $tgl_masuk,
+                'keterangan'        => 'Penghapusan Permasalahan Diterima'
+            ]);
+        } else if($action == 'reject') {
+            DB::table('detlaporan')
+                ->where('id', $id)
+                ->update([
+                    'acc_status'    => 'no'
+                ]);
+
+            Laporanhist::create([
+                'id_laporan'        => $id_lap->id_laporan,
+                'status_laporan'    => 'Diproses', //cek pengajuan hapus laporan user
+                'tanggal'           => $tgl_masuk,
+                'keterangan'        => $request->keterangan
+            ]);
+        }
+
+        return back();
     }
 }

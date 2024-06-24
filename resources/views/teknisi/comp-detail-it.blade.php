@@ -32,6 +32,12 @@
                 @if(Session::has('success'))
                 <div class="toastr-trigger" data-type="success" data-message="Waktu Tambahan di Reset" data-position-class="Berhasil"></div>
                 @endif
+                @if(Session::has('failed'))
+                <div class="toastr-trigger" data-type="error" data-message="Kategori Layanan dan Jenis Layanan Sudah Ada" data-position-class="Gagal"></div>
+                @endif
+                @if(Session::has('hapus'))
+                <div class="toastr-trigger" data-type="success" data-message="Permasalahan Tambahan Dihapus" data-position-class="Berhasil"></div>
+                @endif
                 <div class="card-body">
                     <table style="color: #2D3134;">
                         <tr>
@@ -101,14 +107,23 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 150px; height: 25px;">Waktu Tambahan</td>
-                            <td style="width: 15px;">:</td>
+                            <td style="width: 150px; height: 25px;" valign='top'>Waktu Tambahan</td>
+                            <td style="width: 15px;" valign='top'>:</td>
                             @if($laporan->waktu_tambahan != null)
-                            <td>{{$laporan->waktu_tambahan}} hari</td>
-                            @else
-                            <td>-</td>
+                            <td valign='top'>{{$laporan->waktu_tambahan}} hari</td>
+                            @elseif($laporan->waktu_tambahan_peng != null)
+                            <td valign='top'>{{$laporan->waktu_tambahan_peng}} hari <span style="color: #DD0B2E;">(pengajuan)</span></td>
+                            @elseif($laporan->waktu_tambahan_peng == 0)
+                            <td valign='top'>
+                                {{$laporan->keterangan}}
+                            </td>
                             @endif
                         </tr>
+                        @if($laporan->waktu_tambahan_peng == 0)
+                        <tr>
+                            <td></td>
+                        </tr>
+                        @endif
                     </table> <br>
                     <table>
                         <tr>
@@ -181,7 +196,7 @@
                                         </div><br>
                                         <div class="form-group">
                                             <label>Permasalahan</label>
-                                            <textarea name="det_layanan" class="form-control"></textarea>
+                                            <textarea name="det_layanan" class="form-control" required></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>Detail Pekerjaan</label>
@@ -201,6 +216,7 @@
                         </div>
                     </div>
                     <!-- ========= END MODAL TAMBAH LAPORAN ========= -->
+
                     <!-- ========= MODAL SELESAI ========= -->
                     <div class="modal fade" id="exampleModalSelesai{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -297,11 +313,39 @@
                 <div class="card-body">
                     <div class="d-flex">
                         <div class="mr-auto p-2 bd-highlight">
-                            <b>Laporan {{$no}}</b>
+                            <!-- {{$dtl->id_det}} -->
+                            <table>
+                                <tr>
+                                    <td style="width: 143px; color: #2D3134 ;"><b>Permasalahan {{$no}}</b></td>
+                                    <td style="color: red;">
+                                        @if($dtl->det_pekerjaan == null && $dtl->ket_pekerjaan == null)
+                                        | Belum Diisi
+                                        @elseif($dtl->acc_status == 'waiting')
+                                        | Permasalahan akan Terhapus
+                                        @elseif($dtl->acc_status == 'no')
+                                        | Pengajuan Hapus Laporan Ditolak
+                                        @endif
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                         @if($dtl->status_terakhir != 'Selesai' && $dtl->status_terakhir != 'Manager' && $dtl->status_terakhir != 'Pengajuan')
                         <div class="p-2 bd-highlight">
-                            <i style="color: #3167D5" type="button" data-toggle="modal" data-target="#exampleModalP{{$dtl->id_det}}" data-whatever="@getbootstrap" class="fa fa-pencil-square-o"></i>
+                            <table>
+                                <tr>
+                                    @if($dtl->acc_status != 'waiting')
+                                    <td style="width: 20px;">
+                                        <i style="color: #3167D5; cursor: pointer;" type="button" data-toggle="modal" data-target="#exampleModalP{{$dtl->id_det}}" data-whatever="@getbootstrap" class="fa fa-pencil-square-o"></i>
+                                    </td>
+                                    @endif
+                                    @if($dtl->id_teknisi != null)
+                                    <td>
+                                        <a href="{{url('hapus-pekerjaan-it',$dtl->id_det)}}" onclick="confirm('Apakah yakin menghapus laporan permasalahan ini?')"><i style="color: #DD0B2E; cursor: pointer;" type="button" class="fa fa-trash"></i></a>
+                                        <!-- <i style="color: #DD0B2E; cursor: pointer;" type="button" data-toggle="modal" data-target="#exampleModalP{{$dtl->id_det}}" data-whatever="@getbootstrap" class="fa fa-trash"></i> -->
+                                    </td>
+                                    @endif
+                                </tr>
+                            </table>
                         </div>
                         @endif
                     </div>
@@ -323,20 +367,39 @@
                         </tr>
                         @if($dtl->det_pekerjaan != null && $dtl->ket_pekerjaan != null)
                         <tr>
-                            <td style="width: 150px; height: 25px;"><b>Teknisi IT</b></td>
+                            <td style="width: 150px; height: 25px;">
+                                @if($dtl->acc_status == 'waiting')
+                                <span style="color: #DD0B2E;">* </span>
+                                @endif
+                                <b>Teknisi IT</b>
+                            </td>
                             <td style="width: 15px;"></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td style="width: 150px; height: 25px;">Detail Pekerjaan</td>
-                            <td style="width: 15px;">:</td>
-                            <td>{{$dtl->det_pekerjaan}}</td>
+                            <td style="width: 150px; height: 25px;" valign="top">Detail Pekerjaan</td>
+                            <td style="width: 15px;" valign="top">:</td>
+                            <td valign="top">{{$dtl->det_pekerjaan}}</td>
                         </tr>
                         <tr>
-                            <td style="width: 150px; height: 25px;">Keterangan Pekerjaan</td>
-                            <td style="width: 15px;">:</td>
-                            <td>{{$dtl->ket_pekerjaan}}</td>
+                            <td style="width: 150px; height: 25px;" valign="top">Keterangan Pekerjaan</td>
+                            <td style="width: 15px;" valign="top">:</td>
+                            <td valign="top">{{$dtl->ket_pekerjaan}}</td>
                         </tr>
+                        @if($dtl->acc_status == 'no')
+                        <tr>
+                            <td style="width: 150px; height: 25px;">
+                                <b>Pelapor</b>
+                            </td>
+                            <td style="width: 15px;"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px; height: 25px;" valign="top">Alasan Penolakan</td>
+                            <td style="width: 15px;" valign="top">:</td>
+                            <td valign="top">{{$laporan->keterangan}}</td>
+                        </tr>
+                        @endif
                         @endif
                     </table>
                 </div>
@@ -353,37 +416,46 @@
                     {{csrf_field()}}
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Form Input Pengerjaan Laporan</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Form Input Penyelesaian Permasalahan</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         <div class="modal-body">
                             <table style="color: #2D3134;">
                                 <tr>
-                                    <td style="width: 200px; height: 25px;">Kategori Laporan</td>
+                                    <td style="width: 170px; height: 25px;">Kategori Laporan</td>
                                     <td style="width: 15px;">:</td>
                                     <td>{{$dtl2->kat_layanan}}</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 200px; height: 25px;">Jenis Laporan</td>
+                                    <td style="width: 170px; height: 25px;">Jenis Laporan</td>
                                     <td style="width: 15px;">:</td>
                                     <td>{{$dtl2->jenis_layanan}}</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 200px; height: 25px;" valign="top">Laporan Permasalahan</td>
+                                    <td style="width: 170px; height: 35px;" valign="top">Laporan Permasalahan</td>
                                     <td style="width: 15px;" valign="top">:</td>
                                     <td valign="top">{{$dtl2->det_layanan}}</td>
                                 </tr>
                             </table>
-                            <form>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label">Detail Pekerjaan:</label>
-                                    <textarea name="det_pekerjaan" class="form-control" id="message-text">{{$dtl2->det_pekerjaan}}</textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Keterangan Pekerjaan:</label>
-                                    <textarea name="ket_pekerjaan" class="form-control" id="message-text">{{$dtl2->ket_pekerjaan}}</textarea>
-                                </div>
-                            </form>
+                            <div class="form-group">
+                                <table style="width: 100%; color: #2D3134;">
+                                    <tr>
+                                        <td style="width: 50%; height:40px">Detail Pekerjaan:</td>
+                                        <td align="right" style="width: 50%; height:40px">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" value="tidak sesuai" id="status{{$dtl2->id_det}}" name="status" onchange="toggleDetailPekerjaan({{$dtl2->id_det}})"> Perbaikan Tidak Sesuai
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <textarea name="det_pekerjaan" required class="form-control" id="det_pekerjaan{{$dtl2->id_det}}" data-initial-value="{{$dtl2->det_pekerjaan}}">{{$dtl2->det_pekerjaan}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Keterangan Pekerjaan:</label>
+                                <textarea name="ket_pekerjaan" class="form-control" id="ket_pekerjaan{{$dtl2->id_det}}">{{$dtl2->ket_pekerjaan}}</textarea>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -423,6 +495,23 @@
         }
 
         return true;
+    }
+
+    function toggleDetailPekerjaan(id) {
+        var statusCheckbox = document.getElementById('status' + id);
+        var detPekerjaanTextarea = document.getElementById('det_pekerjaan' + id);
+        var ketPekerjaanTextarea = document.getElementById('ket_pekerjaan' + id);
+
+        if (statusCheckbox.checked) {
+            detPekerjaanTextarea.value = "Perbaikan tidak sesuai";
+            detPekerjaanTextarea.disabled = true;
+            ketPekerjaanTextarea.required = true;
+        } else {
+            var initialValue = detPekerjaanTextarea.getAttribute('data-initial-value');
+            detPekerjaanTextarea.value = initialValue;
+            detPekerjaanTextarea.disabled = false;
+            ketPekerjaanTextarea.required = false;
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {

@@ -39,7 +39,7 @@
                                 <span class="badge badge-primary">Open</span>
                                 @elseif($laporan->status_terakhir == 'Diproses')
                                 <span class="badge badge-info">Process</span>
-                                @elseif($laporan->status_terakhir == 'CheckedU')
+                                @elseif($laporan->status_terakhir == 'CheckedU' or $laporan->status_terakhir == 'CheckLapU')
                                 <span class="badge badge-warning">User Check</span>
                                 @elseif($laporan->status_terakhir == 'reqAddTime')
                                 <span class="badge badge-warning" data-toggle="tooltip" data-placement="right" title="Persetujuan tambah waktu">User Check</span>
@@ -189,7 +189,40 @@
             <?php $no++ ?>
             <div class="card">
                 <div class="card-body">
-                    <b>Laporan {{$no}}</b><br><br>
+                    <!-- {{$dtl->id}} -->
+                    <div class="d-flex">
+                        <div class="mr-auto p-2">
+                            <table>
+                                <tr>
+                                    <td style="width: 143px; color: #2D3134 ;"><b>Permasalahan {{$no}}</b></td>
+                                    <td style="color: red;">
+                                        @if($dtl->acc_status == 'waiting')
+                                        | Laporan Ditemukan Tidak Sesuai
+                                        @elseif($dtl->acc_status == 'no')
+                                        | Pengajuan Hapus Laporan Ditolak
+                                        @endif
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="p-2">
+                            @if($dtl->acc_status == 'waiting')
+                            <form action="{{route('laptidaksesuai',$dtl->id)}}" method="post">
+                                {{csrf_field()}}
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" type="submit" name="action" value="accept"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModalHapusLap{{$dtl->id}}" data-whatever="@getbootstrap"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                            @endif
+                        </div>
+                    </div>
                     <table style="color: #2D3134;">
                         <tr>
                             <td style="width: 150px; height: 25px;">Kategori Laporan</td>
@@ -208,7 +241,12 @@
                         </tr>
                         @if($dtl->det_pekerjaan != null && $dtl->ket_pekerjaan != null)
                         <tr>
-                            <td style="width: 150px; height: 25px;"><b>Teknisi IT</b></td>
+                            <td style="width: 150px; height: 25px;">
+                                @if($dtl->acc_status == 'waiting')
+                                <span style="color: #DD0B2E;">* </span>
+                                @endif
+                                <b>Teknisi IT</b>
+                            </td>
                             <td style="width: 15px;"></td>
                             <td></td>
                         </tr>
@@ -228,6 +266,31 @@
             </div>
             @endforeach
         </div>
+
+        <!-- ========= MODAL HAPUS LAPORAN ALASAN PENOLAKAN ========= -->
+        @foreach($detlaporan as $dtl2)
+        <div class="modal fade" id="exampleModalHapusLap{{$dtl2->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="{{route('laptidaksesuai',$dtl2->id)}}" method="post">
+                    {{csrf_field()}}
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <!-- {{$dtl2->id}} -->
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Alasan Penolakan:</label>
+                                <textarea name="keterangan" style="height: 100px;" class="form-control" placeholder="Masukkan Keterangan"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" name="action" value="reject" class="btn btn-primary">Kirim</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endforeach
+        <!-- ========= END MODAL HAPUS LAPORAN ALASAN PENOLAKAN ========= -->
     </div>
 </div>
 @endsection
