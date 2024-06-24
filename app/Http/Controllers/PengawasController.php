@@ -19,6 +19,42 @@ class PengawasController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function regist (Request $request)
+    {
+        $pass = bcrypt($request->password);
+        $ttd = $request->ttd;
+
+        $existingUser = Pengawas::where('email', $request->email)->first();
+        if ($existingUser) {
+            return back()->withInput()->withErrors(['error' => 'Gunakan Email yang Lain']);
+        }
+
+        $pengawas = Pengawas::create([
+            'nama'      => $request->nama,
+            'nipp'      => $request->nipp,
+            'jabatan'   => $request->jabatan,
+            'email'     => $request->email,
+            'password'  => $pass,
+        ]);
+
+        $id_pengawas = $pengawas->id;
+
+        $nama_file_ttd = $id_pengawas . "_" . time() . "_" . $ttd->getClientOriginalName();
+        $ttd->move(storage_path() . '/app/public/img/pengawas', $nama_file_ttd);
+
+        DB::table('pengawas')
+        ->where('id', $id_pengawas)
+            ->update([
+                'ttd'  => $nama_file_ttd
+            ]);
+
+        $msg = 'Akun Berhasil Dibuat';
+        Session::flash('success', $msg);
+
+        // dd($nama_file_ttd);
+        return view('login');
+    }
+
     public function profile ()
     {
         $dt = DB::table('pengawas')

@@ -27,7 +27,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6 col-xl-5">
+        <div class="col-lg-6 col-xl-6">
             <div class="card">
                 @if(Session::has('success'))
                 <div class="toastr-trigger" data-type="success" data-message="Waktu Tambahan di Reset" data-position-class="Berhasil"></div>
@@ -41,7 +41,7 @@
                 <div class="card-body">
                     <table style="color: #2D3134;">
                         <tr>
-                            <td style="width: 150px; height: 25px;">Status</td>
+                            <td style="width: 136px; height: 25px;">Status</td>
                             <td style="width: 15px;">:</td>
                             <td>
                                 @if($laporan->status_terakhir == 'Pengajuan')
@@ -60,34 +60,34 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 150px; height: 25px;">Nama Pelapor</td>
+                            <td style="width: 136px; height: 25px;">Nama Pelapor</td>
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->nama_pelapor}}</td>
                         </tr>
                         <tr>
-                            <td style="width: 150px; height: 25px;">Jabatan Pelapor</td>
+                            <td style="width: 136px; height: 25px;">Jabatan Pelapor</td>
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->jabatan_pelapor}}</td>
                         </tr>
                         <tr>
-                            <td style="width: 150px; height: 25px;">Tanggal Pelaporan</td>
+                            <td style="width: 136px; height: 25px;">Tanggal Pelaporan</td>
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->tgl_masuk}}</td>
                         </tr>
                         @if($laporan->tgl_selesai != null)
                         <tr>
-                            <td style="width: 150px; height: 25px;">Tanggal Selesai</td>
+                            <td style="width: 136px; height: 25px;">Tanggal Selesai</td>
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->tgl_selesai}}</td>
                         </tr>
                         @endif
                         <tr>
-                            <td style="width: 150px; height: 25px;">No Inventaris Aset</td>
+                            <td style="width: 136px; height: 25px;">No Inventaris Aset</td>
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->no_inv_aset}}</td>
                         </tr>
                         <tr valign="top">
-                            <td style="width: 150px; height: 25px;">Periode Pengerjaan</td>
+                            <td style="width: 136px; height: 25px;">Periode Pengerjaan</td>
                             <td style="width: 15px;">:</td>
                             <td>{{$laporan->tgl_awal_pengerjaan}}
                                 <div class="garis_verikal"></div>
@@ -107,15 +107,19 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 150px; height: 25px;" valign='top'>Waktu Tambahan</td>
+                            <td style="width: 136px; height: 25px;" valign='top'>Waktu Tambahan</td>
                             <td style="width: 15px;" valign='top'>:</td>
                             @if($laporan->waktu_tambahan != null)
                             <td valign='top'>{{$laporan->waktu_tambahan}} hari</td>
                             @elseif($laporan->waktu_tambahan_peng != null)
                             <td valign='top'>{{$laporan->waktu_tambahan_peng}} hari <span style="color: #DD0B2E;">(pengajuan)</span></td>
-                            @elseif($laporan->waktu_tambahan_peng == 0)
+                            @elseif($laporan->waktu_tambahan_peng == 0 && $laporan->status_terakhir != 'Selesai')
                             <td valign='top'>
                                 {{$laporan->keterangan}}
+                            </td>
+                            @else
+                            <td>
+                                -
                             </td>
                             @endif
                         </tr>
@@ -124,45 +128,46 @@
                             <td></td>
                         </tr>
                         @endif
-                    </table> <br>
-                    <table>
-                        <tr>
-                            @if($laporan->status_terakhir != 'Selesai' && $laporan->status_terakhir != 'Manager')
-                            @if($laporan->status_terakhir == 'Pengajuan')
-                            <td>
-                                <form action="{{route('proses-laporan',$laporan->id)}}" method="post">
-                                    {{csrf_field()}}
-                                    <button class="btn btn-primary" type="submit" name="action" value="process">Proses</button>
-                                    <!-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{$laporan->id}}" data-whatever="@getbootstrap">Tolak</button> -->
-                                </form>
-                            </td>
-                            @endif
-
-                            @if($laporan->waktu_tambahan_peng == null && $laporan->status_terakhir != 'Pengajuan' && $laporan->status_terakhir != 'CheckedU' && $laporan->status_terakhir != 'reqAddTime')
-
-                            @if(strtotime($laporan->deadline) > strtotime(now()) && $laporan->waktu_tambahan != null)
-                            <form action="{{route('reset-waktu',$laporan->id)}}" method="post">
-                                {{csrf_field()}}
-                                <td style="width: 100px;">
-                                    <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title="Batalkan Waktu Tambahan" onclick="confirm('Apakah yakin mereset tambahan waktu?')"><i class="fa fa-clock-o" aria-hidden="true" onclick="confirm('Apakah anda yakin akan reset waktu?')"></i> Reset</button>
-                                </td>
-                            </form>
-                            @endif
-                            <td style="width: 100px;">
-                                <button type="submit" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal1{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i> Waktu</button>
-                            </td>
-                            <td>
-                                @if($count < 0) <!-- <button class="btn btn-success" disabled type="submit" data-toggle="tooltip" data-placement="bottom" title="Isikan Detail dan Keterangan Pekerjaan dahulu"><i class="fa fa-check" aria-hidden="true"></i> Laporan</button> -->
-                                    <button class="btn btn-success" type="submit" data-toggle="modal" data-target="#exampleModalSelesai{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-check" aria-hidden="true"></i>Laporan</button>
-                                    @endif
-                            </td>
-                            <td>
-                                <button class="btn btn-secondary" type="submit" data-toggle="modal" data-target="#exampleModalLaporan{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i> Laporan</button>
-                            </td>
-                            @endif
-                            @endif
-                        </tr>
                     </table>
+                    <br>
+
+                    <!-- 1 -->
+                    @if($laporan->status_terakhir != 'Selesai' && $laporan->status_terakhir != 'Manager')
+                    <!-- 2 -->
+                    @if($laporan->status_terakhir == 'Pengajuan')
+                    <button class="btn btn-primary" type="submit" name="action" value="process">Proses</button>
+                    @endif
+                    <!-- end 2 -->
+                    <!-- 3 -->
+                    @if($laporan->waktu_tambahan_peng == null && $laporan->status_terakhir != 'Pengajuan' && $laporan->status_terakhir != 'CheckedU' && $laporan->status_terakhir != 'reqAddTime')
+                    <div class="button-group">
+                        <div class="btn-toolbar">
+                            <div class="btn-group mr-2 mb-2">
+                                <button type="button" class="btn btn-secondary">Waktu</button>
+                                <button type="submit" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal1{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                <!-- 4 -->
+                                @if(strtotime($laporan->deadline) > strtotime(now()) && $laporan->waktu_tambahan != null)
+                                <form action="{{route('reset-waktu',$laporan->id)}}" method="post">
+                                    {{csrf_field()}}
+                                    <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title="Reset Waktu Tambahan" onclick="confirm('Apakah yakin mereset tambahan waktu?')"><i class="fa fa-refresh" aria-hidden="true" onclick="confirm('Apakah anda yakin akan reset waktu?')"></i></button>
+                                </form>
+                                @endif
+                                <!-- end 4 -->
+                            </div>
+                            <div class="btn-group mr-2 mb-2">
+                                <button type="button" class="btn btn-secondary">Laporan</button>
+                                <button class="btn btn-secondary" type="submit" data-toggle="modal" data-target="#exampleModalLaporan{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                @if($count >= 0)
+                                <button class="btn btn-secondary" type="submit" data-toggle="modal" data-target="#exampleModalSelesai{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                    <!-- end 3 -->
+                    @endif
+                    <!-- end 1 -->
+
                     <!-- ========= MODAL TAMBAH LAPORAN ========= -->
                     <div class="modal fade" id="exampleModalLaporan{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -215,9 +220,9 @@
                             </form>
                         </div>
                     </div>
-                    <!-- ========= END MODAL TAMBAH LAPORAN ========= -->
+                    <!-- ========= END MODAL TAMBAH LAPORASELESAIN ========= -->
 
-                    <!-- ========= MODAL SELESAI ========= -->
+                    <!-- ========= MODAL  ========= -->
                     <div class="modal fade" id="exampleModalSelesai{{$laporan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <form action="{{route('laporan-selesai-it',$laporan->id)}}" method="POST">
@@ -266,6 +271,7 @@
                         </div>
                     </div>
                     <!-- ========= END MODAL ALASAN PENOLAKAN ========= -->
+
                 </div>
             </div>
         </div>
@@ -305,7 +311,7 @@
         <!-- ========= END MODAL PENAMBAHAN WAKTU ========= -->
 
         <!-- ========= CARD DETAIL LAPORAN ========= -->
-        <div class="col-lg-6 col-xl-7">
+        <div class="col-lg-6 col-xl-6">
             <?php $no = 0; ?>
             @foreach($detlaporan as $dtl)
             <?php $no++ ?>

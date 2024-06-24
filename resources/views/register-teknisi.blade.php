@@ -37,18 +37,37 @@
                             <div class="card-body pt-5">
                                 <div class="text-center" href="index.html">
                                     <!-- <img class="text-center" src="{{asset('storage/img/kai.png')}}" width="140" height="60" /> -->
-                                    <h3>PENDAFTARAN</h3>
-                                    <p>Mendaftar sebagai :</p>
+                                    <h3>PENDAFTARAN TEKNISI</h3>
                                 </div>
                                 @if ($errors->any())
                                 @foreach ($errors->all() as $error)
                                 <div class="toastr-trigger" data-type="error" data-message="{{ $error }}" data-position-class="Email Sudah Terdaftar Sebelumnya!"></div>
                                 @endforeach
                                 @endif
-                                <a href="{{url('/register/pelapor')}}"><button type="button" class="btn mb-1 btn-outline-primary btn-lg" style="width: 100%;">Pelapor</button></a>
-                                <a href="{{url('/register/teknisi')}}"><button type="button" class="btn mb-1 btn-outline-primary btn-lg" style="width: 100%;">Teknisi</button></a>
-                                <a href="{{url('/register/pengawas')}}"><button type="button" class="btn mb-1 btn-outline-primary btn-lg" style="width: 100%;">Pengawas</button></a>
 
+                                <form class="mt-8 mb-8 login-input" action="{{route('regist-teknisi')}}" method="post" enctype="multipart/form-data">
+                                    {{csrf_field()}}
+                                    <div class="form-group">
+                                        <input type="text" required class="form-control input-flat" value="{{ old('nama') }}" name="nama" placeholder="Nama" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" required class="form-control input-flat" value="{{ old('nipp') }}" name="nipp" placeholder="NIPP" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" required class="form-control input-flat" value="{{ old('jabatan') }}" name="jabatan" placeholder="Jabatan" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" required class="form-control" value="{{ old('email') }}" name="email" placeholder="Email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" required class="form-control" value="{{ old('password') }}" name="password" placeholder="Password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Upload Gambar Tanda Tangan</label>
+                                        <input type="file" class="form-control" value="{{ old('ttd') }}" name="ttd" placeholder="Upload TTD" required>
+                                    </div>
+                                    <button class="btn login-form__btn submit w-100">Daftar</button>
+                                </form>
                                 <p class="mt-5 login-form__footer">Sudah punya akun? <a href="/" class="text-primary">Masuk </a> sekarang</p>
                                 </p>
                             </div>

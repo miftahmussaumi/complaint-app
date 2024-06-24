@@ -104,7 +104,7 @@
                                         <td style="width: 90px; margin-right: 100px;" rowspan="2" valign=top align="right">
                                             @if($dthist->status_laporan == 'Pengajuan')
                                             <span class="badge badge-primary">Open</span>
-                                            @elseif($dthist->status_laporan == 'Diproses')
+                                            @elseif($dthist->status_laporan == 'Diproses' or $dthist->status_laporan == 'reqAddTime' or $dthist->status_laporan == 'CheckLapU' )
                                             <span class="badge badge-info">Process</span>
                                             @elseif($dthist->status_laporan == 'Selesai')
                                             <span class="badge badge-success">Closed</span>
@@ -114,8 +114,6 @@
                                             <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
                                             @elseif($dthist->status_laporan == 'CheckedU')
                                             <span class="badge badge-warning">User Checking</span>
-                                            @elseif($dthist->status_laporan == 'reqAddTime')
-                                            <span class="badge badge-info">Process</span>
                                             @endif
                                         </td>
                                         <td style="width: 10px;"></td>

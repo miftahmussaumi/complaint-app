@@ -124,7 +124,7 @@ class PelaporController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function regist(Request $request)
     {
         $pass = bcrypt($request->password);
         $ttd = $request->ttd;

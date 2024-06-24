@@ -5,6 +5,7 @@ use App\Models\Laporan;
 use App\Models\Laporanakhir;
 use App\Models\Laporanhist;
 use App\Models\DetLaporan;
+use App\Models\Teknisi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,42 @@ use Illuminate\Support\Facades\Session;
 
 class TeknisiController extends Controller
 {
+    public function regist(Request $request)
+    {
+        $pass = bcrypt($request->password);
+        $ttd = $request->ttd;
+
+        $existingUser = Teknisi::where('email', $request->email)->first();
+        if ($existingUser) {
+            return back()->withInput()->withErrors(['error' => 'Gunakan Email yang Lain']);
+        }
+
+        $teknisi = Teknisi::create([
+            'nama'      => $request->nama,
+            'nipp'      => $request->nipp,
+            'email'     => $request->email,
+            'password'  => $pass,
+            'jabatan'   => $request->jabatan,
+        ]);
+
+        $id_teknisi = $teknisi->id;
+
+        $nama_file_ttd = $id_teknisi . "_" . time() . "_" . $ttd->getClientOriginalName();
+        $ttd->move(storage_path() . '/app/public/img/teknisi', $nama_file_ttd);
+
+        DB::table('teknisi')
+        ->where('id', $id_teknisi)
+            ->update([
+                'ttd'  => $nama_file_ttd
+            ]);
+
+        $msg = 'Akun Berhasil Dibuat';
+        Session::flash('success', $msg);
+
+        // dd($nama_file_ttd);
+        return view('login');
+    }
+
     public function profile()
     {
         $dt = DB::table('teknisi')
@@ -55,8 +92,8 @@ class TeknisiController extends Controller
                     'ttd'  => $nama_file_ttd
                 ]);
 
-            // $old_ttd = $request->ttd_old;
-            // unlink(storage_path('app/public/img/teknisi/' . $old_ttd));
+            $old_ttd = $request->ttd_old;
+            unlink(storage_path('app/public/img/teknisi/' . $old_ttd));
         }
 
         // dd($ttd, $filettd);
@@ -252,7 +289,7 @@ class TeknisiController extends Controller
         ->whereNull('ket_pekerjaan')
         ->count();
 
-        // dd($detlaporan);
+        // dd($count);
 
         return view('teknisi.comp-detail-it', compact('laporan', 'detlaporan','count'));
         

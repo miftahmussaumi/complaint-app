@@ -28,7 +28,19 @@ Route::get('/', function () {
 Route::get('/register', function () {
     return view('register');
 });
-Route::post('/regist-pelapor', [PelaporController::class, 'store'])->name('regist-pelapor');
+Route::get('/register/pelapor', function () {
+    return view('register-pelapor');
+});
+Route::get('/register/pengawas', function () {
+    return view('register-pengawas');
+});
+Route::get('/register/teknisi', function () {
+    return view('register-teknisi');
+});
+Route::post('/regist-pelapor', [PelaporController::class, 'regist'])->name('regist-pelapor');
+Route::post('/regist-teknisi', [TeknisiController::class, 'regist'])->name('regist-teknisi');
+Route::post('/regist-pengawas', [PengawasController::class, 'regist'])->name('regist-pengawas');
+
 Route::post('/postlogin', [LoginController::class, 'postlogin'])->name('postlogin');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
