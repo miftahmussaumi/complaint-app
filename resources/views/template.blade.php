@@ -289,17 +289,17 @@
                     <!-- <li class="nav-label">Dashboard</li> -->
                     @if (Str::length(Auth::guard('pelapor')->user()) > 0)
                     <li>
-                        <a href="/profile-pelapor">
+                        <a href="{{url('profile-pelapor')}}">
                             <i class="fa fa-user"></i><span class="nav-text">Profile</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/dashboard-user">
+                        <a href="{{url('dashboard-user')}}">
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/comp">
+                        <a href="{{url('comp')}}">
                             <i class="fa fa-desktop"></i><span class="nav-text">Layanan</span>
                         </a>
                     </li>
@@ -310,17 +310,17 @@
                     </li>
                     @elseif (Str::length(Auth::guard('admin')->user()) > 0)
                     <li>
-                        <a href="/dashboard-admin">
+                        <a href="{{url('dashboard-admin')}}">
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/list-akun-admin">
+                        <a href="{{url('list-akun-admin')}}">
                             <i class="fa fa-users"></i><span class="nav-text">Pengguna</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/laporan-admin">
+                        <a href="{{url('laporan-admin')}}">
                             <i class="fa fa-desktop"></i><span class="nav-text">Laporan Masuk</span>
                         </a>
                     </li>
@@ -330,23 +330,23 @@
                         </a>
                     </li> -->
                     <li>
-                        <a href="/history-admin">
+                        <a href="{{url('history-admin')}}">
                             <i class="fa fa-history"></i><span class=" nav-text">History</span>
                         </a>
                     </li>
                     @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
                     <li>
-                        <a href="/profile-teknisi">
+                        <a href="{{url('profile-teknisi')}}">
                             <i class="fa fa-user"></i><span class="nav-text">Profile</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/layanan-it">
+                        <a href="{{url('layanan-it')}}">
                             <i class="fa fa-download"></i><span class="nav-text">Pengajuan Layanan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/it">
+                        <a href="{{url('it')}}">
                             <i class=" fa fa-folder-open"></i><span class="nav-text">Proses Layanan</span>
                         </a>
                     </li>
@@ -357,23 +357,23 @@
                     </li>
                     @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
                     <li>
-                        <a href="/profile-pengawas">
+                        <a href="{{url('profile-pengawas')}}">
                             <i class="fa fa-user"></i><span class="nav-text">Profile</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/list-akun">
+                        <a href="{{url('list-akun')}}">
                             <i class="fa fa-users"></i><span class="nav-text">Pengguna</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/list-laporan">
+                        <a href="{{url('list-laporan')}}">
                             <i class="fa fa-folder-o"></i><span class="nav-text">Laporan</span>
                         </a>
                     </li>
                     @endif
                     <li>
-                        <a href="/logout">
+                        <a href="{{url('logout')}}">
                             <i class="fa fa-sign-out"></i><span class="nav-text">Logout</span>
                         </a>
                     </li>

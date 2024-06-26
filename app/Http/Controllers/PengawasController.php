@@ -40,9 +40,9 @@ class PengawasController extends Controller
         $id_pengawas = $pengawas->id;
 
         $nama_file_ttd = $id_pengawas . "_" . time() . "_" . $ttd->getClientOriginalName();
-        $ttd->move(storage_path() . '/app/public/img/pengawas', $nama_file_ttd);
+        $ttd->move(storage_path() . '/app/public/img/teknisi', $nama_file_ttd);
 
-        DB::table('pengawas')
+        DB::table('teknisi')
         ->where('id', $id_pengawas)
             ->update([
                 'ttd'  => $nama_file_ttd
@@ -252,7 +252,7 @@ class PengawasController extends Controller
         $laporan = $lap_no_ref . "_" . $tgl . "_" . $bisnis_area . ".pdf";
 
         $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap', 'tgl_awal_pengerjaan', 'tgl_akhir_pengerjaan', 'today'))
-        ->setPaper('legal', 'portrait')
+        ->setPaper('a4', 'portrait')
         ->set_option('isPhpEnabled', true)
         ->output();
 
