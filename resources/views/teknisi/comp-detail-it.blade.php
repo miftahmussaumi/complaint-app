@@ -335,6 +335,8 @@
                                         | Permasalahan akan Terhapus
                                         @elseif($dtl->acc_status == 'no')
                                         | Pengajuan Hapus Laporan Ditolak
+                                        @elseif($dtl->acc_status == 'yes')
+                                        | Tidak Sesuai Perbaikan
                                         @endif
                                     </td>
                                 </tr>
@@ -344,7 +346,7 @@
                         <div class="p-2 bd-highlight">
                             <table>
                                 <tr>
-                                    @if($dtl->acc_status != 'waiting')
+                                    @if($dtl->acc_status != 'yes')
                                     <td style="width: 20px;">
                                         <i style="color: #3167D5; cursor: pointer;" type="button" data-toggle="modal" data-target="#exampleModalP{{$dtl->id_det}}" data-whatever="@getbootstrap" class="fa fa-pencil-square-o"></i>
                                     </td>

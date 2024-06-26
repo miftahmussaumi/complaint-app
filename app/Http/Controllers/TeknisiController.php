@@ -281,10 +281,10 @@ class TeknisiController extends Controller
             'detlaporan.id_teknisi','detlaporan.acc_status'
         )
         ->where('detlaporan.id_laporan', '=', $id)
-        ->where(function ($query) {
-            $query->whereNull('detlaporan.status')
-                ->orWhere('detlaporan.acc_status', '!=', 'yes');
-        })
+        // ->where(function ($query) {
+        //     $query->whereNull('detlaporan.status')
+        //         ->orWhere('detlaporan.acc_status', '!=', 'yes');
+        // })
         ->get();
 
         $count = DetLaporan::where('id_laporan', $id)
