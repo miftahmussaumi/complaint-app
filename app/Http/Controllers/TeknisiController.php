@@ -281,7 +281,8 @@ class TeknisiController extends Controller
             'detlaporan.id_teknisi','detlaporan.acc_status'
         )
         ->where('detlaporan.id_laporan', '=', $id)
-        ->whereNull('acc_status')
+        ->whereNull('detlaporan.status')
+        ->orWhere('acc_status','!=','yes')
         ->get();
 
         $count = DetLaporan::where('id_laporan', $id)
