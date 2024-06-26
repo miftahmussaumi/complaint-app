@@ -50,7 +50,7 @@
                                 <span class="badge badge-info">Process</span>
                                 @elseif($laporan->status_terakhir == 'CheckedU')
                                 <span class="badge badge-warning">User Check</span>
-                                @elseif($laporan->status_terakhir == 'reqAddTime')
+                                @elseif($laporan->status_terakhir == 'reqAddTime' or $laporan->status_terakhir == 'CheckLapU')
                                 <span class="badge badge-warning" data-toggle="tooltip" data-placement="right" title="Persetujuan tambah waktu">User Check</span>
                                 @elseif($laporan->status_terakhir == 'Selesai')
                                 <span class="badge badge-success">Closed</span>

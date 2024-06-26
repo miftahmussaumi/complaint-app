@@ -281,8 +281,10 @@ class TeknisiController extends Controller
             'detlaporan.id_teknisi','detlaporan.acc_status'
         )
         ->where('detlaporan.id_laporan', '=', $id)
-        ->whereNull('detlaporan.status')
-        ->orWhere('acc_status','!=','yes')
+        ->where(function ($query) {
+            $query->whereNull('detlaporan.status')
+                ->orWhere('detlaporan.acc_status', '!=', 'yes');
+        })
         ->get();
 
         $count = DetLaporan::where('id_laporan', $id)
@@ -290,7 +292,7 @@ class TeknisiController extends Controller
         ->whereNull('ket_pekerjaan')
         ->count();
 
-        // dd($count);
+        // dd($detlaporan);
 
         return view('teknisi.comp-detail-it', compact('laporan', 'detlaporan','count'));
         
@@ -349,6 +351,7 @@ class TeknisiController extends Controller
         $existingEntry = DB::table('detlaporan')
         ->where('kat_layanan', $kat_layanan)
         ->where('jenis_layanan', $jenis_layanan)
+        ->where('acc_status','!=','yes')
         ->exists();
 
         if ($existingEntry) {
