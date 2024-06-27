@@ -13,6 +13,6 @@ class DetLaporan extends Model
 
     protected $fillable = [
         'id', 'id_laporan','id_teknisi','kat_layanan', 'jenis_layanan', 'det_layanan', 'status','acc_status',
-        'foto', 'det_pekerjaan', 'ket_perkejaan'
+        'foto', 'det_pekerjaan', 'ket_pekerjaan'
     ]; 
 }

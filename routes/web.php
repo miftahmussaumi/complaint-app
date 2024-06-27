@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/send-manager', [AdminController::class, 'manager']);
     Route::match(['get', 'post'],'/history-admin', [AdminController::class, 'history'])->name('history-admin');
     Route::get('/list-akun-admin', [AdminController::class, 'akun']);
+    Route::get('/persetujuan-akun-admin', [AdminController::class, 'listaccakun']);
     Route::post('/acc-akun/{id}', [AdminController::class, 'accakun'])->name('acc-akun');
     // Route::get('/edit-pelapor/{id}', [AdminController::class, 'pelapor']);
     Route::post('/edit-pelapor-save/{id}', [AdminController::class, 'editpelapor'])->name('edit-pelapor-save');

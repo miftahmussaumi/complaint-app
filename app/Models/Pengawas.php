@@ -13,7 +13,7 @@ class Pengawas extends Authenticatable
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id', 'nama', 'nipp', 'email', 'password','ttd'
+        'id', 'nama', 'nipp', 'email', 'password','ttd','status','jabatan'
     ];
 
     protected $hidden = [

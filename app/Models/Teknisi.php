@@ -14,7 +14,7 @@ class Teknisi extends Authenticatable
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id', 'nama', 'jabatan', 'nipp', 'email', 'password', 'ttd', 'foto'
+        'id', 'nama', 'jabatan', 'nipp', 'email', 'password', 'ttd', 'foto','status'
     ];
 
     protected $hidden = [

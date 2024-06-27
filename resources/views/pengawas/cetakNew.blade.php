@@ -7,24 +7,22 @@
     <title>Document</title>
     <style>
         @page {
-            margin: 150px 50px 70px 50px;
+            margin: 150px 50px 50px 50px;
             /* Sesuaikan margin atas agar header tidak tumpang tindih dengan konten */
         }
 
         body {
             font-family: Arial, sans-serif;
-            font-size: 10px;
-            margin: 0;
-            padding: 0;
+            font-size: 13px;
         }
 
         header {
             position: fixed;
-            top: -130px;
+            top: -100px;
             /* Sesuaikan agar berada di margin atas */
             left: 0;
             right: 0;
-            height: 100px;
+            height: 50px;
             /* Sesuaikan tinggi header */
         }
 
@@ -41,10 +39,6 @@
 
         .page-number:before {
             content: counter(page);
-        }
-
-        .total-pages:before {
-            content: counter(pages);
         }
 
         .table1 {
@@ -97,8 +91,7 @@
             </tr>
             <tr>
                 <td>Halaman</td>
-                <td>
-                </td>
+                <td class="page-number"></td>
             </tr>
         </table>
     </header>
@@ -456,7 +449,7 @@
             </div>
         </div>
     </main>
-    
+
 </body>
 
 </html>

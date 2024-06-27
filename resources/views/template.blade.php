@@ -320,6 +320,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{url('persetujuan-akun-admin')}}">
+                            <i class="fa fa-check-square-o"></i><span class="nav-text">Persetujuan Akun</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{url('laporan-admin')}}">
                             <i class="fa fa-desktop"></i><span class="nav-text">Laporan Masuk</span>
                         </a>

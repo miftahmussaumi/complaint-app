@@ -35,6 +35,7 @@ class PengawasController extends Controller
             'jabatan'   => $request->jabatan,
             'email'     => $request->email,
             'password'  => $pass,
+            'status'    => 0
         ]);
 
         $id_pengawas = $pengawas->id;
@@ -260,6 +261,8 @@ class PengawasController extends Controller
             fn () => print($pdf),
             $laporan
         );
+
+        // return view('pengawas.cetakNew',compact('lap', 'detlap', 'tgl_awal_pengerjaan', 'tgl_akhir_pengerjaan', 'today'));
     }
 
 

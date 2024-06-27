@@ -47,7 +47,7 @@
                                     @elseif(Session::has('error'))
                                     <div class="toastr-trigger" data-type="error" data-message="Error" data-position-class="{{ Session::get('error') }}"></div>
                                     @elseif(Session::has('warning'))
-                                    <div class="toastr-trigger" data-type="warning" data-message="Silahkan hubungi Manajer" data-position-class="{{ Session::get('warning') }}"></div>
+                                    <div class="toastr-trigger" data-type="warning" data-message="Silahkan Hubungi Admin" data-position-class="{{ Session::get('warning') }}"></div>
                                     @endif
 
                                     <form action="{{route('postlogin')}}" method="post" class="mt-5 mb-5 login-input">

@@ -521,6 +521,21 @@ class AdminController extends Controller
         return view('admin.akun-user', compact('pelapor', 'it', 'cacc', 'acc'));
     }
 
+    public function listaccakun()
+    {
+        $pelapor    = DB::table('pelapor')->where('status', '=', 0)->get();
+        $teknisi    = DB::table('teknisi')->where('status', '=', 0)->get();
+        $pengawas   = DB::table('pengawas')->where('status', '=', 0)->get();
+
+
+        // $action         = $request->action;
+        // $id_admin_tj    = $request->id_admin_tj;
+
+        // Session::flash('success');
+
+        return view('admin.acc-akun',compact('pelapor','teknisi','pengawas'));
+    }
+
     public function accakun(Request $request, $id)
     {
         $action         = $request->action;
@@ -536,7 +551,7 @@ class AdminController extends Controller
 
         Session::flash('success');
 
-        return redirect('list-akun-admin');
+        return back();
     }
 
     /**

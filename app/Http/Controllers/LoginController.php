@@ -22,15 +22,32 @@ class LoginController extends Controller
             if ($user->status == 1) {
                 return redirect('/profile-pelapor');
             } else {
-                $msg = 'Akun ada belum disetujui Manajer';
+                $msg = 'Akun Anda Belum Disetujui';
                 Session::flash('warning', $msg); 
                 Auth::guard('pelapor')->logout();
                 return redirect('/');
             }
             // return redirect('/profile-pelapor');
         } else if (Auth::guard('teknisi')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('/profile-teknisi');
+            $teknisi = Auth::guard('teknisi')->user();
+            if ($teknisi->status == 1) {
+                return redirect('/profile-teknisi');
+            } else {
+                $msg = 'Akun Anda Belum Disetujui';
+                Session::flash('warning', $msg);
+                Auth::guard('teknisi')->logout();
+                return redirect('/');
+            }
         } else if (Auth::guard('pengawas')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            $pengawas = Auth::guard('pengawas')->user();
+            if ($pengawas->status == 1) {
+                return redirect('/profile-pengawas');
+            } else {
+                $msg = 'Akun Anda Belum Disetujui';
+                Session::flash('warning', $msg);
+                Auth::guard('pengawas')->logout();
+                return redirect('/');
+            }
             return redirect('/profile-pengawas');
         } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect('/dashboard-admin');

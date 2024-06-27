@@ -113,11 +113,11 @@
                             <td valign='top'>{{$laporan->waktu_tambahan}} hari</td>
                             @elseif($laporan->waktu_tambahan_peng != null)
                             <td valign='top'>{{$laporan->waktu_tambahan_peng}} hari <span style="color: #DD0B2E;">(pengajuan)</span></td>
-                            @elseif($laporan->waktu_tambahan_peng == 0 && $laporan->status_terakhir != 'Selesai')
+                            @elseif($laporan->waktu_tambahan_peng == '0' && $laporan->status_terakhir != 'Selesai')
                             <td valign='top'>
                                 {{$laporan->keterangan}}
                             </td>
-                            @else
+                            @elseif($laporan->waktu_tambahan == null)
                             <td>
                                 -
                             </td>
@@ -214,7 +214,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Keterangan Pekerjaan</label>
-                                            <textarea name="det_pekerjaan" class="form-control"></textarea>
+                                            <textarea name="ket_pekerjaan" class="form-control"></textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -378,7 +378,7 @@
                             <td style="width: 15px;">:</td>
                             <td>{{$dtl->det_layanan}}</td>
                         </tr>
-                        @if($dtl->det_pekerjaan != null && $dtl->ket_pekerjaan != null)
+                        @if($dtl->det_pekerjaan != null or $dtl->ket_pekerjaan != null)
                         <tr>
                             <td style="width: 150px; height: 25px;">
                                 @if($dtl->acc_status == 'waiting')

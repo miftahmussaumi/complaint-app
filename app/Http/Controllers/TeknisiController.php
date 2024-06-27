@@ -31,6 +31,7 @@ class TeknisiController extends Controller
             'email'     => $request->email,
             'password'  => $pass,
             'jabatan'   => $request->jabatan,
+            'status'    => 0
         ]);
 
         $id_teknisi = $teknisi->id;
@@ -349,40 +350,40 @@ class TeknisiController extends Controller
         $ket_pekerjaan  = $request->ket_pekerjaan;
 
         $existingEntry = DB::table('detlaporan')
-        ->where('kat_layanan', $kat_layanan)
-        ->where('jenis_layanan', $jenis_layanan)
+        ->where('kat_layanan', $request->kat_layanan)
+        ->where('jenis_layanan', $request->jenis_layanan)
         ->where('acc_status','!=','yes')
         ->exists();
 
         if ($existingEntry) {
             Session::flash('failed'); 
         } else {
-            if ($jenis_layanan == "Lainnya") {
+            if ($request->jenis_layanan == "Lainnya") {
                 $layanan_lain = $request->layanan_lain;
                 DetLaporan::create([
                     'id_laporan'        => $id,
-                    'kat_layanan'       => $kat_layanan,
+                    'kat_layanan'       => $request->kat_layanan,
                     'jenis_layanan'     => $layanan_lain,
-                    'det_layanan'       => $det_layanan,
+                    'det_layanan'       => $request->det_layanan,
                     'det_pekerjaan'     => $det_pekerjaan,
-                    'ket_pekerjaan'     => $ket_pekerjaan,
+                    'ket_pekerjaan'     => $request->ket_pekerjaan,
                     'id_teknisi'        => Auth::guard('teknisi')->user()->id
                 ]);
             } else {
                 DetLaporan::create([
                     'id_laporan'        => $id,
-                    'kat_layanan'       => $kat_layanan,
-                    'jenis_layanan'     => $jenis_layanan,
-                    'det_layanan'       => $det_layanan,
+                    'kat_layanan'       => $request->kat_layanan,
+                    'jenis_layanan'     => $request->jenis_layanan,
+                    'det_layanan'       => $request->det_layanan,
                     'det_pekerjaan'     => $det_pekerjaan,
-                    'ket_pekerjaan'     => $ket_pekerjaan,
+                    'ket_pekerjaan'     => $request->ket_pekerjaan,
                     'id_teknisi'        => Auth::guard('teknisi')->user()->id
                 ]);
             }
         }
 
     
-        // dd($result);
+        // dd($request->all());
 
         return redirect()->back();
     }
