@@ -246,13 +246,13 @@
                                 </div>
                             </div>
                         </li> -->
-                        <li class="icons dropdown d-none d-md-flex">
+                        <li class="icons dropdown d-md-flex">
                             @if (Str::length(Auth::guard('pelapor')->user()) > 0)
-                            {{Auth::guard('pelapor')->user()->nama}}
+                            {{Auth::guard('pelapor')->user()->nama}} - Pelapor
                             @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
-                            {{Auth::guard('pengawas')->user()->nama}}
+                            {{Auth::guard('pengawas')->user()->nama}} - Pengawas
                             @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
-                            {{Auth::guard('teknisi')->user()->nama}}
+                            {{Auth::guard('teknisi')->user()->nama}} - Teknisi
                             @elseif (Str::length(Auth::guard('admin')->user()) > 0)
                             {{Auth::guard('admin')->user()->nama}}
                             @endif
@@ -269,7 +269,27 @@
                                 @elseif (Str::length(Auth::guard('admin')->user()) > 0)
                                 <img src="{{asset('quixlab/images/user/1.png')}}" height="40" width="40" alt="">
                                 @endif
-
+                            </div>
+                            <div class="drop-down dropdown-profile dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            @if (Str::length(Auth::guard('pelapor')->user()) > 0)
+                                            <a href="{{url('profile-pelapor')}}"><i class="icon-user"></i> <span>Profile</span></a>
+                                            @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
+                                            <a href="{{url('profile-pengawas')}}"><i class="icon-user"></i> <span>Profile</span></a>
+                                            @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
+                                            <a href="{{url('profile-teknisi')}}"><i class="icon-user"></i> <span>Profile</span></a>
+                                            @endif
+                                        </li>
+                                        @if (Str::length(Auth::guard('pelapor')->user()) > 0)
+                                        <li>
+                                            <a href="{{url('password')}}"><i class="icon-lock"></i> <span>Ubah Password</span></a>
+                                        </li>
+                                        @endif
+                                        <!-- <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a></li> -->
+                                    </ul>
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -289,15 +309,15 @@
                     <!-- <li class="nav-label">Dashboard</li> -->
                     @if (Str::length(Auth::guard('pelapor')->user()) > 0)
                     <li>
-                        <a href="{{url('profile-pelapor')}}">
-                            <i class="fa fa-user"></i><span class="nav-text">Profile</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="{{url('dashboard-user')}}">
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
+                    <!-- <li>
+                        <a href="{{url('profile-pelapor')}}">
+                            <i class="fa fa-user"></i><span class="nav-text">Profile</span>
+                        </a>
+                    </li> -->
                     <li>
                         <a href="{{url('comp')}}">
                             <i class="fa fa-desktop"></i><span class="nav-text">Layanan</span>
@@ -337,6 +357,11 @@
                     <li>
                         <a href="{{url('history-admin')}}">
                             <i class="fa fa-history"></i><span class=" nav-text">History</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{url('kop-surat')}}">
+                            <i class="fa fa-cog"></i><span class=" nav-text">Kop Surat</span>
                         </a>
                     </li>
                     @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)

@@ -20,7 +20,7 @@ class LoginController extends Controller
         if (Auth::guard('pelapor')->attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::guard('pelapor')->user();
             if ($user->status == 1) {
-                return redirect('/profile-pelapor');
+                return redirect('/dashboard-user');
             } else {
                 $msg = 'Akun Anda Belum Disetujui';
                 Session::flash('warning', $msg); 

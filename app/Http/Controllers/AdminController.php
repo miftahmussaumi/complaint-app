@@ -77,6 +77,37 @@ class AdminController extends Controller
         return view('admin.laporan', compact('dtLap','teknisi'));
     }
 
+    public function kop_surat ()
+    {
+        $kop = DB::table('kop_surat')->first();
+        if ($kop) {
+            $kop->bawah = strtoupper($kop->bawah);
+        }
+        // dd($kop);
+        return view('admin.kop-surat', compact('kop'));
+    }
+
+    public function update_kop_surat(Request $request, $id)
+    {
+        $gambar = $request->gambar;
+        // $tgl = Carbon::now()->format('Y-m-d-H:i:s');
+
+        $file_gambar = time() . "_" . $gambar->getClientOriginalName();
+        $gambar->move(storage_path() . '/app/public/img/kop_surat', $file_gambar);
+
+        DB::table('kop_surat')
+        ->where('id',$id)
+        ->update([
+            'atas_1'    => $request->atas_1,
+            'atas_2'    => $request->atas_2,
+            'bawah'     => $request->bawah,
+            'gambar'    => $file_gambar
+        ]);
+        
+        // dd($file_gambar);
+        return back();
+    }
+
     public function manager ()
     {
         $dtLap = DB::table('laporan')
@@ -541,9 +572,21 @@ class AdminController extends Controller
         $action         = $request->action;
         // $id_admin_tj    = $request->id_admin_tj;
 
-        if ($action == 'accept') {
+        if ($action == 'pelapor') {
             DB::table('pelapor')
             ->where('id', $id)
+                ->update([
+                    'status'       => 1
+                ]);
+        } elseif ($action == 'teknisi') {
+            DB::table('teknisi')
+            ->where('id', $id)
+                ->update([
+                    'status'       => 1
+                ]);
+        } elseif ($action == 'pengawas') {
+            DB::table('pengawas')
+                ->where('id', $id)
                 ->update([
                     'status'       => 1
                 ]);
@@ -551,6 +594,7 @@ class AdminController extends Controller
 
         Session::flash('success');
 
+        // dd($action);
         return back();
     }
 

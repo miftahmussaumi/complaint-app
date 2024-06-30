@@ -68,6 +68,8 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
 
     // ==============ROUTE UNTUK BAGIAN ADMIN============== //
     Route::get('/laporan-admin', [AdminController::class, 'index']);
+    Route::get('/kop-surat', [AdminController::class, 'kop_surat']);
+    Route::post('/update-kop-surat/{id}', [AdminController::class, 'update_kop_surat'])->name('update-kop-surat');
     Route::get('/detail-laporan-admin/{id}', [AdminController::class, 'detail']);
     Route::post('/pilih-teknisi/{id}', [AdminController::class, 'teknisi'])->name('pilih-teknisi');
     Route::post('/manager/{id}', [AdminController::class, 'sendtoManager'])->name('manager');

@@ -49,7 +49,7 @@ class PengawasController extends Controller
                 'ttd'  => $nama_file_ttd
             ]);
 
-        $msg = 'Akun Berhasil Dibuat';
+        $msg = 'Berhasil';
         Session::flash('success', $msg);
 
         // dd($nama_file_ttd);

@@ -43,7 +43,7 @@
                                     </a>
                                     
                                     @if(Session::has('success'))
-                                    <div class="toastr-trigger" data-type="success" data-message="Silahkan Login" data-position-class="{{ Session::get('success') }}"></div>
+                                    <div class="toastr-trigger" data-type="success" data-message="Akun Sudah Dibuat" data-position-class="{{ Session::get('success') }}"></div>
                                     @elseif(Session::has('error'))
                                     <div class="toastr-trigger" data-type="error" data-message="Error" data-position-class="{{ Session::get('error') }}"></div>
                                     @elseif(Session::has('warning'))

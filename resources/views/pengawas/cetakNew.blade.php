@@ -5,64 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        @page {
-            margin: 150px 50px 50px 50px;
-            /* Sesuaikan margin atas agar header tidak tumpang tindih dengan konten */
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 13px;
-        }
-
-        header {
-            position: fixed;
-            top: -100px;
-            /* Sesuaikan agar berada di margin atas */
-            left: 0;
-            right: 0;
-            height: 50px;
-            /* Sesuaikan tinggi header */
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 50px;
-            /* Sesuaikan tinggi footer */
-            text-align: center;
-            font-size: 10px;
-        }
-
-        .page-number:before {
-            content: counter(page);
-        }
-
-        .table1 {
-            border-collapse: collapse;
-            border-spacing: 10px;
-        }
-
-        .table1 th,
-        .table1 td {
-            border: 1px solid black;
-            padding: 2px;
-        }
-
-        .table2 {
-            border-collapse: collapse;
-            border-spacing: 10px;
-        }
-
-        .table2 th,
-        .table2 td {
-            border: 1px solid black;
-            padding: 2px;
-        }
-    </style>
+    
 </head>
 
 <body>

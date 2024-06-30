@@ -39,10 +39,8 @@
                                 <span class="badge badge-primary">Open</span>
                                 @elseif($laporan->status_terakhir == 'Diproses')
                                 <span class="badge badge-info">Process</span>
-                                @elseif($laporan->status_terakhir == 'CheckedU' or $laporan->status_terakhir == 'CheckLapU')
-                                <span class="badge badge-warning">User Check</span>
-                                @elseif($laporan->status_terakhir == 'reqAddTime')
-                                <span class="badge badge-warning" data-toggle="tooltip" data-placement="right" title="Persetujuan tambah waktu">User Check</span>
+                                @elseif($laporan->status_terakhir == 'CheckedU' or $laporan->status_terakhir == 'CheckLapU' or $laporan->status_terakhir == 'reqAddTime')
+                                <span class="badge badge-warning">Postponed</span>
                                 @elseif($laporan->status_terakhir == 'Selesai')
                                 <span class="badge badge-success">Closed</span>
                                 @elseif($laporan->status_terakhir == 'Manager')
