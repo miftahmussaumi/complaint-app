@@ -106,7 +106,7 @@
             <?php $no++ ?>
             <div class="card">
                 <div class="card-body">
-                    <b>Laporan {{$no}}</b><br><br>
+                    <b style="color: #2D3134 ;">Laporan {{$no}}</b><br><br>
                     <table style="color: #2D3134;">
                         <tr>
                             <td>

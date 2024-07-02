@@ -79,29 +79,36 @@ class AdminController extends Controller
 
     public function kop_surat ()
     {
-        $kop = DB::table('kop_surat')->first();
+        $kop = DB::table('kop_surat')
+        ->select([
+            'nomor', DB::raw("DATE_FORMAT(tanggal, '%d %M %Y') AS tanggal_f"),'versi','halaman','id','tanggal'
+        ])->first();
+
         if ($kop) {
-            $kop->bawah = strtoupper($kop->bawah);
+            $tanggal_f = Carbon::parse($kop->tanggal_f)->translatedFormat('d F Y');
+        } else {
+            $tanggal = null;
         }
+
         // dd($kop);
-        return view('admin.kop-surat', compact('kop'));
+        return view('admin.kop-surat', compact('kop','tanggal_f'));
     }
 
     public function update_kop_surat(Request $request, $id)
     {
-        $gambar = $request->gambar;
+        // $gambar = $request->gambar;
         // $tgl = Carbon::now()->format('Y-m-d-H:i:s');
 
-        $file_gambar = time() . "_" . $gambar->getClientOriginalName();
-        $gambar->move(storage_path() . '/app/public/img/kop_surat', $file_gambar);
+        // $file_gambar = time() . "_" . $gambar->getClientOriginalName();
+        // $gambar->move(storage_path() . '/app/public/img/kop_surat', $file_gambar);
 
         DB::table('kop_surat')
         ->where('id',$id)
         ->update([
-            'atas_1'    => $request->atas_1,
-            'atas_2'    => $request->atas_2,
-            'bawah'     => $request->bawah,
-            'gambar'    => $file_gambar
+            'nomor'     => $request->nomor,
+            'versi'     => $request->versi,
+            'tanggal'   => $request->tanggal,
+            'halaman'   => $request->halaman
         ]);
         
         // dd($file_gambar);
@@ -469,7 +476,7 @@ class AdminController extends Controller
         foreach ($data as $laporan) {
             $laporan->history = DB::table('laporanhist')
             ->where('id_laporan', $laporan->id)
-                ->orderBy('tanggal', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->select(
                     'id',
                     'id_laporan',

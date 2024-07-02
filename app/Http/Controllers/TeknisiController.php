@@ -572,7 +572,7 @@ class TeknisiController extends Controller
         foreach ($data as $laporan) {
             $laporan->history = DB::table('laporanhist')
             ->where('id_laporan', $laporan->id)
-                ->orderBy('tanggal', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->select(
                     'id',
                     'id_laporan',

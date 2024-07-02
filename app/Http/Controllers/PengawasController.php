@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pengawas;
+use App\Models\Log_cetak_laporan;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Facade\FlareClient\Stacktrace\File;
 use Illuminate\Support\Facades\Session; 
@@ -178,6 +179,7 @@ class PengawasController extends Controller
             'pengawas.ttd'
         )
         ->where('laporanhist.status_laporan','=','Selesai')
+        ->whereNull('id_pengawas')
         ->orderBy('tgl_masuk')
         ->get();
         
@@ -185,15 +187,67 @@ class PengawasController extends Controller
         return view('pengawas.laporan', compact('lap'));
     }
 
-    public function cetak($idlap)
+    public function ambil($idlap)
     {
-        Carbon::setLocale('id');
-
         DB::table('laporan')
         ->where('id', $idlap)
             ->update([
                 'id_pengawas' => Auth::guard('pengawas')->user()->id
             ]);
+
+        Session::flash('success'); 
+
+        return back();
+    }
+
+    public function laporan_cetak()
+    {
+        $lap = DB::table('laporan')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+        ->leftJoin('laporanhist', function ($join) {
+            $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+            ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+        })
+        ->leftJoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
+        ->leftJoin('pelapor', 'pelapor.id', '=', 'laporan.id_pelapor')
+        ->leftJoin('pengawas', 'pengawas.id', '=', 'laporan.id_pengawas')
+        ->select(
+            DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
+            DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
+            'laporan.no_inv_aset',
+            'laporan.waktu_tambahan',
+            'laporanhist.status_laporan as status_terakhir',
+            'laporan.id AS id',
+            'id_teknisi',
+            'lap_no_ref as no_ref',
+            'lap_bisnis_area as bisnis_area',
+            'teknisi.nama as nama_teknisi',
+            'laporan.lap_no_ref',
+            'laporan.lap_tanggal',
+            'laporan.lap_bisnis_area',
+            'laporan.lap_versi',
+            'laporan.lap_halaman',
+            'laporan.lap_nomor',
+            'pelapor.nama AS nama_pelapor',
+            'pelapor.divisi',
+            'pelapor.email',
+            'pelapor.telepon',
+            'pelapor.nipp as nipp_pelapor',
+            'pengawas.ttd'
+        )
+        ->where('laporanhist.status_laporan', '=', 'Selesai')
+        ->where('id_pengawas','=', Auth::guard('pengawas')->user()->id)
+        ->orderBy('tgl_masuk')
+        ->get();
+
+        return view('pengawas.laporan-cetak',compact('lap'));
+    }
+
+    public function cetak($idlap)
+    {
+        Carbon::setLocale('id');
 
         $detlap = DB::table('detlaporan')
         ->where('id_laporan', '=', $idlap)
@@ -235,7 +289,7 @@ class PengawasController extends Controller
         )
             ->where('laporan.id', '=', $idlap)
             ->first();
-
+            
         if ($lap) {
             $tgl_awal_pengerjaan = Carbon::parse($lap->tgl_awal_pengerjaan)->translatedFormat('d F Y');
             $tgl_akhir_pengerjaan = Carbon::parse($lap->tgl_akhir_pengerjaan)->translatedFormat('d F Y');
@@ -243,6 +297,18 @@ class PengawasController extends Controller
             $tgl_awal_pengerjaan = null;
             $tgl_akhir_pengerjaan = null;
         }
+
+        $kop = DB::table('kop_surat')
+        ->select([
+            'nomor', DB::raw("DATE_FORMAT(tanggal, '%d %M %Y') AS tanggal_f"), 'versi', 'halaman', 'id'
+        ])->first();
+
+        if ($kop) {
+            $tanggal_f = Carbon::parse($kop->tanggal_f)->translatedFormat('d F Y');
+        } else {
+            $tanggal = null;
+        }
+
         $today = Carbon::now()->locale('id')->translatedFormat('d F Y');
 
         $no_ref = $lap->no_ref;
@@ -252,11 +318,16 @@ class PengawasController extends Controller
 
         $laporan = $lap_no_ref . "_" . $tgl . "_" . $bisnis_area . ".pdf";
 
-        $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap', 'tgl_awal_pengerjaan', 'tgl_akhir_pengerjaan', 'today'))
-        ->setPaper('a4', 'portrait')
+        $pdf = Pdf::loadView('pengawas.cetakNew', compact('lap', 'detlap', 'tgl_awal_pengerjaan', 'tgl_akhir_pengerjaan', 'tanggal_f', 'kop'))
+        ->setPaper('legal', 'portrait')
         ->set_option('isPhpEnabled', true)
         ->output();
 
+        Log_cetak_laporan::create([
+            'id_laporan'    => $idlap,
+            'id_pengawas'   => Auth::guard('pengawas')->user()->id
+        ]);
+        
         return response()->streamDownload(
             fn () => print($pdf),
             $laporan

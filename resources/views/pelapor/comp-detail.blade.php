@@ -205,7 +205,7 @@
                         </div>
                         <div class="p-2">
                             @if($dtl->acc_status == 'waiting')
-                            <form action="{{route('laptidaksesuai',$dtl->id)}}" method="post">
+                            <form action="{{route('laptidaksesuai',$dtl->id)}}" method="post"> 
                                 {{csrf_field()}}
                                 <table>
                                     <tr>

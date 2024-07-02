@@ -1,9 +1,6 @@
 @extends('template')
 
 @section('content')
-@if(Session::has('success'))
-<div class="toastr-trigger" data-type="success" data-message="Laporan Dialihkan" data-position-class="Berhasil"></div>
-@endif
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -48,7 +45,7 @@
                                     </td>
                                     <td>
                                         <a href="{{url('detail-laporan',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        <a href="{{url('ambil-laporan',$data->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-hand-paper-o"></i></button></a>
+                                        <a href="{{url('cetak-laporan',$data->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
 
                                         <!-- @if($data->ttd != null)
                                         <a href="{{url('cetak-laporan',$data->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>

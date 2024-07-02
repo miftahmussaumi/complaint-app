@@ -397,9 +397,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{url('list-laporan')}}">
-                            <i class="fa fa-folder-o"></i><span class="nav-text">Laporan</span>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="fa fa-folder-o"></i> <span class="nav-text">Laporan</span>
                         </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{url('list-laporan')}}">Daftar Laporan</a></li>
+                            <li><a href="{{url('list-laporan-cetak')}}">Print Laporan</a></li>
+                        </ul>
                     </li>
                     @endif
                     <li>

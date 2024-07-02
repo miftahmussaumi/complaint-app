@@ -334,13 +334,13 @@
                                         @elseif($dtl->acc_status == 'no')
                                         | Pengajuan Hapus Laporan Ditolak
                                         @elseif($dtl->acc_status == 'yes')
-                                        | Tidak Sesuai Perbaikan
+                                        | Permasalahan Terhapus
                                         @endif
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        @if($dtl->status_terakhir != 'Selesai' && $dtl->status_terakhir != 'Manager' && $dtl->status_terakhir != 'Pengajuan')
+                        @if($dtl->status_terakhir != 'Selesai' && $dtl->status_terakhir != 'Pengajuan')
                         <div class="p-2 bd-highlight">
                             <table>
                                 <tr>
@@ -452,6 +452,7 @@
                                 <table style="width: 100%; color: #2D3134;">
                                     <tr>
                                         <td style="width: 50%; height:40px">Detail Pekerjaan:</td>
+                                        @if($dtl2->id_teknisi == null)
                                         <td align="right" style="width: 50%; height:40px">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
@@ -459,6 +460,7 @@
                                                 </label>
                                             </div>
                                         </td>
+                                        @endif
                                     </tr>
                                 </table>
                                 <textarea name="det_pekerjaan" required class="form-control" id="det_pekerjaan{{$dtl2->id_det}}" data-initial-value="{{$dtl2->det_pekerjaan}}">{{$dtl2->det_pekerjaan}}</textarea>

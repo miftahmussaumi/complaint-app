@@ -94,7 +94,7 @@
                                     </div> -->
                                     <button class="btn login-form__btn submit w-100">Daftar</button>
                                 </form>
-                                <p class="mt-5 login-form__footer">Sudah punya akun? <a href="/" class="text-primary">Masuk </a> sekarang</p>
+                                <p class="mt-5 login-form__footer">Sudah punya akun? <a href="{{url('')}}" class="text-primary">Masuk </a> sekarang</p>
                                 </p>
                             </div>
                         </div>

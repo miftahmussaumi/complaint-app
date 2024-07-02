@@ -26,56 +26,56 @@
                 <table style="width: 100%; color: black; font-size: 15px;" class="table1">
                     <tr>
                         <td rowspan="4" style="width: 25%; margin-top: 5px;" valign="center" align="center">
-                            <img src="{{asset('storage/img/kop_surat/'.$kop->gambar)}}" width="150" height="70" />
+                            <img src="{{asset('storage/img/kop_surat/kop_kai.png')}}" width="150" height="70" />
                             <!-- <i style="color: #3167D5; cursor: pointer;" valign="top" type="button" data-toggle="modal" data-target="#exampleModalP" data-whatever="@getbootstrap" class="fa fa-pencil-square-o"></i> -->
                         </td>
                         <td rowspan="2" valign="center">
-                            {{$kop->atas_1}} <br> {{$kop->atas_2}}
+                            PT Kereta Api Indonesia <br> Sistem Informasi
                         </td>
                         <td style="width: 10%;">Nomor</td>
-                        <td style="width: 25%;">......</td>
+                        <td style="width: 25%;">{{$kop->nomor}}</td>
                     </tr>
                     <tr>
                         <td>Tanggal</td>
-                        <td>......</td>
+                        <td>{{$tanggal_f}}</td>
                     </tr>
                     <tr>
                         <td rowspan="2">
-                            {{$kop->bawah}}
+                            BERITA ACARA INSTALASI DAN <br> TROUBLESHOOTING LAYANAN IT
                         </td>
                         <td>Versi</td>
-                        <td>......</td>
+                        <td>{{$kop->versi}}</td>
                     </tr>
                     <tr>
                         <td>Halaman</td>
-                        <td>......</td>
+                        <td>{{$kop->halaman}}</td>
                     </tr>
                 </table><br><br>
                 <div class="basic-form">
                     <form action="{{route('update-kop-surat',$kop->id)}}" method="post" enctype="multipart/form-data">
                         {{csrf_field()}}
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Tabel Atas Pertama</label>
+                            <label class="col-sm-2 col-form-label">Nomor</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="atas_1" value="{{$kop->atas_1}}">
+                                <input type="text" class="form-control" name="nomor" value="{{$kop->nomor}}">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Tabel Atas Kedua</label>
+                            <label class="col-sm-2 col-form-label">Tanggal</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="atas_2" value="{{$kop->atas_2}}">
+                                <input type="date" class="form-control" name="tanggal" value="{{$kop->tanggal}}">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Tabel Bawah</label>
+                            <label class="col-sm-2 col-form-label">Versi</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="bawah" value="{{$kop->bawah}}">
+                                <input type="text" class="form-control" name="versi" value="{{$kop->versi}}">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Gambar</label>
+                            <label class="col-sm-2 col-form-label">Halaman</label>
                             <div class="col-sm-10">
-                                <input type="file" class="form-control" name="gambar" accept="image/*">
+                                <input type="text" class="form-control" name="halaman" value="{{$kop->halaman}}">
                             </div>
                         </div>
                         <div class="form-group row">

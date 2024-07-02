@@ -5,7 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    
+    <style>
+        .table1 {
+            border-collapse: collapse;
+            border-spacing: 10px;
+            font-size: 15px;
+        }
+
+        .table1 th,
+        .table1 td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+
+        .table2 {
+            border-collapse: collapse;
+            border-spacing: 10px;
+        }
+
+        .table2 th,
+        .table2 td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,22 +42,22 @@
                     PT. Kereta Api Indonesia <br> Sistem Informasi
                 </td>
                 <td style="width: 10%;">Nomor</td>
-                <td style="width: 25%;">{{$lap->nomor}}</td>
+                <td style="width: 25%;">{{$kop->nomor}}</td>
             </tr>
             <tr>
                 <td>Tanggal</td>
-                <td>{{$today}}</td>
+                <td>{{$tanggal_f}}</td>
             </tr>
             <tr>
                 <td rowspan="2">
                     BERITA ACARA INSTALASI DAN <br>TROUBLESHOOTING LAYANAN IT
                 </td>
                 <td>Versi</td>
-                <td>{{$lap->versi}}</td>
+                <td>{{$kop->versi}}</td>
             </tr>
             <tr>
                 <td>Halaman</td>
-                <td class="page-number"></td>
+                <td>{{$kop->halaman}}</td>
             </tr>
         </table>
     </header>

@@ -49,7 +49,7 @@
                                 <a href="{{url('/register/teknisi')}}"><button type="button" class="btn mb-1 btn-outline-primary btn-lg" style="width: 100%;">Teknisi</button></a>
                                 <a href="{{url('/register/pengawas')}}"><button type="button" class="btn mb-1 btn-outline-primary btn-lg" style="width: 100%;">Pengawas</button></a>
 
-                                <p class="mt-5 login-form__footer">Sudah punya akun? <a href="/" class="text-primary">Masuk </a> sekarang</p>
+                                <p class="mt-5 login-form__footer">Sudah punya akun? <a href="{{url('')}}" class="text-primary">Masuk </a> sekarang</p>
                                 </p>
                             </div>
                         </div>

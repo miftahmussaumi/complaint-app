@@ -60,7 +60,7 @@
                                         </div>
                                         <button type="submit" class="btn login-form__btn submit w-100">Masuk</button>
                                     </form>
-                                    <p class="mt-5 login-form__footer">Belum punya akun? <a href="/register" class="text-primary">Daftar</a> sekarang</p>
+                                    <p class="mt-5 login-form__footer">Belum punya akun? <a href="{{url('register')}}" class="text-primary">Daftar</a> sekarang</p>
                                 </div>
                             </div>
                         </div>

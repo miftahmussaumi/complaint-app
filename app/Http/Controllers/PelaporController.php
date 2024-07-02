@@ -106,7 +106,8 @@ class PelaporController extends Controller
 
         $detlaporan = DB::table('detlaporan')
         ->where('id_laporan','=',$id)
-        ->whereNull('status')
+        ->whereNull('id_teknisi')
+        ->orWhere('acc_status','!=','yes')
         ->get();
 
         $hislap = DB::table('laporanhist')
@@ -284,15 +285,15 @@ class PelaporController extends Controller
         $lap_no_ref = sprintf('%03d', $autoIncrement) . '/' . $tanggal;
         // == END PEMBUATAN NOMOR REFERENSI ==
 
-        // == PEMBUATAN NOMOR LAPORAN ==
-        $bulan = date('m'); // Format bulan dua digit
-        $tahun = date('Y'); // Format tahun empat digit
-        $lap_nomor = "FR.SM/IT/011.005/{$bulan}-{$tahun}";
-        // == END PENBUATAN NOMOR LAPORAN ==
+        // // == PEMBUATAN NOMOR LAPORAN ==
+        // $bulan = date('m'); // Format bulan dua digit
+        // $tahun = date('Y'); // Format tahun empat digit
+        // $lap_nomor = "FR.SM/IT/011.005/{$bulan}-{$tahun}";
+        // // == END PENBUATAN NOMOR LAPORAN ==
 
-        // == PEMBUATAN VERSI ==
-        $lap_versi = "002-{$tahun}";
-        // == END PENBUATAN VERSI ==
+        // // == PEMBUATAN VERSI ==
+        // $lap_versi = "002-{$tahun}";
+        // // == END PENBUATAN VERSI ==
 
         if($action == 'accept') {
             Laporanhist::create([
@@ -301,12 +302,11 @@ class PelaporController extends Controller
                 'tanggal'           => $tgl_masuk,
                 'keterangan'        => 'Laporan telah diselesaikan dengan baik'
             ]);
+
             DB::table('laporan')
             ->where('id', $idlap)
             ->update([
-                'lap_no_ref'    => $lap_no_ref,
-                'lap_nomor'     => $lap_nomor,
-                'lap_versi'     => $lap_versi
+                'lap_no_ref'        => $lap_no_ref
             ]);
         } else if ($action == 'reject') {
             Laporanhist::create([
@@ -625,7 +625,7 @@ class PelaporController extends Controller
             $laporan->history = DB::table('laporanhist')
             ->where('id_laporan', $laporan->id)
             ->where('laporanhist.status_laporan', '!=', 'Manager') 
-                ->orderBy('tanggal', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->select(
                     'id',
                     'id_laporan',
