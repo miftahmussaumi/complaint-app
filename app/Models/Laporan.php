@@ -12,7 +12,7 @@ class Laporan extends Model
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id','id_pelapor','id_pengawas','id_admin','tgl_masuk','no_inv_aset','tgl_selesai','status_terakhir',
+        'id','id_pelapor','id_pengawas','id_admin', 'alihkan_pws','tgl_masuk','no_inv_aset','tgl_selesai','status_terakhir',
         'tgl_awal_pengerjaan','tgl_akhir_pengerjaan','waktu_tambahan', 'waktu_tambahan_peng',
     ]; 
 }

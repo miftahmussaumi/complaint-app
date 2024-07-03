@@ -19,7 +19,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Tanggal Permintaan</th>
+                                    <th>Tanggal Masuk</th>
                                     <th>Pelapor</th>
                                     <th>No Referensi</th>
                                     <th>No Inventaris</th>

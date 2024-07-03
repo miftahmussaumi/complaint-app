@@ -200,6 +200,19 @@ class PengawasController extends Controller
         return back();
     }
 
+    public function alih_laporan($idlap)
+    {
+        DB::table('laporan')
+        ->where('id', $idlap)
+            ->update([
+                'id_pengawas' => Auth::guard('pengawas')->user()->id
+            ]);
+
+        Session::flash('success');
+
+        return back();
+    }
+
     public function laporan_cetak()
     {
         $lap = DB::table('laporan')
@@ -242,7 +255,9 @@ class PengawasController extends Controller
         ->orderBy('tgl_masuk')
         ->get();
 
-        return view('pengawas.laporan-cetak',compact('lap'));
+        $pengawas = DB::table('pengawas')->get();
+
+        return view('pengawas.laporan-cetak',compact('lap','pengawas'));
     }
 
     public function cetak($idlap)

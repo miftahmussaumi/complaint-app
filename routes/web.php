@@ -109,6 +109,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/list-laporan', [PengawasController::class, 'laporan']);
     Route::get('/ambil-laporan/{idlap}', [PengawasController::class, 'ambil'])->name('ambil-laporan');
     Route::get('/list-laporan-cetak', [PengawasController::class, 'laporan_cetak'])->name('list-laporan-cetak');
+    Route::get('/alih-laporan-cetak', [PengawasController::class, 'alih_laporan'])->name('alih-laporan-cetak');
     Route::get('/cetak-laporan/{idlap}', [PengawasController::class, 'cetak'])->name('cetak-laporan');
     Route::get('/detail-laporan/{id}', [PengawasController::class, 'detail'])->name('detail-laporan');
     Route::post('/laporan-akhir/{idlap}', [LaporanakhirController::class, 'store'])->name('laporan-akhir');
