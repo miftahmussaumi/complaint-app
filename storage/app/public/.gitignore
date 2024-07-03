@@ -2,4 +2,4 @@
 !.gitignore
 /storage/*
 !/storage/app
-!/storage/app/public/img
+!/storage/app/public
