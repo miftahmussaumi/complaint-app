@@ -68,8 +68,11 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
 
     // ==============ROUTE UNTUK BAGIAN ADMIN============== //
     Route::get('/laporan-admin', [AdminController::class, 'index']);
+    Route::get('/laporan-alihkan', [AdminController::class, 'laporan_alihkan']);
+    Route::post('/acc-laporan-alihkan/{idlap}', [AdminController::class, 'acc_laporan_alihkan'])->name('acc-laporan-alihkan');
     Route::get('/kop-surat', [AdminController::class, 'kop_surat']);
     Route::post('/update-kop-surat/{id}', [AdminController::class, 'update_kop_surat'])->name('update-kop-surat');
+    Route::post('/preview-kop-surat/{id}', [AdminController::class, 'preview_kop_surat'])->name('preview-kop-surat');
     Route::get('/detail-laporan-admin/{id}', [AdminController::class, 'detail']);
     Route::post('/pilih-teknisi/{id}', [AdminController::class, 'teknisi'])->name('pilih-teknisi');
     Route::post('/manager/{id}', [AdminController::class, 'sendtoManager'])->name('manager');
@@ -82,7 +85,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     // Route::get('/edit-pelapor/{id}', [AdminController::class, 'pelapor']);
     Route::post('/edit-pelapor-save/{id}', [AdminController::class, 'editpelapor'])->name('edit-pelapor-save');
     Route::post('/edit-teknisi-save/{id}', [AdminController::class, 'editteknisi'])->name('edit-teknisi-save');
-
+    Route::post('/edit-pengawas-save/{id}', [AdminController::class, 'editpengawas'])->name('edit-pengawas-save');
 
     // ==============ROUTE UNTUK BAGIAN TEKNISI IT============== //
     Route::get('/profile-teknisi', [TeknisiController::class, 'profile']);
@@ -109,7 +112,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/list-laporan', [PengawasController::class, 'laporan']);
     Route::get('/ambil-laporan/{idlap}', [PengawasController::class, 'ambil'])->name('ambil-laporan');
     Route::get('/list-laporan-cetak', [PengawasController::class, 'laporan_cetak'])->name('list-laporan-cetak');
-    Route::get('/alih-laporan-cetak', [PengawasController::class, 'alih_laporan'])->name('alih-laporan-cetak');
+    Route::post('/alih-laporan-cetak/{idlap}', [PengawasController::class, 'alih_laporan'])->name('alih-laporan-cetak');
     Route::get('/cetak-laporan/{idlap}', [PengawasController::class, 'cetak'])->name('cetak-laporan');
     Route::get('/detail-laporan/{id}', [PengawasController::class, 'detail'])->name('detail-laporan');
     Route::post('/laporan-akhir/{idlap}', [LaporanakhirController::class, 'store'])->name('laporan-akhir');

@@ -1,6 +1,9 @@
 @extends('template')
 
 @section('content')
+@if(Session::has('success'))
+<div class="toastr-trigger" data-type="success" data-message="Penanggung Jawab Laporan Dialihkan" data-position-class="Berhasil"></div>
+@endif
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -18,10 +21,10 @@
                                     <th>No</th>
                                     <th>Tanggal Masuk</th>
                                     <th>Pelapor</th>
-                                    <th>No Referensi</th>
                                     <th>No Inventaris</th>
                                     <th>Tanggal Selesai</th>
                                     <th>Teknisi</th>
+                                    <th>Dialihkan</th>
                                     <th>#</th>
                                 </tr>
                             </thead>
@@ -33,7 +36,6 @@
                                     <td>{{ $no }}</td>
                                     <td>{{ $data->tgl_masuk }}</td>
                                     <td>{{ $data->nama_pelapor }}</td>
-                                    <td>{{ $data->lap_no_ref }}</td>
                                     <td>{{ $data->no_inv_aset }}</td>
                                     <td>{{ $data->tgl_selesai }}</td>
                                     <td>
@@ -44,15 +46,17 @@
                                         @endif
                                     </td>
                                     <td>
+                                        @if($data->alihkan_pws == null)
+                                        -
+                                        @else
+                                        {{ $data->nama_pws }}
+                                        @endif
+                                    </td>
+                                    <td>
                                         <a href="{{url('detail-laporan',$data->id)}}"><button class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></button></a>
-                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal{{$data->id}}" data-whatever="@getbootstrap"><i class="fa fa-pencil-square-o"></i></button>
+                                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal{{$data->id}}" data-whatever="@getbootstrap"><i class="fa fa-pencil-square-o"></i></button>
                                         <a href="{{url('cetak-laporan',$data->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
 
-                                        <!-- @if($data->ttd != null)
-                                        <a href="{{url('cetak-laporan',$data->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-file-pdf-o"></i></button></a>
-                                        @else
-                                        <a href="{{url('profile-pengawas')}}"><button class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Masukkan TTD dahulu"><i class="fa fa-file-pdf-o"></i></button></a>
-                                        @endif -->
                                     </td>
                                 </tr>
                                 @endforeach
@@ -61,7 +65,7 @@
                         <!-- ========= MODAL ========= -->
                         <div class="modal fade" id="exampleModal{{$data2->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
-                                <form action="{{route('laporan-selesai-it',$data2->id)}}" method="POST">
+                                <form action="{{route('alih-laporan-cetak',$data2->id)}}" method="POST">
                                     {{csrf_field()}}
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -73,11 +77,15 @@
                                             <div class="form-group">
                                                 <label for="message-text" class="col-form-label">Alihkan ke :</label>
                                                 <div class="form-group">
-                                                    @foreach($pengawas as $dt)
-                                                    <select class="form-control" required name="">
-                                                        <option>1</option>
+                                                    <select class="form-control" required name="id_pengawas">
+                                                        @foreach($pengawas as $dt)
+                                                        @if($dt->id == Auth::guard('pengawas')->user()->id)
+                                                        <option value="{{$dt->id}}" disabled>{{$dt->nama}}</option>
+                                                        @else
+                                                        <option value="{{$dt->id}}">{{$dt->nama}}</option>
+                                                        @endif
+                                                        @endforeach
                                                     </select>
-                                                    @endforeach
                                                 </div>
                                                 <div id="error-message" class="error"></div>
                                             </div>

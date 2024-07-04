@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kop_surat;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +68,7 @@ class AdminController extends Controller
             DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
         )
         ->orderBy('laporan.tgl_masuk','desc')
-        ->whereNotIn('laporanhist.status_laporan', ['Dibatalkan', 'Selesai'])
+        // ->whereNotIn('laporanhist.status_laporan', ['Dibatalkan', 'Selesai'])
         ->get();
 
         $teknisi = DB::table('teknisi')->get();
@@ -77,12 +78,88 @@ class AdminController extends Controller
         return view('admin.laporan', compact('dtLap','teknisi'));
     }
 
+    public function laporan_alihkan ()
+    {
+        $dtLap = DB::table('laporan')
+        ->leftJoin(DB::raw('(SELECT id_laporan, MAX(tanggal) AS tanggal FROM laporanhist GROUP BY id_laporan) AS latest_laporanhist'), function ($join) {
+            $join->on('laporan.id', '=', 'latest_laporanhist.id_laporan');
+        })
+            ->leftJoin('laporanhist', function ($join) {
+                $join->on('laporan.id', '=', 'laporanhist.id_laporan')
+                ->on('laporanhist.tanggal', '=', 'latest_laporanhist.tanggal');
+            })
+            ->leftJoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
+            ->leftJoin('pelapor', 'pelapor.id', '=', 'laporan.id_pelapor')
+            ->leftJoin('pengawas AS pengawas_alihkan', 'pengawas_alihkan.id', '=', 'laporan.alihkan_pws')
+            ->leftJoin('pengawas AS pengawas_id', 'pengawas_id.id', '=', 'laporan.id_pengawas')
+            ->select(
+                'no_inv_aset',
+                'waktu_tambahan',
+                'laporanhist.status_laporan as status_terakhir',
+                'tgl_akhir_pengerjaan AS deadline',
+                'laporan.id AS id',
+                'id_teknisi',
+                'teknisi.nama as nama_teknisi',
+                'laporan.tgl_masuk',
+                'pelapor.nama as nama_pelapor',
+                DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk_f"),
+                DB::raw("DATE_FORMAT(tgl_akhir_pengerjaan, '%d %M %Y,  %H:%i WIB') AS tgl_akhir_pengerjaan"),
+                'laporan.alihkan_pws',
+                'pengawas_alihkan.nama as nama_pengawas_alihkan',
+                'pengawas_alihkan.nipp as nipp_pengawas_alihkan',
+                'pengawas_alihkan.jabatan as jabatan_pengawas_alihkan',
+                'pengawas_alihkan.email as email_pengawas_alihkan',
+                'laporan.id_pengawas',
+                'pengawas_id.nama as nama_pengawas_id',
+                'pengawas_id.nipp as nipp_pengawas_id',
+                'pengawas_id.jabatan as jabatan_pengawas_id',
+                'pengawas_id.email as email_pengawas_id',
+            )
+            ->orderBy('laporan.tgl_masuk', 'desc')
+            ->where('alihkan_pws','!=','null')
+            // ->whereNotIn('laporanhist.status_laporan', ['Dibatalkan', 'Selesai'])
+            ->get();
+
+        $teknisi = DB::table('teknisi')->get();
+
+        // FORMAT TANGGAL '%d/%m/%Y %H:%i'
+
+        return view('admin.laporan-alihkan', compact('dtLap', 'teknisi'));
+    }
+
+    public function acc_laporan_alihkan (Request $request, $idlap)
+    {
+        $alihkan        = $request->alihkan;
+        $alihkan_pws    = $request->alihkan_pws;
+
+        if($alihkan == 'setuju') {
+            DB::table('laporan')
+            ->where('id', $idlap)
+            ->update([
+                'id_pengawas'   => $alihkan_pws,
+                'alihkan_pws'   => DB::raw('NULL')
+            ]);
+        } else {
+            DB::table('laporan')
+                ->where('id', $idlap)
+                ->update([
+                    'alihkan_pws'   => DB::raw('NULL')
+                ]);
+        }
+
+        Session::flash('success');
+        return back();
+        // dd($idlap, $request->alihkan, $request->alihkan_pws);
+    }
+
     public function kop_surat ()
     {
         $kop = DB::table('kop_surat')
         ->select([
-            'nomor', DB::raw("DATE_FORMAT(tanggal, '%d %M %Y') AS tanggal_f"),'versi','halaman','id','tanggal'
-        ])->first();
+            'nomor', DB::raw("DATE_FORMAT(tanggal, '%d %M %Y') AS tanggal_f"),'versi','halaman','id','tanggal','preview','keterangan'
+        ])
+        ->orderByDesc('created_at')
+        ->first();
 
         if ($kop) {
             $tanggal_f = Carbon::parse($kop->tanggal_f)->translatedFormat('d F Y');
@@ -90,8 +167,17 @@ class AdminController extends Controller
             $tanggal = null;
         }
 
-        // dd($kop);
-        return view('admin.kop-surat', compact('kop','tanggal_f'));
+        $kopSurat = DB::table('kop_surat')
+        ->select([DB::raw("DATE_FORMAT(tanggal, '%d %M %Y') AS tanggal"),
+            DB::raw("DATE_FORMAT(created_at, '%d %M %Y, %H:%i:%s WIB') AS created_at"),
+            'nomor', 'versi', 'halaman', 'keterangan', 'id'
+        ])
+        ->orderBy('id', 'desc')
+        ->limit(2)
+            ->get();
+
+        // dd($pairs);
+        return view('admin.kop-surat', compact('kop','tanggal_f','kopSurat'));
     }
 
     public function update_kop_surat(Request $request, $id)
@@ -102,17 +188,57 @@ class AdminController extends Controller
         // $file_gambar = time() . "_" . $gambar->getClientOriginalName();
         // $gambar->move(storage_path() . '/app/public/img/kop_surat', $file_gambar);
 
-        DB::table('kop_surat')
-        ->where('id',$id)
-        ->update([
+        $update = $request->update;
+
+        $kop = Kop_surat::create([
             'nomor'     => $request->nomor,
             'versi'     => $request->versi,
             'tanggal'   => $request->tanggal,
-            'halaman'   => $request->halaman
+            'halaman'   => $request->halaman,
+            'preview'   => 1,
+            'keterangan'=> $request->keterangan
         ]);
         
+        $id_kop = $kop->id;
+
+        
+        // if ($update == 'kirim') {
+        //     DB::table('kop_surat')
+        //     ->where('id',$id_kop)
+        //     ->update([
+        //         'preview' =>  DB::raw('NULL')
+        //     ]);
+        // } else if ($update == 'batal') {
+        //     $kop = Kop_surat::findorfail($id_kop);
+        //     $kop->delete();
+        // }
+
         // dd($file_gambar);
         return back();
+    }
+
+    public function preview_kop_surat (Request $request, $id)
+    {
+        $update = $request->update;
+
+        if ($update == 'kirim') {
+            DB::table('kop_surat')
+            ->where('id',$id)
+            ->update([
+                'preview' =>  DB::raw('NULL')
+            ]);
+            Session::flash('success');
+
+        } else if ($update == 'batal') {
+            $kop = Kop_surat::findorfail($id);
+            $kop->delete();
+            // Session::flash('danger');
+
+        }
+        // dd($id, $update);
+
+        return back();
+
     }
 
     public function manager ()
@@ -554,9 +680,11 @@ class AdminController extends Controller
                 't.jabatan',
             )->get();
 
+        $pws = DB::table('pengawas')->get();
+
         // dd($acc);
 
-        return view('admin.akun-user', compact('pelapor', 'it', 'cacc', 'acc'));
+        return view('admin.akun-user', compact('pelapor', 'it', 'cacc', 'acc','pws'));
     }
 
     public function listaccakun()
@@ -657,6 +785,22 @@ class AdminController extends Controller
     public function editteknisi(Request $request, $id)
     {
         $update = DB::table('teknisi')
+        ->where('id', '=', $id)
+            ->update([
+                'nama'      => $request->nama,
+                'nipp'      => $request->nipp,
+                'email'     => $request->email,
+                'jabatan'   => $request->jabatan,
+            ]);
+        Session::flash('success');
+
+        // dd($request->all());
+        return back();
+    }
+
+    public function editpengawas(Request $request, $id)
+    {
+        $update = DB::table('pengawas')
         ->where('id', '=', $id)
             ->update([
                 'nama'      => $request->nama,

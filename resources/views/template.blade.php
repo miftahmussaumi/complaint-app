@@ -345,10 +345,19 @@
                         </a>
                     </li>
                     <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="fa fa-files-o"></i> <span class="nav-text">Laporan</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{url('laporan-admin')}}">Laporan Masuk</a></li>
+                            <li><a href="{{url('laporan-alihkan')}}">Peralihan Laporan</a></li>
+                        </ul>
+                    </li>
+                    <!-- <li>
                         <a href="{{url('laporan-admin')}}">
                             <i class="fa fa-desktop"></i><span class="nav-text">Laporan Masuk</span>
                         </a>
-                    </li>
+                    </li> -->
                     <!-- <li>
                         <a href="/send-manager">
                             <i class="fa fa-file-text""></i><span class=" nav-text">Laporan Manager</span>
@@ -360,9 +369,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{url('kop-surat')}}">
-                            <i class="fa fa-cog"></i><span class=" nav-text">Kop Surat</span>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="fa fa-cog"></i> <span class="nav-text">Pengaturan</span>
                         </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{url('kop-surat')}}">Kop Surat</a></li>
+                            <li><a href="">Broadcast</a></li>
+                        </ul>
                     </li>
                     @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
                     <li>

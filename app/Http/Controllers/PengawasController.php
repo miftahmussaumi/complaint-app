@@ -200,12 +200,12 @@ class PengawasController extends Controller
         return back();
     }
 
-    public function alih_laporan($idlap)
+    public function alih_laporan(Request $request, $idlap)
     {
         DB::table('laporan')
         ->where('id', $idlap)
             ->update([
-                'id_pengawas' => Auth::guard('pengawas')->user()->id
+                'alihkan_pws' => $request->id_pengawas
             ]);
 
         Session::flash('success');
@@ -225,7 +225,7 @@ class PengawasController extends Controller
         })
         ->leftJoin('teknisi', 'teknisi.id', '=', 'laporan.id_teknisi')
         ->leftJoin('pelapor', 'pelapor.id', '=', 'laporan.id_pelapor')
-        ->leftJoin('pengawas', 'pengawas.id', '=', 'laporan.id_pengawas')
+        ->leftJoin('pengawas', 'pengawas.id', '=', 'laporan.alihkan_pws')
         ->select(
             DB::raw("DATE_FORMAT(tgl_masuk, '%d %M %Y') AS tgl_masuk"),
             DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y') AS tgl_selesai"),
@@ -248,7 +248,7 @@ class PengawasController extends Controller
             'pelapor.email',
             'pelapor.telepon',
             'pelapor.nipp as nipp_pelapor',
-            'pengawas.ttd'
+            'pengawas.ttd','laporan.alihkan_pws','pengawas.nama as nama_pws'
         )
         ->where('laporanhist.status_laporan', '=', 'Selesai')
         ->where('id_pengawas','=', Auth::guard('pengawas')->user()->id)

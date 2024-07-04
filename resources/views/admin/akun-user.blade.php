@@ -12,8 +12,10 @@
                 <ul class="nav nav-pills mb-3">
                     <li class="nav-item"><a href="#navpills-1" class="nav-link active" data-toggle="tab" aria-expanded="false">Pelapor</a></li>
                     <li class="nav-item"><a href="#navpills-2" class="nav-link" data-toggle="tab" aria-expanded="false">Teknisi IT </a></li>
+                    <li class="nav-item"><a href="#navpills-3" class="nav-link" data-toggle="tab" aria-expanded="false">Pengawas </a></li>
                 </ul>
                 <div class="tab-content br-n pn">
+                    <!-- ===== HALAMAN TAB AKUN PELAPOR ===== -->
                     <div id="navpills-1" class="tab-pane active">
                         <div class="row align-items-center">
                             <div class="col-sm-12">
@@ -110,6 +112,8 @@
                             </div>
                         </div>
                     </div>
+                    <!-- ===== END HALAMAN TAB AKUN PELAPOR ===== -->
+                    
                     <!-- ===== HALAMAN TAB AKUN TEKNISI ===== -->
                     <div id="navpills-2" class="tab-pane">
                         <div class="row align-items-center">
@@ -191,6 +195,86 @@
                         </div>
                     </div>
                     <!-- ===== END HALAMAN TAB AKUN TEKNISI ===== -->
+                    
+                    <!-- ===== HALAMAN TAB AKUN PENGAWAS ===== -->
+                    <div id="navpills-3" class="tab-pane">
+                        <div class="row align-items-center">
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <table style="color: #2D3134;" class="table table-striped table-bordered zero-configuration">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama</th>
+                                                <th>NIPP</th>
+                                                <th>Jabatan</th>
+                                                <th>Email</th>
+                                                <th>#</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $no = 0; ?>
+                                            @foreach($pws as $dtpws)
+                                            <?php $no++ ?>
+                                            <tr>
+                                                <td>{{$no}}</td>
+                                                <td>{{$dtpws->nama}}</td>
+                                                <td>{{$dtpws->nipp}}</td>
+                                                <td>{{$dtpws->jabatan}}</td>
+                                                <td>{{$dtpws->email}}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalPws{{$dtpws->id}}" data-whatever="@getbootstrap"><i class="fa fa-pencil"></i></button>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    @foreach($pws as $dtpws2)
+                                    <div class="modal fade" id="exampleModalPws{{$dtpws2->id}}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{{route('edit-pengawas-save',$dtpws2->id)}}" method="post">
+                                                    {{csrf_field()}}
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-tpwsle">Edpws Data Teknisi pws</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label>Nama</label>
+                                                                <input type="text" class="form-control" name="nama" placeholder="Nama" value="{{$dtpws2->nama}}">
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label>NIPP</label>
+                                                                <input type="text" class="form-control" name="nipp" placeholder="NIPP" value="{{$dtpws2->nipp}}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label>Jabatan</label>
+                                                                <input type="text" class="form-control" name="jabatan" placeholder="Jabatan" value="{{$dtpws2->jabatan}}">
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label>Email</label>
+                                                                <input type="email" class="form-control" name="email" placeholder="Email" value="{{$dtpws2->email}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ===== END HALAMAN TAB AKUN PENGAWAS ===== -->
                 </div>
             </div>
         </div>

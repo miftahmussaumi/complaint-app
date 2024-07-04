@@ -12,6 +12,6 @@ class Kop_surat extends Model
     protected $primaryKey   = "id"; //cek
 
     protected $fillable = [
-        'id', 'atas_1','atas_2','bawah','gambar'
+        'id', 'atas_1','atas_2','bawah','gambar','keterangan','nomor','versi','tanggal','halaman','preview'
     ];
 }
