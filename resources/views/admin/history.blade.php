@@ -31,7 +31,7 @@
                             <div class="col">
                                 @if($filter != null)
                                 <button type="submit" name="action" value="filter" class="btn btn-primary">Filter</button>
-                                <a href="/history-admin"><button type="button" id="clearFilterBtn" class="btn btn-primary">Show All Data</button></a>
+                                <a href="/history-user"><button type="button" id="clearFilterBtn" class="btn btn-primary">Show All Data</button></a>
                                 @else
                                 <button type="submit" name="action" value="filter" class="btn btn-primary">Filter</button>
                                 <button type="button" id="clearFilterBtn" class="btn btn-primary">Clear</button>
@@ -104,7 +104,7 @@
                                         <td style="width: 90px; margin-right: 100px;" rowspan="2" valign=top align="right">
                                             @if($dthist->status_laporan == 'Pengajuan')
                                             <span class="badge badge-primary">Open</span>
-                                            @elseif($dthist->status_laporan == 'Diproses' or $dthist->status_laporan == 'reqAddTime' or $dthist->status_laporan == 'CheckLapU' )
+                                            @elseif($dthist->status_laporan == 'Diproses' or $dthist->status_laporan == 'reqAddTime' or $dthist->status_laporan == 'CheckLapU' or $dthist->status_laporan == 'CheckedU' )
                                             <span class="badge badge-info">Process</span>
                                             @elseif($dthist->status_laporan == 'Selesai')
                                             <span class="badge badge-success">Closed</span>
@@ -112,8 +112,6 @@
                                             <span class="badge badge-danger">Cancel</span>
                                             @elseif($dthist->status_laporan == 'ReqHapus')
                                             <span class="badge badge-warning">Request <i class="fa fa-trash-o" aria-hidden="true"></i></span>
-                                            @elseif($dthist->status_laporan == 'CheckedU')
-                                            <span class="badge badge-warning">User Checking</span>
                                             @endif
                                         </td>
                                         <td style="width: 10px;"></td>
@@ -176,7 +174,7 @@
                     break;
                 case 'no_inv_aset':
                     $.ajax({
-                        url: '/getNoInventarisOptions',
+                        url: '/getNoInventarisOptionsAdmin',
                         type: 'GET',
                         success: function(response) {
                             $('#additional-filters').append('<select id="no_inv_aset" name="no_inv_aset" class="form-control">' + response.options + '</select>');

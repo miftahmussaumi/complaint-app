@@ -113,21 +113,23 @@
                         </div>
                     </div>
                     <!-- ===== END HALAMAN TAB AKUN PELAPOR ===== -->
-                    
+
                     <!-- ===== HALAMAN TAB AKUN TEKNISI ===== -->
                     <div id="navpills-2" class="tab-pane">
                         <div class="row align-items-center">
                             <div class="col-sm-12">
                                 <div class="table-responsive">
-                                    <table style="color: #2D3134;" class="table table-striped table-bordered zero-configuration">
+                                    <table style="color: #2D3134; width: 100%;" class="table table-striped table-bordered zero-configuration">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Nama</th>
+                                                <th style="width: 40%;">Nama</th>
                                                 <th>NIPP</th>
                                                 <th>Jabatan</th>
                                                 <th>Email</th>
-                                                <th>Total Penyelesaian</th>
+                                                <th>Trouble</th>
+                                                <th>Instalasi</th>
+                                                <th>Total</th>
                                                 <th>#</th>
                                             </tr>
                                         </thead>
@@ -141,6 +143,8 @@
                                                 <td>{{$dtit->nipp}}</td>
                                                 <td>{{$dtit->jabatan}}</td>
                                                 <td>{{$dtit->email}}</td>
+                                                <td>{{$dtit->total_troubleshooting}}</td>
+                                                <td>{{$dtit->total_instalasi}}</td>
                                                 <td>{{$dtit->jumlah_laporan}}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalIT{{$dtit->id}}" data-whatever="@getbootstrap"><i class="fa fa-pencil"></i></button>
@@ -195,7 +199,7 @@
                         </div>
                     </div>
                     <!-- ===== END HALAMAN TAB AKUN TEKNISI ===== -->
-                    
+
                     <!-- ===== HALAMAN TAB AKUN PENGAWAS ===== -->
                     <div id="navpills-3" class="tab-pane">
                         <div class="row align-items-center">

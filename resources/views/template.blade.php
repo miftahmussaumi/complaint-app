@@ -374,7 +374,7 @@
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="{{url('kop-surat')}}">Kop Surat</a></li>
-                            <li><a href="">Broadcast</a></li>
+                            <li><a href="{{url('broadcast')}}">Broadcast</a></li>
                         </ul>
                     </li>
                     @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)

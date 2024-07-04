@@ -200,20 +200,6 @@ class AdminController extends Controller
         ]);
         
         $id_kop = $kop->id;
-
-        
-        // if ($update == 'kirim') {
-        //     DB::table('kop_surat')
-        //     ->where('id',$id_kop)
-        //     ->update([
-        //         'preview' =>  DB::raw('NULL')
-        //     ]);
-        // } else if ($update == 'batal') {
-        //     $kop = Kop_surat::findorfail($id_kop);
-        //     $kop->delete();
-        // }
-
-        // dd($file_gambar);
         return back();
     }
 
@@ -450,6 +436,23 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function getNoInventarisOptionsAdmin()
+    {
+        $options = '';
+
+        $noInventaris = DB::table('laporan')
+        ->join('laporanhist', 'laporanhist.id_laporan', '=', 'laporan.id')
+        ->where('laporanhist.status_laporan', ['Selesai', 'Dibatalkan'])
+        ->get();
+
+        foreach ($noInventaris as $noInv) {
+            $options .= '<option name=""no_inv_aset" value="' . $noInv->no_inv_aset . '">' . $noInv->no_inv_aset . '</option>';
+        }
+
+        return response()->json(['options' => $options]);
+    }
+
     public function history(Request $request)
     {
         $filter         = $request->filter;
@@ -519,7 +522,6 @@ class AdminController extends Controller
                         ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
                     })
                     ->where('detlaporan.kat_layanan', '=', $kat_layanan)
-                    ->where('laporan.status_terakhir', '!=', 'Manager')
                     ->get();
                 // dd($data);
             } else if ($no_inv_aset != null) {
@@ -544,7 +546,6 @@ class AdminController extends Controller
                         ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
                     })
                     ->where('laporan.no_inv_aset', '=', $no_inv_aset)
-                    ->where('laporan.status_terakhir', '!=', 'Manager')
                     ->get();
                 // dd($data);
             } else if ($tgl_masuk != null) {
@@ -569,7 +570,6 @@ class AdminController extends Controller
                         ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
                     })
                     ->where('laporan.tgl_masuk', $tgl_masuk_f, $tgl_masuk)
-                    ->where('laporan.status_terakhir', '!=', 'Manager')
                     ->get();
                 // dd($data); 
             } else if ($tgl_selesai != null) {
@@ -593,7 +593,6 @@ class AdminController extends Controller
                         $query->where('laporanhist.status_laporan', '=', 'Selesai')
                         ->orWhere('laporanhist.status_laporan', '=', 'Dibatalkan');
                     })
-                    ->where('laporan.status_terakhir', '!=', 'Manager')
                     ->get();
                 // dd($data);
             }
@@ -659,9 +658,6 @@ class AdminController extends Controller
             // ->orderByDesc('p.created_at')
             ->get();
 
-        $acc    = DB::table('pelapor')->where('status', '=', 0)->get();
-        $cacc   = count($acc);
-
         $it = DB::table('teknisi as t')
         ->select(
             't.id',
@@ -669,22 +665,25 @@ class AdminController extends Controller
             't.nipp',
             't.email',
             't.jabatan',
-            DB::raw('COUNT(l.id) AS jumlah_laporan')
+            DB::raw('SUM(CASE WHEN dl.kat_layanan = "Throubleshooting" THEN 1 ELSE 0 END) AS total_troubleshooting'),
+            DB::raw('SUM(CASE WHEN dl.kat_layanan = "Instalasi" THEN 1 ELSE 0 END) AS total_instalasi'),
+            DB::raw('COUNT(dl.id) AS jumlah_laporan')
         )
-            ->leftJoin('laporan as l', 't.id', '=', 'l.id_teknisi')
-            ->groupBy(
-                't.id',
-                't.nama',
-                't.nipp',
-                't.email',
-                't.jabatan',
-            )->get();
+        ->leftJoin('laporan as l', 't.id', '=', 'l.id_teknisi')
+        ->leftJoin('detlaporan as dl', 'l.id', '=', 'dl.id_laporan')
+        ->groupBy(
+            't.id',
+            't.nama',
+            't.nipp',
+            't.email',
+            't.jabatan',)
+        ->get();
 
         $pws = DB::table('pengawas')->get();
 
         // dd($acc);
 
-        return view('admin.akun-user', compact('pelapor', 'it', 'cacc', 'acc','pws'));
+        return view('admin.akun-user', compact('pelapor', 'it','pws'));
     }
 
     public function listaccakun()

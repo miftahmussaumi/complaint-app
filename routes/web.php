@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelaporController;
 use App\Http\Controllers\PengawasController;
 use App\Http\Controllers\TeknisiController;
+use App\Http\Controllers\BroadcastController;
 use App\Models\Pengawas;
 use App\Models\Teknisi;
 use Illuminate\Support\Facades\Route;
@@ -79,13 +80,14 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/dashboard-admin', [AdminController::class, 'dashboard']);
     Route::get('/send-manager', [AdminController::class, 'manager']);
     Route::match(['get', 'post'],'/history-admin', [AdminController::class, 'history'])->name('history-admin');
+    Route::get('/getNoInventarisOptionsAdmin', [AdminController::class, 'getNoInventarisOptionsAdmin']);
     Route::get('/list-akun-admin', [AdminController::class, 'akun']);
     Route::get('/persetujuan-akun-admin', [AdminController::class, 'listaccakun']);
     Route::post('/acc-akun/{id}', [AdminController::class, 'accakun'])->name('acc-akun');
-    // Route::get('/edit-pelapor/{id}', [AdminController::class, 'pelapor']);
     Route::post('/edit-pelapor-save/{id}', [AdminController::class, 'editpelapor'])->name('edit-pelapor-save');
     Route::post('/edit-teknisi-save/{id}', [AdminController::class, 'editteknisi'])->name('edit-teknisi-save');
     Route::post('/edit-pengawas-save/{id}', [AdminController::class, 'editpengawas'])->name('edit-pengawas-save');
+    Route::get('/broadcast', [BroadcastController::class, 'index']);
 
     // ==============ROUTE UNTUK BAGIAN TEKNISI IT============== //
     Route::get('/profile-teknisi', [TeknisiController::class, 'profile']);
