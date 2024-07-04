@@ -6,6 +6,7 @@ use App\Models\DetLaporan;
 use App\Models\Laporan;
 use App\Models\Laporanakhir;
 use App\Models\Laporanhist;
+use App\Models\Broadcast;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -37,10 +38,21 @@ class LaporanController extends Controller
         $open       = $dtLap->where('status_terakhir', 'Pengajuan')->count();
         $proses     = $dtLap->whereIn('status_terakhir', ['Diproses', 'reqAddTime','CheckedU'])->count();
         $selesai    = $dtLap->where('status_terakhir', 'Selesai')->count();
+        $ditunda    = $dtLap->whereIn('status_terakhir', ['CheckedU', 'reqAddTime', 'CheckLapU'])->count();
         $all        = $dtLap->count();
+
+        $bc = DB::table('broadcast')
+        ->select([
+            'judul', 'informasi', 'status', 'id',
+            DB::raw("DATE_FORMAT(tgl_tampil, '%d %M %Y, %H:%i WIB') AS tgl_tampil"),
+            DB::raw("DATE_FORMAT(tgl_selesai, '%d %M %Y, %H:%i WIB') AS tgl_selesai"),
+        ])
+        ->whereDate('tgl_tampil', '<=', now())
+        ->whereDate('tgl_selesai', '>=', now())
+        ->get();
         
         // dd($statusSelesaiCount);
-        return view('pelapor.dashboard', compact('selesai','open','proses'));
+        return view('pelapor.dashboard', compact('selesai','open','proses','ditunda','bc'));
     }
     /**
      * Store a newly created resource in storage.

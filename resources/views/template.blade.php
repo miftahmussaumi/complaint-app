@@ -32,6 +32,12 @@
     <link href="{{asset('quixlab/plugins/sweetalert/css/sweetalert.css')}}" rel="stylesheet">
     <link href="{{asset('quixlab/plugins/toastr/css/toastr.min.css')}}" rel="stylesheet">
 
+    <!-- Pignose Calender -->
+    <link href="{{asset('quixlab/plugins/pg-calendar/css/pignose.calendar.min.css')}}" rel="stylesheet">
+    <!-- Chartist -->
+    <link rel="stylesheet" href="{{asset('quixlab/plugins/chartist/css/chartist.min.css')}}">
+    <link rel="stylesheet" href="{{asset('quixlab/plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css')}}">
+
     <!-- Custom Stylesheet -->
     <link href="{{asset('quixlab/css/style.css')}}" rel="stylesheet">
     @yield('style')
@@ -500,6 +506,26 @@
 
     <script src="{{asset('quixlab/plugins/toastr/js/toastr.min.js')}}"></script>
     <script src="{{asset('quixlab/plugins/toastr/js/toastr.init.js')}}"></script>
+
+    <!-- Chartjs -->
+    <script src="{{asset('quixlab/plugins/chart.js/Chart.bundle.min.js')}}"></script>
+    <!-- Circle progress -->
+    <script src="{{asset('quixlab/plugins/circle-progress/circle-progress.min.js')}}"></script>
+    <!-- Datamap -->
+    <script src="{{asset('quixlab/plugins/d3v3/index.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/topojson/topojson.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/datamaps/datamaps.world.min.js')}}"></script>
+    <!-- Morrisjs -->
+    <script src="{{asset('quixlab/plugins/raphael/raphael.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/morris/morris.min.js')}}"></script>
+    <!-- Pignose Calender -->
+    <script src="{{asset('quixlab/plugins/moment/moment.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/pg-calendar/js/pignose.calendar.min.js')}}"></script>
+    <!-- ChartistJS -->
+    <script src="{{asset('quixlab/plugins/chartist/js/chartist.min.js')}}"></script>
+    <script src="{{asset('quixlab/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js')}}"></script>
+
+    <script src="{{asset('quixlab/js/dashboard/dashboard-1.js')}}"></script>
 
     @yield('script')
 </body>

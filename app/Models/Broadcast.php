@@ -12,6 +12,6 @@ class Broadcast extends Model
     protected $primaryKey = "id"; //cek
 
     protected $fillable = [
-        'id', 'informasi','tgl_tampil','tgl_selesai','status'
+        'id', 'judul','informasi','tgl_tampil','tgl_selesai','status'
     ]; 
 }

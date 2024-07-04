@@ -88,6 +88,11 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::post('/edit-teknisi-save/{id}', [AdminController::class, 'editteknisi'])->name('edit-teknisi-save');
     Route::post('/edit-pengawas-save/{id}', [AdminController::class, 'editpengawas'])->name('edit-pengawas-save');
     Route::get('/broadcast', [BroadcastController::class, 'index']);
+    Route::get('/add-broadcast', [BroadcastController::class, 'create']);
+    Route::post('/store-broadcast', [BroadcastController::class, 'store'])->name('store-broadcast');
+    Route::get('/edit-broadcast/{id}', [BroadcastController::class, 'edit'])->name('edit-broadcast');
+    Route::post('/update-broadcast/{id}', [BroadcastController::class, 'update'])->name('update-broadcast');
+
 
     // ==============ROUTE UNTUK BAGIAN TEKNISI IT============== //
     Route::get('/profile-teknisi', [TeknisiController::class, 'profile']);
