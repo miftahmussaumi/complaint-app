@@ -17,7 +17,7 @@
                             <h3>Data Permintaan Layanan</h3>
                         </div>
                         <div class="p-2 bd-highlight">
-                            <a href="{{url('form-comp')}}"><button class="btn btn-primary"><i class="fa fa-plus"></i>  Permintaan</button></a>
+                            <a href="{{url('form-comp')}}"><button class="btn btn-primary"><i class="fa fa-plus"></i> Permintaan</button></a>
                             <!-- <a href=""><button type="button" class="btn mb-1 btn-primary">Permintaan <span class="btn-icon-right"><i class="fa fa-plus"></i></span></a> -->
                             <!-- <button onclick="window.location={{url('/form-comp')}}" type="button" class="btn mb-1 btn-primary">Permintaan <span class="btn-icon-right"><i class="fa fa-plus"></i></span> -->
                         </div>
@@ -32,7 +32,7 @@
                                     <th>Batas Akhir Pengerjaan</th>
                                     <th>Waktu Tambahan</th>
                                     <th>Status</th>
-                                    <th>#</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

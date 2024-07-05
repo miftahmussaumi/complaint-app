@@ -30,7 +30,7 @@
                                                 <th>Unit</th>
                                                 <th>Email</th>
                                                 <th>No Hp</th>
-                                                <th>#</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -74,7 +74,7 @@
                                                 <th>NIPP</th>
                                                 <th>Jabatan</th>
                                                 <th>Email</th>
-                                                <th>#</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -117,7 +117,7 @@
                                                 <th>NIPP</th>
                                                 <th>Jabatan</th>
                                                 <th>Email</th>
-                                                <th>#</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>

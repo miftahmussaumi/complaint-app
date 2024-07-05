@@ -139,15 +139,18 @@ class AdminController extends Controller
                 'id_pengawas'   => $alihkan_pws,
                 'alihkan_pws'   => DB::raw('NULL')
             ]);
+            $msg = 'Penanggung Jawab Laporan Dialihkan';
+            Session::flash('success', $msg); 
         } else {
             DB::table('laporan')
                 ->where('id', $idlap)
                 ->update([
                     'alihkan_pws'   => DB::raw('NULL')
                 ]);
+            $msg = 'Pengalihan Penanggung Jawab Ditolak';
+            Session::flash('success', $msg); 
         }
 
-        Session::flash('success');
         return back();
         // dd($idlap, $request->alihkan, $request->alihkan_pws);
     }

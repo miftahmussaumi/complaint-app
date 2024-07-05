@@ -19,7 +19,7 @@
                                     <th>Batas Akhir Pengerjaan</th>
                                     <th>Teknisi</th>
                                     <th>Status</th>
-                                    <th>#</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -316,7 +316,9 @@ class PengawasController extends Controller
         $kop = DB::table('kop_surat')
         ->select([
             'nomor', DB::raw("DATE_FORMAT(tanggal, '%d %M %Y') AS tanggal_f"), 'versi', 'halaman', 'id'
-        ])->first();
+        ])
+        ->orderByDesc('created_at')
+        ->first();
 
         if ($kop) {
             $tanggal_f = Carbon::parse($kop->tanggal_f)->translatedFormat('d F Y');
@@ -324,7 +326,7 @@ class PengawasController extends Controller
             $tanggal = null;
         }
 
-        $today = Carbon::now()->locale('id')->translatedFormat('d F Y');
+        $today = Carbon::now()->locale('id')->translatedFormat('d F Y'); 
 
         $no_ref = $lap->no_ref;
         $bisnis_area = $lap->bisnis_area;

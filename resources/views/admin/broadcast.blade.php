@@ -30,7 +30,7 @@
                                     <th>Tanggal Diupload</th>
                                     <th>Tanggal Selesai</th>
                                     <th>Status</th>
-                                    <th>#</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

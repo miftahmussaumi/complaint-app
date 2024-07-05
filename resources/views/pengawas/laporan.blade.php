@@ -25,7 +25,7 @@
                                     <th>No Inventaris</th>
                                     <th>Tanggal Selesai</th>
                                     <th>Teknisi</th>
-                                    <th>#</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

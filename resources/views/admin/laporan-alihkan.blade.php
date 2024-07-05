@@ -2,7 +2,7 @@
 
 @section('content')
 @if(Session::has('success'))
-<div class="toastr-trigger" data-type="success" data-message="Penanggung Jawab Dialihkan" data-position-class="Berhasil!"></div>
+<div class="toastr-trigger" data-type="success" data-message="{{ Session::get('success') }}" data-position-class="Berhasil"></div>
 @endif
 <div class="container-fluid">
     <div class="row">
@@ -19,7 +19,7 @@
                                     <th>Nama Pelapor</th>
                                     <th>No Inventaris</th>
                                     <th>Teknisi</th>
-                                    <th>#</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

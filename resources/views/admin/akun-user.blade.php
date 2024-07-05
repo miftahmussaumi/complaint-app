@@ -30,7 +30,7 @@
                                                 <th>Divisi</th>
                                                 <th>Email</th>
                                                 <th>Telepon</th>
-                                                <th>#</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -130,7 +130,7 @@
                                                 <th>Trouble</th>
                                                 <th>Instalasi</th>
                                                 <th>Total</th>
-                                                <th>#</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -213,7 +213,7 @@
                                                 <th>NIPP</th>
                                                 <th>Jabatan</th>
                                                 <th>Email</th>
-                                                <th>#</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>

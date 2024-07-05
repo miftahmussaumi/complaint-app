@@ -2,7 +2,7 @@
 
 @section('content')
 @if(Session::has('success'))
-<div class="toastr-trigger" data-type="success" data-message="Penanggung Jawab Laporan Dialihkan" data-position-class="Berhasil"></div>
+<div class="toastr-trigger" data-type="success" data-message="Menunggu Persetujuan Admin" data-position-class="Penanggung Jawab Dialihkan"></div>
 @endif
 <div class="container-fluid">
     <div class="row">
@@ -25,7 +25,7 @@
                                     <th>Tanggal Selesai</th>
                                     <th>Teknisi</th>
                                     <th>Dialihkan</th>
-                                    <th>#</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

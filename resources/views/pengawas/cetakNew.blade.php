@@ -35,17 +35,17 @@
     <header>
         <table style="width: 100%;" class="table1">
             <tr>
-                <td rowspan="4" style="width: 25%; margin-top: 5px;" valign="center" align="center">
+                <td rowspan="4" style="width: 20%; margin-top: 5px;" valign="center" align="center">
                     <img src="{{storage_path('app/public/img/kai.png')}}" width="100" height="60" />
                 </td>
-                <td rowspan="2" valign="center">
+                <td rowspan="2" valign="center" style="width: 30%;">
                     PT. Kereta Api Indonesia <br> Sistem Informasi
                 </td>
                 <td style="width: 10%;">Nomor</td>
                 <td style="width: 25%;">{{$kop->nomor}}</td>
             </tr>
             <tr>
-                <td>Tanggal</td>
+                <td>Tanggal</td> 
                 <td>{{$tanggal_f}}</td>
             </tr>
             <tr>
