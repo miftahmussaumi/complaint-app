@@ -349,10 +349,23 @@ class TeknisiController extends Controller
         $det_pekerjaan  = $request->det_pekerjaan;
         $ket_pekerjaan  = $request->ket_pekerjaan;
 
+        if($jenis_layanan == 'Lainnya') {
+            $jenis_layanan = $request->layanan_lain;
+        } else {
+            $jenis_layanan = $request->jenis_layanan;
+        }
+
         $existingEntry = DB::table('detlaporan')
+        ->where('id_laporan',$id)
         ->where('kat_layanan', $request->kat_layanan)
-        ->where('jenis_layanan', $request->jenis_layanan)
-        ->where('acc_status','!=','yes')
+        ->where('jenis_layanan', $jenis_layanan)
+        // ->where('acc_status', '!=', 'yes')
+        // ->orWhereNull('acc_status')
+        ->where(function ($query) {
+            $query->where('acc_status', '!=', 'yes')
+                ->orWhereNull('acc_status');
+        })
+        ->orderBy('id', 'desc')
         ->exists();
 
         if ($existingEntry) {
@@ -383,7 +396,7 @@ class TeknisiController extends Controller
         }
 
     
-        // dd($request->all());
+        dd($existingEntry, $jenis_layanan, $id);
 
         return redirect()->back();
     }

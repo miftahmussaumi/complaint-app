@@ -198,6 +198,8 @@
                                         | Laporan Ditemukan Tidak Sesuai
                                         @elseif($dtl->acc_status == 'no')
                                         | Pengajuan Hapus Laporan Ditolak
+                                        @elseif($dtl->acc_status == 'yes')
+                                        | Permasalahan Terhapus
                                         @endif
                                     </td>
                                 </tr>
@@ -205,7 +207,7 @@
                         </div>
                         <div class="p-2">
                             @if($dtl->acc_status == 'waiting')
-                            <form action="{{route('laptidaksesuai',$dtl->id)}}" method="post"> 
+                            <form action="{{route('laptidaksesuai',$dtl->id)}}" method="post">
                                 {{csrf_field()}}
                                 <table>
                                     <tr>

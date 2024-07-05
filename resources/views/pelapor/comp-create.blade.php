@@ -50,7 +50,7 @@
                                             </div>
                                             <div class="col">
                                                 <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
-                                                    <input required type="text" value="{{ old('waktu_awal') }}" id="waktu_awal" name="waktu_awal" class="form-control" placeholder="hh:mm">
+                                                    <input required type="text" value="{{ old('waktu_awal') }}" id="waktu_awal" name="waktu_awal" class="form-control" >
                                                     <span class="input-group-append">
                                                         <span class="input-group-text"><i class="fa fa-clock-o"></i></span>
                                                     </span>
@@ -75,7 +75,7 @@
                                             </div>
                                             <div class="col">
                                                 <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
-                                                    <input required type="text" value="{{ old('waktu_akhir') }}" id="waktu_akhir" name="waktu_akhir" class="form-control" placeholder="hh:mm">
+                                                    <input required type="text" value="{{ old('waktu_akhir') }}" id="waktu_akhir" name="waktu_akhir" class="form-control"  >
                                                     <span class="input-group-append">
                                                         <span class="input-group-text"><i class="fa fa-clock-o"></i></span>
                                                     </span>
@@ -107,7 +107,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                    <div class="input-group" data-placement="bottom" data-align="top" data-autoclose="true">
                                                         <div class="col">
                                                             <select required name="jenis_layanan[]" class="form-control jenis-layanan">
                                                             </select>

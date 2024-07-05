@@ -72,7 +72,7 @@
         <div class="nav-header">
             <div class="brand-logo">
                 @if (Str::length(Auth::guard('pelapor')->user()) > 0)
-                <a href="/profile-pelapor">
+                <a href="/profile-pelapor')}}">
                     <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
                     <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
                     <span class="brand-title">
@@ -81,7 +81,7 @@
                     <!-- <h4 style="color: white;">Gambar Logo</h4> -->
                 </a>
                 @elseif (Str::length(Auth::guard('teknisi')->user()) > 0)
-                <a href="/profile-teknisi">
+                <a href="{{url('profile-teknisi')}}">
                     <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
                     <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
                     <span class="brand-title">
@@ -90,7 +90,7 @@
                     <!-- <h4 style="color: white;">Gambar Logo</h4> -->
                 </a>
                 @elseif (Str::length(Auth::guard('admin')->user()) > 0)
-                <a href="/laporan-admin">
+                <a href="{{url('laporan-admin')}}">
                     <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
                     <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
                     <span class="brand-title">
@@ -99,7 +99,7 @@
                     <!-- <h4 style="color: white;">Gambar Logo</h4> -->
                 </a>
                 @elseif (Str::length(Auth::guard('pengawas')->user()) > 0)
-                <a href="/profile-pengawas">
+                <a href="{{url('profile-pengawas')}}">
                     <b class="logo-abbr"><img src="{{asset('storage/img/kai-mini.png')}}" alt=""> </b>
                     <!-- <span class="logo-compact"><img src="{{asset('quixlab/images/logo-compact.png')}}" alt=""></span> -->
                     <span class="brand-title">

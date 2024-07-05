@@ -160,9 +160,9 @@
                             <div class="btn-group mr-2 mb-2">
                                 <button type="button" class="btn btn-secondary">Laporan</button>
                                 <button class="btn btn-secondary" type="submit" data-toggle="modal" data-target="#exampleModalLaporan{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                                @if($count >= 0)
+                                @if($count <= 0)
                                 <button class="btn btn-secondary" type="submit" data-toggle="modal" data-target="#exampleModalSelesai{{$laporan->id}}" data-whatever="@getbootstrap"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                @endif
+                                @endif 
                             </div>
                         </div>
                     </div>

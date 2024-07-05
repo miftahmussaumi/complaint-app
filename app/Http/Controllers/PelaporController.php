@@ -106,8 +106,8 @@ class PelaporController extends Controller
 
         $detlaporan = DB::table('detlaporan')
         ->where('id_laporan','=',$id)
-        ->whereNull('id_teknisi')
-        ->orWhere('acc_status','!=','yes')
+        // ->whereNull('id_teknisi')
+        // ->orWhere('acc_status','!=','yes')
         ->get();
 
         $hislap = DB::table('laporanhist')
