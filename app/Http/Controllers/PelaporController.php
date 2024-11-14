@@ -260,7 +260,7 @@ class PelaporController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function acclap(Request $request, $idlap)
+    public function acclap(Request $request, $idlap) 
     {
         $action = $request->action;
         $tgl_masuk = Carbon::now()->format('Y-m-d H:i:s');

@@ -46,7 +46,7 @@
                                     <td></td>
                                     <td>
                                         <a href="{{url('edit-broadcast',$dt->id)}}"><button class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></button></a>
-                                        <a href="{{url('edit-comp',$dt->id)}}"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a>
+                                        <a href="{{url('delete-broadcast',$dt->id)}}" onclick="return confirm('Apakah Yakin Menghapus Broadcast?')"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></a>
                                     </td>
                                 </tr>
                                 @endforeach

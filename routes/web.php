@@ -81,7 +81,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::get('/send-manager', [AdminController::class, 'manager']);
     Route::match(['get', 'post'],'/history-admin', [AdminController::class, 'history'])->name('history-admin');
     Route::get('/getNoInventarisOptionsAdmin', [AdminController::class, 'getNoInventarisOptionsAdmin']);
-    Route::get('/list-akun-admin', [AdminController::class, 'akun']);
+    Route::get('/list-akun-admin', [AdminController::class, 'akun']); 
     Route::get('/persetujuan-akun-admin', [AdminController::class, 'listaccakun']);
     Route::post('/acc-akun/{id}', [AdminController::class, 'accakun'])->name('acc-akun');
     Route::post('/edit-pelapor-save/{id}', [AdminController::class, 'editpelapor'])->name('edit-pelapor-save');
@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth:admin,pelapor,pengawas,teknisi']], function
     Route::post('/store-broadcast', [BroadcastController::class, 'store'])->name('store-broadcast');
     Route::get('/edit-broadcast/{id}', [BroadcastController::class, 'edit'])->name('edit-broadcast');
     Route::post('/update-broadcast/{id}', [BroadcastController::class, 'update'])->name('update-broadcast');
+    Route::get('/delete-broadcast/{id}', [BroadcastController::class, 'delete'])->name('delete-broadcast');
 
 
     // ==============ROUTE UNTUK BAGIAN TEKNISI IT============== //

@@ -219,7 +219,7 @@ class AdminController extends Controller
             Session::flash('success');
 
         } else if ($update == 'batal') {
-            $kop = Kop_surat::findorfail($id);
+            $kop = Kop_surat::findorfail($id); 
             $kop->delete();
             // Session::flash('danger');
 
@@ -679,7 +679,7 @@ class AdminController extends Controller
             't.nama',
             't.nipp',
             't.email',
-            't.jabatan',)
+            't.jabatan',) 
         ->get();
 
         $pws = DB::table('pengawas')->get();
